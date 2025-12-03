@@ -13,18 +13,6 @@ services:
         fromDatabase:
           name: agentic-workflows-db
           property: connectionString
-      - key: REDIS_URL
-        fromDatabase:
-          name: agentic-workflows-redis
-          property: connectionString
-      - key: CELERY_BROKER_URL
-        fromDatabase:
-          name: agentic-workflows-redis
-          property: connectionString
-      - key: CELERY_RESULT_BACKEND
-        fromDatabase:
-          name: agentic-workflows-redis
-          property: connectionString
       - key: SECRET_KEY
         generateValue: true
       - key: LOG_LEVEL
@@ -34,7 +22,4 @@ databases:
   - name: agentic-workflows-db
     databaseName: agentic_workflows
     user: agentic
-    plan: free
-
-  - name: agentic-workflows-redis
     plan: free
