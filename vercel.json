@@ -1,0 +1,37 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "ui/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "ui/dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "api/index.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "ui/$1"
+    }
+  ],
+  "env": {
+    "ENVIRONMENT": "production",
+    "DATABASE_URL": "@database_url",
+    "REDIS_URL": "@redis_url",
+    "SECRET_KEY": "@secret_key"
+  },
+  "build": {
+    "env": {
+      "ENVIRONMENT": "production"
+    }
+  }
+}
