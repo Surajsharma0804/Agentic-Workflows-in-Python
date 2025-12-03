@@ -1,0 +1,55 @@
+# Render Blueprint for Agentic Workflows
+# This file enables one-click deployment to Render.com
+
+services:
+  # FastAPI Backend
+  - type: web
+    name: agentic-workflows-api
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    region: singapore
+    branch: main
+    healthCheckPath: /api/health
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: agentic-workflows-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          name: agentic-workflows-redis
+          type: redis
+          property: connectionString
+      - key: CELERY_BROKER_URL
+        fromService:
+          name: agentic-workflows-redis
+          type: redis
+          property: connectionString
+      - key: CELERY_RESULT_BACKEND
+        fromService:
+          name: agentic-workflows-redis
+          type: redis
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: LOG_LEVEL
+        value: INFO
+
+databases:
+  # PostgreSQL Database
+  - name: agentic-workflows-db
+    databaseName: agentic_workflows
+    user: agentic
+    plan: free
+    region: singapore
+
+  # Redis Cache
+  - name: agentic-workflows-redis
+    plan: free
+    region: singapore

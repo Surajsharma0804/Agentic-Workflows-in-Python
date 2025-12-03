@@ -11,7 +11,7 @@
 
 **Enterprise-grade workflow automation platform with AI-powered agents**
 
-[Features](#-features) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [Demo](#-demo) • [Contributing](#-contributing)
+[Features](#-features) • [Quick Start](#-quick-start) • [Deploy](#-deploy-to-production) • [Documentation](#-documentation) • [Contributing](#-contributing)
 
 </div>
 
@@ -145,6 +145,55 @@ Password: SecurePass123!
 │  (Port 5432) │  │  (Port 6379) │  │  (Background)│
 └──────────────┘  └──────────────┘  └──────────────┘
 ```
+
+---
+
+## 🚀 Deploy to Production
+
+### Deploy to Render.com (Recommended)
+
+**Share your project with friends in 5 minutes!**
+
+Render.com supports Docker, PostgreSQL, Redis, and everything your app needs.
+
+#### Quick Deploy
+
+```powershell
+# Run deployment script
+.\DEPLOY_NOW.ps1
+```
+
+Then:
+1. Go to https://dashboard.render.com
+2. Sign up with GitHub (free)
+3. Click "New +" → "Blueprint"
+4. Select your repository
+5. Click "Apply"
+6. Wait 5-10 minutes
+7. Get your URL: `https://your-app.onrender.com`
+
+#### What You Get
+
+- ✅ Full-stack app with database
+- ✅ PostgreSQL + Redis included
+- ✅ SSL certificate (HTTPS)
+- ✅ Auto-deploy from GitHub
+- ✅ Free tier available
+- ✅ Shareable URL for friends
+
+**📚 Full Guide**: [DEPLOY_TO_RENDER.md](DEPLOY_TO_RENDER.md)
+
+### Alternative: Deploy UI to Vercel
+
+For frontend-only demo:
+
+```powershell
+cd ui
+npm install -g vercel
+vercel --prod
+```
+
+**Note**: Backend features won't work with Vercel. Use Render for full functionality.
 
 ---
 
