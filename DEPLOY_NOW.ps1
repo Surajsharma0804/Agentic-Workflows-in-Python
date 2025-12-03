@@ -135,5 +135,5 @@ if ($openBrowser -eq "Y" -or $openBrowser -eq "y") {
 }
 
 Write-Host ""
-Write-Host "Good luck with your deployment! 🚀" -ForegroundColor Green
+Write-Host "Good luck with your deployment!" -ForegroundColor Green
 Write-Host ""
