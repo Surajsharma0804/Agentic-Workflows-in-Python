@@ -1,0 +1,33 @@
+id: data-pipeline
+name: Daily Data Processing Pipeline
+description: Extract, transform, and load data daily
+
+tasks:
+  - id: extract_data
+    type: postgresql
+    params:
+      connection_string: ${DATABASE_URL}
+      query: "SELECT * FROM users WHERE created_at > NOW() - INTERVAL '1 day'"
+      operation: select
+  
+  - id: transform_data
+    type: file_organizer
+    params:
+      target: ./data/raw
+      categories:
+        processed: ['.csv', '.json']
+  
+  - id: upload_to_s3
+    type: aws_s3
+    params:
+      bucket: data-warehouse
+      operation: upload
+      local_path: ./data/processed
+      s3_key: daily/data.csv
+  
+  - id: notify_team
+    type: slack
+    params:
+      webhook_url: ${SLACK_WEBHOOK_URL}
+      channel: "#data-team"
+      message: "Daily data pipeline completed successfully"

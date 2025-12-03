@@ -1,0 +1,149 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentic-workflows"
+version = "1.0.0"
+description = "Enterprise-grade agentic workflow automation platform with AI-powered orchestration"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "Agentic Workflows Team", email = "team@agenticworkflows.io"}
+]
+keywords = ["workflow", "automation", "ai", "orchestration", "agents", "tasks", "pipeline"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Distributed Computing",
+]
+
+dependencies = [
+    "PyYAML>=6.0.1",
+    "pydantic>=2.7.0",
+    "pydantic-settings>=2.0.0",
+    "requests>=2.31.0",
+    "python-dotenv>=1.0.1",
+    "rich>=13.7.0",
+    "click>=8.1.7",
+    "typer>=0.9.0",
+    "tenacity>=8.2.3",
+    "structlog>=24.1.0",
+]
+
+[project.optional-dependencies]
+# Full installation with all features
+full = [
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "sqlalchemy>=2.0.25",
+    "alembic>=1.13.1",
+    "redis>=5.0.1",
+    "celery>=5.3.6",
+    "openai>=1.10.0",
+    "boto3>=1.34.34",
+]
+
+# Web API and dashboard
+web = [
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "websockets>=12.0",
+]
+
+# Database support
+database = [
+    "sqlalchemy>=2.0.25",
+    "alembic>=1.13.1",
+    "psycopg2-binary>=2.9.9",
+    "asyncpg>=0.29.0",
+]
+
+# Distributed task execution
+distributed = [
+    "celery>=5.3.6",
+    "redis>=5.0.1",
+    "flower>=2.0.1",
+]
+
+# AI/ML capabilities
+ai = [
+    "openai>=1.10.0",
+    "anthropic>=0.8.0",
+    "langchain>=0.1.0",
+    "tiktoken>=0.5.2",
+]
+
+# Cloud integrations
+cloud = [
+    "boto3>=1.34.34",
+    "azure-storage-blob>=12.19.0",
+    "google-cloud-storage>=2.14.0",
+]
+
+# Development tools
+dev = [
+    "pytest>=8.2.0",
+    "pytest-asyncio>=0.23.3",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "black>=24.1.1",
+    "ruff>=0.1.14",
+    "mypy>=1.8.0",
+    "pre-commit>=3.6.0",
+]
+
+# Documentation
+docs = [
+    "mkdocs>=1.5.3",
+    "mkdocs-material>=9.5.6",
+    "mkdocstrings[python]>=0.24.0",
+]
+
+[project.scripts]
+agentic-workflows = "agentic_workflows.runner:cli"
+agentic-server = "agentic_workflows.api.server:main"
+agentic-worker = "agentic_workflows.worker:main"
+
+[project.urls]
+Homepage = "https://github.com/yourusername/agentic-workflows"
+Documentation = "https://docs.agenticworkflows.io"
+Repository = "https://github.com/yourusername/agentic-workflows"
+"Bug Tracker" = "https://github.com/yourusername/agentic-workflows/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["agentic_workflows*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v"
+
+[tool.black]
+line-length = 100
+target-version = ['py310', 'py311', 'py312']
+include = '\.pyi?$'
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false

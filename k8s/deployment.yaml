@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agentic-workflows-api
+  namespace: agentic-workflows
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: agentic-workflows-api
+  template:
+    metadata:
+      labels:
+        app: agentic-workflows-api
+    spec:
+      containers:
+      - name: api
+        image: yourusername/agentic-workflows:latest
+        ports:
+        - containerPort: 8000
+        - containerPort: 9090
+        envFrom:
+        - configMapRef:
+            name: agentic-workflows-config
+        - secretRef:
+            name: agentic-workflows-secrets
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /api/live
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/ready
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agentic-workflows-worker
+  namespace: agentic-workflows
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: agentic-workflows-worker
+  template:
+    metadata:
+      labels:
+        app: agentic-workflows-worker
+    spec:
+      containers:
+      - name: worker
+        image: yourusername/agentic-workflows:latest
+        command: ["agentic-worker"]
+        envFrom:
+        - configMapRef:
+            name: agentic-workflows-config
+        - secretRef:
+            name: agentic-workflows-secrets
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"

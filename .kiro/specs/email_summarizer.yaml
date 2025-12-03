@@ -1,0 +1,10 @@
+id: email-summarizer
+name: Email Summarizer
+description: Summarize emails from a source file
+tasks:
+  - id: summarize_emails
+    type: email_summarizer
+    params:
+      source_path: ./examples/sample_emails.txt
+      num_sentences: 3
+      dry_run: true

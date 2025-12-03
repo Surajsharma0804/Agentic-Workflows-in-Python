@@ -1,0 +1,19 @@
+# Core Parsing & Validation
+PyYAML>=6.0.1          # For parsing the .yaml files in .kiro/specs/
+pydantic>=2.7.0        # For validating data structures in core/spec.py
+
+# Network & APIs
+requests>=2.31.0       # For plugins/http_task.py
+python-dotenv>=1.0.1   # To manage API keys (for agents)
+
+# CLI & Output (for runner.py)
+rich>=13.7.0           # Makes terminal output look professional/colored
+click>=8.1.7           # (Optional) For building a clean CLI command structure
+
+# Testing
+pytest>=8.2.0          # For running tests in tests/
+
+bcrypt>=4.1.0
+PyJWT>=2.8.0
+email-validator>=2.1.0
+sqlalchemy>=2.0.0
