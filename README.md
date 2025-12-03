@@ -183,18 +183,6 @@ Then:
 
 **📚 Full Guide**: [DEPLOY_TO_RENDER.md](DEPLOY_TO_RENDER.md)
 
-### Alternative: Deploy UI to Vercel
-
-For frontend-only demo:
-
-```powershell
-cd ui
-npm install -g vercel
-vercel --prod
-```
-
-**Note**: Backend features won't work with Vercel. Use Render for full functionality.
-
 ---
 
 ## 🧪 Testing

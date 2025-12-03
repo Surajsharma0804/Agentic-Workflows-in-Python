@@ -2,7 +2,7 @@
 
 ## 🎯 Quick Answer
 
-**You have 3 options to share your project:**
+**You have 2 options to share your project:**
 
 ### Option 1: 🚀 Deploy Full App to Render.com (RECOMMENDED)
 **Best for**: Showing the complete working application  
@@ -10,13 +10,7 @@
 **Cost**: FREE  
 **Result**: Everything works (UI + Backend + Database)
 
-### Option 2: 🎨 Deploy UI Only to Vercel
-**Best for**: Showing the beautiful interface  
-**Time**: 5 minutes  
-**Cost**: FREE  
-**Result**: UI works, but no backend functionality
-
-### Option 3: 📹 Record a Demo Video
+### Option 2: 📹 Record a Demo Video
 **Best for**: Quick showcase without deployment  
 **Time**: 15 minutes  
 **Cost**: FREE  
@@ -96,43 +90,7 @@
 
 ---
 
-## 🎨 Option 2: Deploy UI to Vercel
-
-**This shows your beautiful interface, but backend won't work.**
-
-### Quick Deploy:
-
-1. **Install Vercel CLI**
-   ```powershell
-   npm install -g vercel
-   ```
-
-2. **Deploy**
-   ```powershell
-   cd ui
-   vercel --prod
-   ```
-
-3. **Follow prompts**
-   - Login with GitHub
-   - Project name: `agentic-workflows`
-   - Deploy!
-
-4. **Get URL**
-   ```
-   ✅ Deployed to: https://agentic-workflows-xyz.vercel.app
-   ```
-
-**Or use the script:**
-```powershell
-.\DEPLOY_TO_VERCEL.ps1
-```
-
-**Note**: Backend features won't work (login, workflows, etc.)
-
----
-
-## 📹 Option 3: Record Demo Video
+## 📹 Option 2: Record Demo Video
 
 **Quick way to show your project without deployment!**
 
@@ -176,15 +134,15 @@
 
 ## 🎯 Comparison
 
-| Feature | Render.com | Vercel | Video |
-|---------|-----------|--------|-------|
-| Shows UI | ✅ | ✅ | ✅ |
-| Backend Works | ✅ | ❌ | ✅ (local) |
-| Database Works | ✅ | ❌ | ✅ (local) |
-| Friends Can Try | ✅ | ⚠️ (UI only) | ❌ |
-| Setup Time | 10 min | 5 min | 15 min |
-| Cost | FREE | FREE | FREE |
-| Best For | Production demo | UI showcase | Quick demo |
+| Feature | Render.com | Video |
+|---------|-----------|-------|
+| Shows UI | ✅ | ✅ |
+| Backend Works | ✅ | ✅ (local) |
+| Database Works | ✅ | ✅ (local) |
+| Friends Can Try | ✅ | ❌ |
+| Setup Time | 10 min | 15 min |
+| Cost | FREE | FREE |
+| Best For | Production demo | Quick demo |
 
 ---
 
@@ -217,49 +175,17 @@
 
 ---
 
-## 🚨 Vercel Error Fix
-
-**The error you're seeing:**
-```
-Error: No fastapi entrypoint found
-```
-
-**Why it happens:**
-- Vercel expects FastAPI in specific locations
-- Your app is in `agentic_workflows/api/server.py`
-- Vercel can't find it
-
-**Solution:**
-- ✅ Use Render.com instead (supports Docker)
-- ✅ Or deploy only UI to Vercel
-- ✅ Or use the `api/index.py` file I created
-
-**To fix for Vercel:**
-1. I created `api/index.py` (entrypoint)
-2. But Vercel still won't work well because:
-   - No PostgreSQL support
-   - No Redis support
-   - No Celery workers
-   - 10-second timeout limit
-
-**Better solution**: Use Render.com! 🚀
-
----
-
 ## 📝 Quick Commands
 
 ### Deploy to Render.com
-```bash
-# Just push to GitHub, Render auto-deploys!
+```powershell
+# Run deployment script
+.\DEPLOY_NOW.ps1
+
+# Or manually push to GitHub, Render auto-deploys!
 git add .
 git commit -m "Ready for deployment"
 git push origin main
-```
-
-### Deploy UI to Vercel
-```powershell
-cd ui
-vercel --prod
 ```
 
 ### Run Locally
@@ -276,10 +202,6 @@ start http://localhost:3001
 - Check deployment logs in dashboard
 - Verify environment variables
 - Ensure Docker builds locally first
-
-**Vercel Issues:**
-- Use Render.com instead 😊
-- Or deploy UI only
 
 **Contact:**
 - Email: surajkumarind08@gmail.com
@@ -301,7 +223,7 @@ start http://localhost:3001
 - ✅ Run workflows
 - ✅ Test everything
 
-**No Vercel needed!** Render.com is better for full-stack apps.
+**Render.com is perfect for full-stack Docker apps!**
 
 ---
 

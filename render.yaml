@@ -2,6 +2,21 @@
 # This file enables one-click deployment to Render.com
 
 services:
+  # PostgreSQL Database
+  - type: pserv
+    name: agentic-workflows-db
+    plan: free
+    region: singapore
+    databaseName: agentic_workflows
+    databaseUser: agentic
+
+  # Redis Cache
+  - type: redis
+    name: agentic-workflows-redis
+    plan: free
+    region: singapore
+    maxmemoryPolicy: allkeys-lru
+
   # FastAPI Backend
   - type: web
     name: agentic-workflows-api
@@ -40,16 +55,3 @@ services:
         generateValue: true
       - key: LOG_LEVEL
         value: INFO
-
-databases:
-  # PostgreSQL Database
-  - name: agentic-workflows-db
-    databaseName: agentic_workflows
-    user: agentic
-    plan: free
-    region: singapore
-
-  # Redis Cache
-  - name: agentic-workflows-redis
-    plan: free
-    region: singapore
