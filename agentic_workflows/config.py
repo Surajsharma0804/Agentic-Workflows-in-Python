@@ -14,10 +14,10 @@ class Settings(BaseSettings):
     environment: str = Field(default="development", env="ENVIRONMENT")
     debug: bool = Field(default=False, env="DEBUG")
     
-    # API Server
+    # API Server (FREE tier optimized)
     api_host: str = Field(default="0.0.0.0", env="API_HOST")
     api_port: int = Field(default=8000, env="PORT")  # Render uses PORT env var
-    api_workers: int = Field(default=4, env="API_WORKERS")
+    api_workers: int = Field(default=1, env="API_WORKERS")  # FREE tier: 1 worker only
     api_reload: bool = Field(default=False, env="API_RELOAD")
     
     # Security
@@ -32,15 +32,15 @@ class Settings(BaseSettings):
     )
     database_echo: bool = Field(default=False, env="DATABASE_ECHO")
     
-    # Redis
-    redis_url: str = Field(default="redis://localhost:6379/0", env="REDIS_URL")
-    redis_max_connections: int = Field(default=50, env="REDIS_MAX_CONNECTIONS")
+    # Redis (Optional - not available on FREE tier)
+    redis_url: Optional[str] = Field(default=None, env="REDIS_URL")
+    redis_max_connections: int = Field(default=10, env="REDIS_MAX_CONNECTIONS")
     
-    # Celery
-    celery_broker_url: str = Field(default="redis://localhost:6379/1", env="CELERY_BROKER_URL")
-    celery_result_backend: str = Field(default="redis://localhost:6379/2", env="CELERY_RESULT_BACKEND")
-    celery_task_track_started: bool = True
-    celery_task_time_limit: int = 3600  # 1 hour
+    # Celery (Optional - not available on FREE tier)
+    celery_broker_url: Optional[str] = Field(default=None, env="CELERY_BROKER_URL")
+    celery_result_backend: Optional[str] = Field(default=None, env="CELERY_RESULT_BACKEND")
+    celery_task_track_started: bool = False
+    celery_task_time_limit: int = 1800  # 30 minutes (reduced for FREE tier)
     
     # Logging
     log_level: str = Field(default="INFO", env="LOG_LEVEL")
@@ -51,9 +51,9 @@ class Settings(BaseSettings):
     audit_log_path: str = Field(default="audit.log", env="AUDIT_LOG_PATH")
     audit_retention_days: int = Field(default=90, env="AUDIT_RETENTION_DAYS")
     
-    # Workflow Execution
-    max_concurrent_workflows: int = Field(default=100, env="MAX_CONCURRENT_WORKFLOWS")
-    workflow_timeout_seconds: int = Field(default=3600, env="WORKFLOW_TIMEOUT_SECONDS")
+    # Workflow Execution (FREE tier optimized)
+    max_concurrent_workflows: int = Field(default=5, env="MAX_CONCURRENT_WORKFLOWS")  # Reduced for FREE tier
+    workflow_timeout_seconds: int = Field(default=1800, env="WORKFLOW_TIMEOUT_SECONDS")  # 30 min max
     task_retry_max_attempts: int = Field(default=3, env="TASK_RETRY_MAX_ATTEMPTS")
     task_retry_delay_seconds: int = Field(default=5, env="TASK_RETRY_DELAY_SECONDS")
     

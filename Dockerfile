@@ -1,22 +1,22 @@
 # Production Dockerfile for Agentic Workflows (FREE Tier Optimized)
+# Optimized for 512MB RAM and fast startup
 
 # Stage 1: Builder
 FROM python:3.11-slim AS builder
 
 WORKDIR /build
 
-# Install build dependencies
+# Install build dependencies (minimal)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
-    g++ \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements
 COPY requirements-full.txt ./
 
-# Install Python dependencies
-RUN pip install --no-cache-dir --upgrade pip==24.0 && \
+# Install Python dependencies (optimized)
+RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements-full.txt
 
 # Stage 2: Runtime
