@@ -1,7 +1,7 @@
 services:
-  # FastAPI Backend - FREE
+  # Full Stack App (Backend + Frontend) - FREE
   - type: web
-    name: agentic-workflows-api
+    name: agentic-workflows
     runtime: docker
     plan: free
     region: oregon
@@ -22,25 +22,7 @@ services:
       - key: LOG_LEVEL
         value: INFO
       - key: CORS_ORIGINS
-        value: "https://agentic-workflows-ui.onrender.com,http://localhost:3000"
-
-  # React Frontend - FREE (Static Site)
-  - type: web
-    name: agentic-workflows-ui
-    runtime: static
-    plan: free
-    region: oregon
-    branch: main
-    buildCommand: cd ui && npm install && npm run build
-    staticPublishPath: ./ui/dist
-    autoDeploy: true
-    envVars:
-      - key: VITE_API_URL
-        value: https://agentic-workflows-api.onrender.com
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+        value: "*"
 
 databases:
   # PostgreSQL Database - FREE
