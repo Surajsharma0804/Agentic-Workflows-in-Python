@@ -1,8 +1,23 @@
 # Production Dockerfile for Agentic Workflows (FREE Tier Optimized)
 # Optimized for 512MB RAM and fast startup
+# Includes React frontend build
 
-# Stage 1: Builder
-FROM python:3.11-slim AS builder
+# Stage 1: Frontend Builder
+FROM node:18-slim AS frontend-builder
+
+WORKDIR /frontend
+
+# Copy frontend files
+COPY ui/package*.json ./
+COPY ui/ ./
+
+# Install dependencies and build
+RUN npm ci --only=production && \
+    npm run build && \
+    ls -la dist/
+
+# Stage 2: Python Builder
+FROM python:3.11-slim AS python-builder
 
 WORKDIR /build
 
@@ -19,7 +34,7 @@ COPY requirements-full.txt ./
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements-full.txt
 
-# Stage 2: Runtime
+# Stage 3: Runtime
 FROM python:3.11-slim
 
 WORKDIR /app
@@ -38,14 +53,17 @@ RUN groupadd -r agentic --gid=1000 && \
     chown -R agentic:agentic /app
 
 # Copy Python packages from builder
-COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
-COPY --from=builder /usr/local/bin /usr/local/bin
+COPY --from=python-builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=python-builder /usr/local/bin /usr/local/bin
 
 # Copy application code
 COPY --chown=agentic:agentic agentic_workflows/ ./agentic_workflows/
 COPY --chown=agentic:agentic .kiro/ ./.kiro/
 COPY --chown=agentic:agentic pyproject.toml ./
 COPY --chown=agentic:agentic entrypoint.sh ./
+
+# Copy built frontend from frontend-builder
+COPY --from=frontend-builder --chown=agentic:agentic /frontend/dist ./ui/dist
 
 # Make entrypoint executable
 RUN chmod +x entrypoint.sh

@@ -3,10 +3,12 @@ import uvicorn
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from fastapi.exceptions import RequestValidationError
+from fastapi.staticfiles import StaticFiles
 import structlog
 import time
+from pathlib import Path
 
 from ..config import get_settings
 from ..core.exceptions import AgenticWorkflowsError
@@ -123,13 +125,7 @@ def create_app() -> FastAPI:
             }
         )
     
-    # Root path handler for Render health check
-    @app.get("/")
-    async def root():
-        """Root endpoint - redirects to health check."""
-        return {"status": "ok", "message": "Agentic Workflows API", "health": "/api/health", "docs": "/api/docs"}
-    
-    # Include routers
+    # Include API routers FIRST (before static files)
     app.include_router(health.router, prefix="/api", tags=["Health"])
     app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
     app.include_router(workflows.router, prefix="/api/workflows", tags=["Workflows"])
@@ -139,6 +135,40 @@ def create_app() -> FastAPI:
     # AI-powered endpoints
     from .routes import llm
     app.include_router(llm.router, prefix="/api/llm", tags=["AI & LLM"])
+    
+    # Serve React frontend (if built)
+    ui_dist_path = Path(__file__).parent.parent.parent / "ui" / "dist"
+    if ui_dist_path.exists():
+        logger.info("serving_react_frontend", path=str(ui_dist_path))
+        # Mount static files (JS, CSS, images)
+        app.mount("/assets", StaticFiles(directory=str(ui_dist_path / "assets")), name="assets")
+        
+        # Serve index.html for all non-API routes (SPA routing)
+        @app.get("/{full_path:path}")
+        async def serve_react_app(full_path: str):
+            """Serve React app for all non-API routes."""
+            # If path starts with /api, let it 404 naturally
+            if full_path.startswith("api/"):
+                return JSONResponse(status_code=404, content={"error": "Not Found"})
+            
+            # Serve index.html for all other routes (React Router handles routing)
+            index_file = ui_dist_path / "index.html"
+            if index_file.exists():
+                return FileResponse(index_file)
+            return JSONResponse(status_code=404, content={"error": "Frontend not built"})
+    else:
+        logger.warning("react_frontend_not_found", path=str(ui_dist_path))
+        # Fallback root endpoint if UI not built
+        @app.get("/")
+        async def root():
+            """Root endpoint - API info."""
+            return {
+                "status": "ok",
+                "message": "Agentic Workflows API",
+                "health": "/api/health",
+                "docs": "/api/docs",
+                "note": "Frontend UI not built. Build with: cd ui && npm install && npm run build"
+            }
     
     @app.on_event("startup")
     async def startup_event():
