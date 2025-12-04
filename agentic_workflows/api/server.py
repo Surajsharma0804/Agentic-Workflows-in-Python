@@ -140,6 +140,16 @@ def create_app() -> FastAPI:
     ui_dist_path = Path(__file__).parent.parent.parent / "ui" / "dist"
     if ui_dist_path.exists():
         logger.info("serving_react_frontend", path=str(ui_dist_path))
+        
+        # Root path - serve index.html
+        @app.get("/")
+        async def root():
+            """Serve React app root."""
+            index_file = ui_dist_path / "index.html"
+            if index_file.exists():
+                return FileResponse(index_file)
+            return JSONResponse(status_code=404, content={"error": "Frontend not built"})
+        
         # Mount static files (JS, CSS, images)
         app.mount("/assets", StaticFiles(directory=str(ui_dist_path / "assets")), name="assets")
         
