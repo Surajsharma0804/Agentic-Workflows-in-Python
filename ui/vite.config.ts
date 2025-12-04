@@ -25,15 +25,21 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    sourcemap: true,
+    sourcemap: false, // Disable sourcemaps for production (smaller bundle)
+    minify: 'esbuild', // Use esbuild for faster minification
     rollupOptions: {
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           'ui-vendor': ['lucide-react', 'framer-motion'],
           'chart-vendor': ['recharts'],
+          'query-vendor': ['@tanstack/react-query', 'axios'],
         },
       },
     },
+    chunkSizeWarningLimit: 1000, // Increase limit to 1MB
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom'],
   },
 })
