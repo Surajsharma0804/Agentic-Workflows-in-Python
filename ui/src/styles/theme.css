@@ -105,10 +105,37 @@
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
   
+  /* Fluid Typography - Scales smoothly from mobile to desktop */
+  --font-size-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --font-size-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+  --font-size-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+  --font-size-lg: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+  --font-size-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+  --font-size-2xl: clamp(1.5rem, 1.3rem + 1vw, 1.875rem);
+  --font-size-3xl: clamp(1.875rem, 1.6rem + 1.375vw, 2.25rem);
+  --font-size-4xl: clamp(2.25rem, 1.9rem + 1.75vw, 3rem);
+  --font-size-5xl: clamp(3rem, 2.5rem + 2.5vw, 3.75rem);
+  
+  /* Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+  
   /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Breakpoints (for reference in JS) */
+  --breakpoint-xs: 320px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  --breakpoint-tv: 1920px;
 }
 
 /* === DARK THEME === */
@@ -233,4 +260,318 @@ body {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+/* === RESPONSIVE UTILITIES === */
+
+/* Fluid Typography Classes */
+.text-xs { font-size: var(--font-size-xs); }
+.text-sm { font-size: var(--font-size-sm); }
+.text-base { font-size: var(--font-size-base); }
+.text-lg { font-size: var(--font-size-lg); }
+.text-xl { font-size: var(--font-size-xl); }
+.text-2xl { font-size: var(--font-size-2xl); }
+.text-3xl { font-size: var(--font-size-3xl); }
+.text-4xl { font-size: var(--font-size-4xl); }
+.text-5xl { font-size: var(--font-size-5xl); }
+
+/* Container Queries Support */
+.container-responsive {
+  container-type: inline-size;
+  width: 100%;
+}
+
+/* Responsive Spacing */
+.spacing-responsive {
+  padding: clamp(1rem, 2vw, 2rem);
+}
+
+.gap-responsive {
+  gap: clamp(0.5rem, 1.5vw, 1.5rem);
+}
+
+/* Responsive Grid */
+.grid-responsive {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: clamp(1rem, 2vw, 2rem);
+}
+
+/* === MOBILE FIRST BREAKPOINTS === */
+
+/* Extra Small Devices (320px - 639px) */
+@media (max-width: 639px) {
+  .hide-xs { display: none !important; }
+  .show-xs { display: block !important; }
+  
+  /* Stack navigation vertically */
+  .nav-mobile {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  /* Full width buttons on mobile */
+  .btn-mobile-full {
+    width: 100%;
+  }
+  
+  /* Reduce padding on mobile */
+  .container-mobile {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Small Devices (640px - 767px) */
+@media (min-width: 640px) {
+  .hide-sm { display: none !important; }
+  .show-sm { display: block !important; }
+}
+
+/* Medium Devices (768px - 1023px) - Tablets */
+@media (min-width: 768px) {
+  .hide-md { display: none !important; }
+  .show-md { display: block !important; }
+  
+  /* Two column layout for tablets */
+  .grid-md-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Large Devices (1024px+) - Desktop */
+@media (min-width: 1024px) {
+  .hide-lg { display: none !important; }
+  .show-lg { display: block !important; }
+  
+  /* Three column layout for desktop */
+  .grid-lg-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  /* Four column layout for desktop */
+  .grid-lg-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Extra Large Devices (1280px+) */
+@media (min-width: 1280px) {
+  .hide-xl { display: none !important; }
+  .show-xl { display: block !important; }
+}
+
+/* 2XL Devices (1536px+) */
+@media (min-width: 1536px) {
+  .hide-2xl { display: none !important; }
+  .show-2xl { display: block !important; }
+}
+
+/* TV/Large Screens (1920px+) */
+@media (min-width: 1920px) {
+  .hide-tv { display: none !important; }
+  .show-tv { display: block !important; }
+  
+  /* Larger text for TV viewing distance */
+  body {
+    font-size: 1.25rem;
+  }
+  
+  /* Larger interactive elements for TV remotes */
+  button, a, input, select {
+    min-height: 48px;
+    min-width: 48px;
+  }
+}
+
+/* === RESPONSIVE TABLES === */
+@media (max-width: 767px) {
+  .table-responsive {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Stack table as cards on mobile */
+  .table-stack {
+    display: block;
+  }
+  
+  .table-stack thead {
+    display: none;
+  }
+  
+  .table-stack tbody,
+  .table-stack tr,
+  .table-stack td {
+    display: block;
+    width: 100%;
+  }
+  
+  .table-stack tr {
+    margin-bottom: 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    background: var(--surface);
+  }
+  
+  .table-stack td {
+    text-align: right;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .table-stack td:last-child {
+    border-bottom: none;
+  }
+  
+  .table-stack td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+}
+
+/* === RESPONSIVE MODALS === */
+@media (max-width: 767px) {
+  .modal-responsive {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0;
+    border-radius: 0;
+  }
+  
+  .modal-content-responsive {
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+  }
+}
+
+@media (min-width: 768px) {
+  .modal-responsive {
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    border-radius: var(--radius-xl);
+  }
+}
+
+/* === RESPONSIVE FORMS === */
+.form-responsive {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .form-responsive-row {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+  
+  .form-responsive-row > * {
+    flex: 1;
+  }
+}
+
+/* === RESPONSIVE IMAGES === */
+.img-responsive {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.img-contain {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* === TOUCH TARGETS === */
+/* Ensure minimum 44x44px touch targets for accessibility */
+@media (pointer: coarse) {
+  button,
+  a,
+  input[type="checkbox"],
+  input[type="radio"],
+  select {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* === PRINT STYLES === */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background: white;
+    color: black;
+  }
+  
+  a {
+    text-decoration: underline;
+  }
+  
+  a[href]::after {
+    content: " (" attr(href) ")";
+  }
+}
+
+/* === LANDSCAPE ORIENTATION === */
+@media (orientation: landscape) and (max-height: 500px) {
+  /* Reduce vertical spacing in landscape on small screens */
+  .spacing-landscape-compact {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+}
+
+/* === HIGH CONTRAST MODE === */
+@media (prefers-contrast: high) {
+  :root {
+    --border: #000000;
+    --text-primary: #000000;
+    --bg: #ffffff;
+  }
+  
+  [data-theme="dark"] {
+    --border: #ffffff;
+    --text-primary: #ffffff;
+    --bg: #000000;
+  }
+}
+
+/* === FOCUS INDICATORS FOR KEYBOARD NAVIGATION === */
+.focus-keyboard:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* === TV REMOTE NAVIGATION === */
+@media (min-width: 1920px) {
+  /* Highlight focused element for TV remote navigation */
+  *:focus {
+    outline: 4px solid var(--primary);
+    outline-offset: 4px;
+    box-shadow: 0 0 0 8px rgba(99, 102, 241, 0.2);
+  }
+  
+  /* Larger click targets for TV */
+  .tv-target {
+    padding: 1.5rem 2rem;
+    font-size: 1.5rem;
+  }
 }

@@ -1,0 +1,428 @@
+/**
+ * Comprehensive Responsive Design System
+ * Mobile-First Approach with Fluid Typography and Layouts
+ * Supports: XS Phone (320px) → TV (2560px+)
+ */
+
+/* === FLUID TYPOGRAPHY SCALE === */
+:root {
+  /* Base font size with fluid scaling */
+  --font-size-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --font-size-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+  --font-size-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+  --font-size-lg: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+  --font-size-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+  --font-size-2xl: clamp(1.5rem, 1.3rem + 1vw, 1.875rem);
+  --font-size-3xl: clamp(1.875rem, 1.6rem + 1.375vw, 2.25rem);
+  --font-size-4xl: clamp(2.25rem, 1.9rem + 1.75vw, 3rem);
+  --font-size-5xl: clamp(3rem, 2.5rem + 2.5vw, 4rem);
+
+  /* Line heights */
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+
+  /* Fluid spacing scale */
+  --space-xs: clamp(0.25rem, 0.2rem + 0.25vw, 0.5rem);
+  --space-sm: clamp(0.5rem, 0.4rem + 0.5vw, 0.75rem);
+  --space-md: clamp(1rem, 0.8rem + 1vw, 1.5rem);
+  --space-lg: clamp(1.5rem, 1.2rem + 1.5vw, 2.5rem);
+  --space-xl: clamp(2rem, 1.5rem + 2.5vw, 4rem);
+  --space-2xl: clamp(3rem, 2rem + 5vw, 6rem);
+
+  /* Container widths */
+  --container-xs: 20rem;    /* 320px */
+  --container-sm: 24rem;    /* 384px */
+  --container-md: 28rem;    /* 448px */
+  --container-lg: 32rem;    /* 512px */
+  --container-xl: 36rem;    /* 576px */
+  --container-2xl: 42rem;   /* 672px */
+  --container-3xl: 48rem;   /* 768px */
+  --container-4xl: 56rem;   /* 896px */
+  --container-5xl: 64rem;   /* 1024px */
+  --container-6xl: 72rem;   /* 1152px */
+  --container-7xl: 80rem;   /* 1280px */
+  --container-full: 100%;
+
+  /* Touch target sizes */
+  --touch-target-min: 44px;  /* WCAG 2.1 AA minimum */
+  --touch-target-comfortable: 48px;
+  --touch-target-large: 56px;
+
+  /* Breakpoint-aware padding */
+  --page-padding-x: clamp(1rem, 2vw, 2rem);
+  --page-padding-y: clamp(1rem, 3vh, 3rem);
+
+  /* Grid gaps */
+  --grid-gap-xs: clamp(0.5rem, 1vw, 0.75rem);
+  --grid-gap-sm: clamp(0.75rem, 1.5vw, 1rem);
+  --grid-gap-md: clamp(1rem, 2vw, 1.5rem);
+  --grid-gap-lg: clamp(1.5rem, 3vw, 2rem);
+  --grid-gap-xl: clamp(2rem, 4vw, 3rem);
+}
+
+/* === RESPONSIVE CONTAINERS === */
+.container-responsive {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--page-padding-x);
+  padding-right: var(--page-padding-x);
+}
+
+@media (min-width: 640px) {
+  .container-responsive {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container-responsive {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-responsive {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container-responsive {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container-responsive {
+    max-width: 1536px;
+  }
+}
+
+/* === FLUID GRID SYSTEM === */
+.grid-responsive {
+  display: grid;
+  gap: var(--grid-gap-md);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+}
+
+.grid-responsive-sm {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+}
+
+.grid-responsive-lg {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
+}
+
+/* === RESPONSIVE TYPOGRAPHY === */
+.text-fluid-xs { font-size: var(--font-size-xs); }
+.text-fluid-sm { font-size: var(--font-size-sm); }
+.text-fluid-base { font-size: var(--font-size-base); }
+.text-fluid-lg { font-size: var(--font-size-lg); }
+.text-fluid-xl { font-size: var(--font-size-xl); }
+.text-fluid-2xl { font-size: var(--font-size-2xl); }
+.text-fluid-3xl { font-size: var(--font-size-3xl); }
+.text-fluid-4xl { font-size: var(--font-size-4xl); }
+.text-fluid-5xl { font-size: var(--font-size-5xl); }
+
+/* === TOUCH-FRIENDLY INTERACTIVE ELEMENTS === */
+.touch-target {
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+  display: inline-flex;
+  align-items: center;
+  justify-center: center;
+  padding: 0.5rem 1rem;
+}
+
+.touch-target-comfortable {
+  min-height: var(--touch-target-comfortable);
+  min-width: var(--touch-target-comfortable);
+}
+
+.touch-target-large {
+  min-height: var(--touch-target-large);
+  min-width: var(--touch-target-large);
+}
+
+/* === RESPONSIVE TABLES === */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 767px) {
+  .table-stacked {
+    display: block;
+  }
+
+  .table-stacked thead {
+    display: none;
+  }
+
+  .table-stacked tbody,
+  .table-stacked tr,
+  .table-stacked td {
+    display: block;
+    width: 100%;
+  }
+
+  .table-stacked tr {
+    margin-bottom: 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    background: var(--surface);
+  }
+
+  .table-stacked td {
+    text-align: right;
+    padding: 0.5rem 0;
+    position: relative;
+    padding-left: 50%;
+  }
+
+  .table-stacked td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 45%;
+    padding-right: 10px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+}
+
+/* === RESPONSIVE MODALS === */
+@media (max-width: 767px) {
+  .modal-responsive {
+    position: fixed;
+    inset: 0;
+    margin: 0;
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media (min-width: 768px) {
+  .modal-responsive {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: var(--radius-2xl);
+  }
+}
+
+/* === RESPONSIVE IMAGES === */
+.img-responsive {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.img-contain {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* === RESPONSIVE NAVIGATION === */
+@media (max-width: 1023px) {
+  .nav-mobile {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 50;
+  }
+
+  .nav-mobile.is-open {
+    transform: translateX(0);
+  }
+}
+
+@media (min-width: 1024px) {
+  .nav-desktop {
+    position: relative;
+    transform: none !important;
+  }
+}
+
+/* === TV / LARGE SCREEN OPTIMIZATIONS === */
+@media (min-width: 1920px) {
+  :root {
+    --touch-target-min: 56px;
+    --touch-target-comfortable: 64px;
+    --touch-target-large: 72px;
+  }
+
+  .tv-layout {
+    max-width: 1920px;
+    margin: 0 auto;
+    padding: 2rem 4rem;
+  }
+
+  .tv-focus-visible:focus-visible {
+    outline: 4px solid var(--primary);
+    outline-offset: 4px;
+    box-shadow: 0 0 0 8px rgba(99, 102, 241, 0.2);
+  }
+
+  .tv-text-scale {
+    font-size: 1.25em;
+    line-height: 1.6;
+  }
+}
+
+/* === ORIENTATION HANDLING === */
+@media (orientation: landscape) and (max-height: 600px) {
+  .landscape-compact {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .landscape-compact .modal-responsive {
+    max-height: 95vh;
+    overflow-y: auto;
+  }
+}
+
+/* === PRINT STYLES === */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-full-width {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  * {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+}
+
+/* === REDUCED DATA MODE === */
+@media (prefers-reduced-data: reduce) {
+  .lazy-load-image {
+    background-image: none !important;
+  }
+
+  video {
+    display: none;
+  }
+}
+
+/* === HIGH CONTRAST MODE === */
+@media (prefers-contrast: high) {
+  :root {
+    --border: #000000;
+    --text-primary: #000000;
+    --bg: #ffffff;
+  }
+
+  [data-theme="dark"] {
+    --border: #ffffff;
+    --text-primary: #ffffff;
+    --bg: #000000;
+  }
+
+  .card,
+  .btn,
+  .input {
+    border-width: 2px;
+  }
+}
+
+/* === FOCUS VISIBLE ENHANCEMENTS === */
+.focus-ring:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* === RESPONSIVE UTILITIES === */
+.hide-mobile {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .hide-mobile {
+    display: block;
+  }
+  .hide-desktop {
+    display: none;
+  }
+}
+
+.show-mobile {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .show-mobile {
+    display: none;
+  }
+}
+
+/* === STACK TO ROW PATTERN === */
+.stack-to-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--grid-gap-md);
+}
+
+@media (min-width: 768px) {
+  .stack-to-row {
+    flex-direction: row;
+  }
+}
+
+/* === RESPONSIVE PADDING === */
+.responsive-padding {
+  padding: var(--page-padding-y) var(--page-padding-x);
+}
+
+.responsive-padding-x {
+  padding-left: var(--page-padding-x);
+  padding-right: var(--page-padding-x);
+}
+
+.responsive-padding-y {
+  padding-top: var(--page-padding-y);
+  padding-bottom: var(--page-padding-y);
+}
+
+/* === SAFE AREA INSETS (for notched devices) === */
+@supports (padding: max(0px)) {
+  .safe-area-inset {
+    padding-left: max(var(--page-padding-x), env(safe-area-inset-left));
+    padding-right: max(var(--page-padding-x), env(safe-area-inset-right));
+    padding-top: max(var(--page-padding-y), env(safe-area-inset-top));
+    padding-bottom: max(var(--page-padding-y), env(safe-area-inset-bottom));
+  }
+}
