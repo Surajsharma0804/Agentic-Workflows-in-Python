@@ -49,9 +49,10 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
               }}
               transition={{ duration: 0.2 }}
               className={`
-                absolute ${leftIcon ? 'left-10' : 'left-3'} px-2 bg-surface pointer-events-none z-10
-                transition-colors duration-200
-                ${isFocused ? 'text-primary' : 'text-text-secondary'}
+                absolute ${leftIcon ? 'left-10' : 'left-3'} px-2 pointer-events-none z-10
+                transition-all duration-200 font-medium
+                ${isFocused || hasValue ? 'bg-gradient-to-r from-surface via-surface to-surface' : 'bg-surface'}
+                ${isFocused ? 'text-primary-500' : hasValue ? 'text-primary-400' : 'text-text-muted'}
                 ${error ? 'text-danger-500' : ''}
               `}
             >
@@ -61,7 +62,12 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
 
           {/* Left Icon */}
           {leftIcon && (
-            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-muted z-10">
+            <div className={`
+              absolute left-3 top-1/2 transform -translate-y-1/2 z-10
+              transition-colors duration-200
+              ${isFocused ? 'text-primary-500' : hasValue ? 'text-primary-400' : 'text-text-muted'}
+              ${error ? 'text-danger-500' : ''}
+            `}>
               {leftIcon}
             </div>
           )}
@@ -78,17 +84,20 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
                 ? 'var(--color-danger-500)'
                 : isFocused
                 ? 'var(--primary)'
+                : hasValue
+                ? 'var(--color-primary-400)'
                 : 'var(--border)',
             }}
             transition={{ duration: 0.2 }}
             className={`
-              w-full px-4 py-3 bg-surface border-2 rounded-xl
-              text-text-primary placeholder-text-muted
-              focus:outline-none focus:ring-2 focus:ring-primary/20
-              transition-all duration-200
+              w-full px-4 py-3 rounded-xl border-2
+              text-text-primary placeholder-text-muted/60
+              focus:outline-none transition-all duration-200
+              ${isFocused ? 'bg-surface/80 shadow-lg shadow-primary/10' : 'bg-surface'}
               ${leftIcon ? 'pl-10' : ''}
               ${rightIcon ? 'pr-10' : ''}
-              ${error ? 'border-danger-500 focus:ring-danger-500/20' : ''}
+              ${error ? 'border-danger-500 bg-danger-500/5' : ''}
+              ${isFocused && !error ? 'ring-4 ring-primary/10' : ''}
               ${className}
             `}
             {...props}
@@ -97,24 +106,13 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
 
           {/* Right Icon */}
           {rightIcon && (
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-muted">
+            <div className={`
+              absolute right-3 top-1/2 transform -translate-y-1/2
+              transition-colors duration-200
+              ${isFocused ? 'text-primary-500' : 'text-text-muted'}
+            `}>
               {rightIcon}
             </div>
-          )}
-
-          {/* Focus Ring Animation */}
-          {isFocused && !error && (
-            <motion.div
-              layoutId="input-focus-ring"
-              className="absolute inset-0 rounded-xl pointer-events-none"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-              style={{
-                boxShadow: '0 0 0 3px rgba(99, 102, 241, 0.1)',
-              }}
-            />
           )}
         </div>
 
