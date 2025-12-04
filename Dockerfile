@@ -11,8 +11,8 @@ WORKDIR /frontend
 COPY ui/package*.json ./
 COPY ui/ ./
 
-# Install dependencies and build
-RUN npm ci --only=production && \
+# Install ALL dependencies (including devDependencies for build)
+RUN npm ci && \
     npm run build && \
     ls -la dist/
 
