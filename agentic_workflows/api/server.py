@@ -160,7 +160,10 @@ def create_app() -> FastAPI:
                 exists=ui_dist_path.exists(),
                 absolute_path=str(ui_dist_path.absolute()))
     
-    if ui_dist_path.exists():
+    # Check if frontend is built
+    frontend_available = ui_dist_path.exists() and (ui_dist_path / "index.html").exists()
+    
+    if frontend_available:
         # List contents for debugging
         try:
             contents = list(ui_dist_path.iterdir())
@@ -170,15 +173,13 @@ def create_app() -> FastAPI:
         except Exception as e:
             logger.error("error_listing_frontend", error=str(e))
         
-        # Mount static assets FIRST (before catch-all)
+        # Mount static assets
         assets_path = ui_dist_path / "assets"
         if assets_path.exists():
             app.mount("/assets", StaticFiles(directory=str(assets_path)), name="assets")
             logger.info("mounted_assets", path=str(assets_path))
-        else:
-            logger.warning("assets_not_found", path=str(assets_path))
         
-        # Serve static files from ui/dist (manifest.json, robots.txt, sw.js, etc.)
+        # Serve static files from ui/dist
         @app.get("/manifest.json")
         async def manifest():
             return FileResponse(ui_dist_path / "manifest.json")
@@ -195,32 +196,7 @@ def create_app() -> FastAPI:
         @app.get("/")
         async def root():
             """Serve React app root."""
-            index_file = ui_dist_path / "index.html"
-            if index_file.exists():
-                return FileResponse(index_file)
-            return JSONResponse(status_code=404, content={"error": "Frontend not built"})
-        
-        # SPA catch-all - serve index.html for all unmatched routes
-        # This MUST be defined last, after all API routes
-        @app.exception_handler(404)
-        async def custom_404_handler(request: Request, exc):
-            """Handle 404s by serving React app for non-API routes."""
-            # If it's an API route, return JSON 404
-            if request.url.path.startswith("/api"):
-                return JSONResponse(
-                    status_code=404,
-                    content={"error": "Not Found", "path": request.url.path}
-                )
-            
-            # For all other routes, serve the React app (SPA routing)
-            index_file = ui_dist_path / "index.html"
-            if index_file.exists():
-                return FileResponse(index_file)
-            
-            return JSONResponse(
-                status_code=404,
-                content={"error": "Frontend not built"}
-            )
+            return FileResponse(ui_dist_path / "index.html")
     else:
         logger.warning("react_frontend_not_found", path=str(ui_dist_path))
         # Fallback root endpoint if UI not built
@@ -232,8 +208,29 @@ def create_app() -> FastAPI:
                 "message": "Agentic Workflows API",
                 "health": "/api/health",
                 "docs": "/api/docs",
-                "note": "Frontend UI not built. Build with: cd ui && npm install && npm run build"
+                "note": "Frontend UI not built"
             }
+    
+    # Custom 404 handler for SPA routing (registered at app level, not conditionally)
+    @app.exception_handler(404)
+    async def custom_404_handler(request: Request, exc):
+        """Handle 404s by serving React app for non-API routes."""
+        # If it's an API route, return JSON 404
+        if request.url.path.startswith("/api"):
+            return JSONResponse(
+                status_code=404,
+                content={"error": "Not Found", "path": request.url.path}
+            )
+        
+        # For frontend routes, serve index.html if available
+        if frontend_available:
+            return FileResponse(ui_dist_path / "index.html")
+        
+        # Otherwise return JSON 404
+        return JSONResponse(
+            status_code=404,
+            content={"error": "Not Found", "path": request.url.path}
+        )
     
     @app.on_event("startup")
     async def startup_event():
