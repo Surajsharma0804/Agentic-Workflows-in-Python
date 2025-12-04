@@ -1,0 +1,68 @@
+From: Kiro AI <kiro@audit.ai>
+Date: Wed, 4 Dec 2024 12:00:00 +0000
+Subject: [PATCH 0001] Fix requirements.txt - add missing production dependencies
+
+Critical fix: requirements.txt is missing FastAPI, uvicorn, structlog and other
+core dependencies needed to run the application. This causes ModuleNotFoundError
+when trying to start the server or run tests.
+
+Solution: Add all production-critical dependencies to requirements.txt
+
+---
+ requirements.txt | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/requirements.txt b/requirements.txt
+index 1234567..abcdefg 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,4 +1,4 @@
+-# Core Parsing & Validation
++# Core Dependencies
+ PyYAML>=6.0.1          # For parsing the .yaml files in .kiro/specs/
+ pydantic>=2.7.0        # For validating data structures in core/spec.py
++pydantic-settings>=2.0.0  # For settings management
+ 
+-# Network & APIs
++# Web Framework & API (CRITICAL - Required for server)
++fastapi>=0.109.0       # Web framework
++uvicorn[standard]>=0.27.0  # ASGI server
++python-multipart>=0.0.6    # Form data parsing
++
++# Database & ORM (CRITICAL - Required for auth)
++sqlalchemy>=2.0.25     # ORM
++alembic>=1.13.1        # Database migrations
++psycopg2-binary>=2.9.9 # PostgreSQL driver
++
++# Authentication & Security (CRITICAL)
++python-jose[cryptography]>=3.3.0  # JWT tokens
++passlib[bcrypt]>=1.7.4  # Password hashing
++bcrypt>=4.1.0          # Password hashing backend
++PyJWT>=2.8.0           # JWT implementation
++email-validator>=2.1.0 # Email validation
++cryptography>=42.0.0   # Cryptographic operations
++
++# Monitoring & Logging (CRITICAL for production)
++structlog>=24.1.0      # Structured logging
++prometheus-client>=0.19.0  # Metrics
++
++# HTTP & Networking
+ requests>=2.31.0       # For plugins/http_task.py
++httpx>=0.26.0          # Async HTTP client
+ python-dotenv>=1.0.1   # To manage API keys (for agents)
+ 
+ # CLI & Output (for runner.py)
+ rich>=13.7.0           # Makes terminal output look professional/colored
+ click>=8.1.7           # (Optional) For building a clean CLI command structure
++typer>=0.9.0           # CLI framework
+ 
+ # Testing
+ pytest>=8.2.0          # For running tests in tests/
+-
+-bcrypt>=4.1.0
+-PyJWT>=2.8.0
+-email-validator>=2.1.0
+-sqlalchemy>=2.0.0
++pytest-asyncio>=0.23.3 # Async test support
++pytest-cov>=4.1.0      # Coverage reporting
+ 
