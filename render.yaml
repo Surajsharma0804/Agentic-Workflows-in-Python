@@ -22,7 +22,7 @@ services:
       - key: LOG_LEVEL
         value: INFO
       - key: CORS_ORIGINS
-        value: "*"
+        value: "https://agentic-workflows.onrender.com"
 
 databases:
   # PostgreSQL Database - FREE
