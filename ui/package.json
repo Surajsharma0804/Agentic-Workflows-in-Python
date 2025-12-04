@@ -11,17 +11,7 @@
     "lint:fix": "eslint . --ext ts,tsx --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,css,md}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css,md}\"",
-    "type-check": "tsc --noEmit",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:ui": "vitest --ui",
-    "test:coverage": "vitest run --coverage",
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui",
-    "test:a11y": "playwright test --grep @a11y",
-    "analyze": "vite-bundle-visualizer",
-    "lighthouse": "lhci autorun",
-    "prepare": "husky install"
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -41,12 +31,7 @@
     "framer-motion": "^10.18.0",
     "react-flow-renderer": "^10.3.17",
     "@headlessui/react": "^1.7.17",
-    "react-loading-skeleton": "^3.3.1",
-    "react-error-boundary": "^4.0.11",
-    "@sentry/react": "^7.99.0",
-    "react-i18next": "^14.0.0",
-    "i18next": "^23.7.0",
-    "i18next-browser-languagedetector": "^7.2.0"
+    "react-loading-skeleton": "^3.3.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.48",
@@ -55,38 +40,13 @@
     "@typescript-eslint/eslint-plugin": "^6.19.0",
     "@typescript-eslint/parser": "^6.19.0",
     "@vitejs/plugin-react": "^4.2.1",
-    "@vitest/ui": "^1.2.0",
-    "@testing-library/react": "^14.1.2",
-    "@testing-library/jest-dom": "^6.2.0",
-    "@testing-library/user-event": "^14.5.2",
-    "@playwright/test": "^1.41.0",
-    "@axe-core/playwright": "^4.8.3",
     "autoprefixer": "^10.4.16",
     "eslint": "^8.56.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
-    "eslint-plugin-jsx-a11y": "^6.8.0",
     "postcss": "^8.4.33",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3",
-    "vite": "^5.0.11",
-    "vitest": "^1.2.0",
-    "jsdom": "^24.0.0",
-    "@vitest/coverage-v8": "^1.2.0",
-    "prettier": "^3.2.4",
-    "prettier-plugin-tailwindcss": "^0.5.11",
-    "husky": "^8.0.3",
-    "lint-staged": "^15.2.0",
-    "vite-bundle-visualizer": "^1.0.1",
-    "@lhci/cli": "^0.13.0"
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.{css,md}": [
-      "prettier --write"
-    ]
+    "vite": "^5.0.11"
   }
 }
