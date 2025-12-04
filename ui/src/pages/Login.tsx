@@ -72,20 +72,10 @@ export default function Login() {
     }
   }
 
-  const handleSocialLogin = async (provider: 'google' | 'apple' | 'github') => {
-    setIsLoading(true)
-    try {
-      if (provider === 'google') await loginWithGoogle()
-      else if (provider === 'apple') await loginWithApple()
-      else await loginWithGithub()
-      
-      showSuccess(`Successfully logged in with ${provider}!`)
-      navigate('/')
-    } catch (error: any) {
-      showError(error.message || `${provider} login failed. Please try again.`)
-    } finally {
-      setIsLoading(false)
-    }
+  const handleSocialLogin = (provider: 'google' | 'apple' | 'github') => {
+    // Redirect to OAuth endpoint
+    const baseUrl = window.location.origin
+    window.location.href = `${baseUrl}/api/auth/${provider}/login`
   }
 
   return (

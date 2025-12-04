@@ -23,6 +23,8 @@ class User(Base):
     avatar = Column(String, nullable=True)
     reset_token = Column(String, nullable=True)
     reset_token_expires = Column(DateTime, nullable=True)
+    oauth_provider = Column(String, nullable=True)  # google, apple, github
+    oauth_provider_id = Column(String, nullable=True)  # Provider's user ID
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     

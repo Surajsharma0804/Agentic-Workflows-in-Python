@@ -1,5 +1,6 @@
 """Authentication endpoints with real database integration."""
 from fastapi import APIRouter, Depends, HTTPException, status, Request
+from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, EmailStr
 from typing import Optional
@@ -12,6 +13,7 @@ from ...db.database import get_db
 from ...db.models import User
 from ...config import get_settings
 from ...utils.email import send_password_reset_email
+from ...utils.oauth import oauth, get_google_user_info, get_github_user_info, verify_apple_token
 
 logger = structlog.get_logger()
 router = APIRouter()
@@ -305,3 +307,249 @@ async def get_current_user(token: str, db: Session = Depends(get_db)):
 async def logout():
     """Logout user (client-side token removal)."""
     return {"message": "Successfully logged out"}
+
+
+# ============================================
+# OAuth2 Authentication Endpoints
+# ============================================
+
+@router.get("/google/login")
+async def google_login(request: Request):
+    """Initiate Google OAuth login flow."""
+    if not settings.google_client_id:
+        raise HTTPException(
+            status_code=status.HTTP_501_NOT_IMPLEMENTED,
+            detail="Google OAuth is not configured"
+        )
+    
+    redirect_uri = settings.google_redirect_uri or f"{request.base_url}api/auth/google/callback"
+    return await oauth.google.authorize_redirect(request, redirect_uri)
+
+
+@router.get("/google/callback")
+async def google_callback(request: Request, db: Session = Depends(get_db)):
+    """Handle Google OAuth callback."""
+    try:
+        # Get access token
+        token = await oauth.google.authorize_access_token(request)
+        
+        # Get user info
+        user_info = await get_google_user_info(token['access_token'])
+        if not user_info:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Failed to get user information from Google"
+            )
+        
+        # Find or create user
+        user = db.query(User).filter(
+            User.oauth_provider == 'google',
+            User.oauth_provider_id == user_info['provider_id']
+        ).first()
+        
+        if not user:
+            # Check if email already exists
+            existing_user = db.query(User).filter(User.email == user_info['email']).first()
+            if existing_user:
+                # Link OAuth to existing account
+                existing_user.oauth_provider = 'google'
+                existing_user.oauth_provider_id = user_info['provider_id']
+                existing_user.avatar = user_info.get('avatar')
+                existing_user.is_verified = user_info.get('is_verified', False)
+                user = existing_user
+            else:
+                # Create new user
+                user = User(
+                    email=user_info['email'],
+                    name=user_info['name'],
+                    avatar=user_info.get('avatar'),
+                    hashed_password=User.hash_password(secrets.token_urlsafe(32)),  # Random password
+                    oauth_provider='google',
+                    oauth_provider_id=user_info['provider_id'],
+                    is_active=True,
+                    is_verified=user_info.get('is_verified', False),
+                    role='user'
+                )
+                db.add(user)
+        
+        db.commit()
+        db.refresh(user)
+        
+        # Create access token
+        access_token = create_access_token(
+            data={"sub": user.email, "user_id": user.id}
+        )
+        
+        logger.info("google_oauth_success", email=user.email)
+        
+        # Redirect to frontend with token
+        frontend_url = str(request.base_url).rstrip('/')
+        return RedirectResponse(
+            url=f"{frontend_url}/auth/callback?token={access_token}&provider=google"
+        )
+        
+    except Exception as e:
+        logger.error("google_oauth_failed", error=str(e))
+        frontend_url = str(request.base_url).rstrip('/')
+        return RedirectResponse(
+            url=f"{frontend_url}/login?error=google_auth_failed"
+        )
+
+
+@router.get("/github/login")
+async def github_login(request: Request):
+    """Initiate GitHub OAuth login flow."""
+    if not settings.github_client_id:
+        raise HTTPException(
+            status_code=status.HTTP_501_NOT_IMPLEMENTED,
+            detail="GitHub OAuth is not configured"
+        )
+    
+    redirect_uri = settings.github_redirect_uri or f"{request.base_url}api/auth/github/callback"
+    return await oauth.github.authorize_redirect(request, redirect_uri)
+
+
+@router.get("/github/callback")
+async def github_callback(request: Request, db: Session = Depends(get_db)):
+    """Handle GitHub OAuth callback."""
+    try:
+        # Get access token
+        token = await oauth.github.authorize_access_token(request)
+        
+        # Get user info
+        user_info = await get_github_user_info(token['access_token'])
+        if not user_info:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Failed to get user information from GitHub"
+            )
+        
+        # Find or create user
+        user = db.query(User).filter(
+            User.oauth_provider == 'github',
+            User.oauth_provider_id == user_info['provider_id']
+        ).first()
+        
+        if not user:
+            # Check if email already exists
+            existing_user = db.query(User).filter(User.email == user_info['email']).first()
+            if existing_user:
+                # Link OAuth to existing account
+                existing_user.oauth_provider = 'github'
+                existing_user.oauth_provider_id = user_info['provider_id']
+                existing_user.avatar = user_info.get('avatar')
+                existing_user.is_verified = user_info.get('is_verified', False)
+                user = existing_user
+            else:
+                # Create new user
+                user = User(
+                    email=user_info['email'],
+                    name=user_info['name'],
+                    avatar=user_info.get('avatar'),
+                    hashed_password=User.hash_password(secrets.token_urlsafe(32)),  # Random password
+                    oauth_provider='github',
+                    oauth_provider_id=user_info['provider_id'],
+                    is_active=True,
+                    is_verified=user_info.get('is_verified', False),
+                    role='user'
+                )
+                db.add(user)
+        
+        db.commit()
+        db.refresh(user)
+        
+        # Create access token
+        access_token = create_access_token(
+            data={"sub": user.email, "user_id": user.id}
+        )
+        
+        logger.info("github_oauth_success", email=user.email)
+        
+        # Redirect to frontend with token
+        frontend_url = str(request.base_url).rstrip('/')
+        return RedirectResponse(
+            url=f"{frontend_url}/auth/callback?token={access_token}&provider=github"
+        )
+        
+    except Exception as e:
+        logger.error("github_oauth_failed", error=str(e))
+        frontend_url = str(request.base_url).rstrip('/')
+        return RedirectResponse(
+            url=f"{frontend_url}/login?error=github_auth_failed"
+        )
+
+
+@router.post("/apple/callback")
+async def apple_callback(
+    request: Request,
+    id_token: str,
+    user: Optional[str] = None,
+    db: Session = Depends(get_db)
+):
+    """Handle Apple Sign In callback."""
+    try:
+        # Verify Apple ID token
+        user_info = await verify_apple_token(id_token)
+        if not user_info:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Failed to verify Apple ID token"
+            )
+        
+        # Apple sends user info only on first sign in
+        if user:
+            import json
+            user_data = json.loads(user)
+            user_info['name'] = f"{user_data.get('firstName', '')} {user_data.get('lastName', '')}".strip()
+        
+        # Find or create user
+        db_user = db.query(User).filter(
+            User.oauth_provider == 'apple',
+            User.oauth_provider_id == user_info['provider_id']
+        ).first()
+        
+        if not db_user:
+            # Check if email already exists
+            existing_user = db.query(User).filter(User.email == user_info['email']).first()
+            if existing_user:
+                # Link OAuth to existing account
+                existing_user.oauth_provider = 'apple'
+                existing_user.oauth_provider_id = user_info['provider_id']
+                existing_user.is_verified = user_info.get('is_verified', False)
+                db_user = existing_user
+            else:
+                # Create new user
+                db_user = User(
+                    email=user_info['email'],
+                    name=user_info.get('name', 'Apple User'),
+                    hashed_password=User.hash_password(secrets.token_urlsafe(32)),  # Random password
+                    oauth_provider='apple',
+                    oauth_provider_id=user_info['provider_id'],
+                    is_active=True,
+                    is_verified=user_info.get('is_verified', False),
+                    role='user'
+                )
+                db.add(db_user)
+        
+        db.commit()
+        db.refresh(db_user)
+        
+        # Create access token
+        access_token = create_access_token(
+            data={"sub": db_user.email, "user_id": db_user.id}
+        )
+        
+        logger.info("apple_oauth_success", email=db_user.email)
+        
+        return {
+            "access_token": access_token,
+            "token_type": "bearer",
+            "user": db_user.to_dict()
+        }
+        
+    except Exception as e:
+        logger.error("apple_oauth_failed", error=str(e))
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Apple Sign In failed"
+        )

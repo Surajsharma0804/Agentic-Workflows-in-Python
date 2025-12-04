@@ -104,6 +104,21 @@ class Settings(BaseSettings):
     
     slack_webhook_url: Optional[str] = Field(default=None, env="SLACK_WEBHOOK_URL")
     
+    # OAuth2 Providers
+    google_client_id: Optional[str] = Field(default=None, env="GOOGLE_CLIENT_ID")
+    google_client_secret: Optional[str] = Field(default=None, env="GOOGLE_CLIENT_SECRET")
+    google_redirect_uri: Optional[str] = Field(default=None, env="GOOGLE_REDIRECT_URI")
+    
+    apple_client_id: Optional[str] = Field(default=None, env="APPLE_CLIENT_ID")
+    apple_team_id: Optional[str] = Field(default=None, env="APPLE_TEAM_ID")
+    apple_key_id: Optional[str] = Field(default=None, env="APPLE_KEY_ID")
+    apple_private_key: Optional[str] = Field(default=None, env="APPLE_PRIVATE_KEY")
+    apple_redirect_uri: Optional[str] = Field(default=None, env="APPLE_REDIRECT_URI")
+    
+    github_client_id: Optional[str] = Field(default=None, env="GITHUB_CLIENT_ID")
+    github_client_secret: Optional[str] = Field(default=None, env="GITHUB_CLIENT_SECRET")
+    github_redirect_uri: Optional[str] = Field(default=None, env="GITHUB_REDIRECT_URI")
+    
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

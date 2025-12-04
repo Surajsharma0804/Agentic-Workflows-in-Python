@@ -1,5 +1,4 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 interface User {
   id: string
@@ -17,6 +16,7 @@ interface AuthContextType {
   login: (email: string, password: string, rememberMe?: boolean) => Promise<void>
   register: (name: string, email: string, password: string, company?: string) => Promise<void>
   logout: () => void
+  setToken: (token: string) => Promise<void>
   loginWithGoogle: () => Promise<void>
   loginWithApple: () => Promise<void>
   loginWithGithub: () => Promise<void>
@@ -104,61 +104,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  const loginWithGoogle = async () => {
-    // Simulate OAuth flow
-    await new Promise(resolve => setTimeout(resolve, 1500))
+  const setToken = async (token: string) => {
+    try {
+      // Fetch user info with token
+      const response = await fetch('/api/auth/me', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      })
 
-    const mockUser: User = {
-      id: 'google_' + Date.now(),
-      name: 'Google User',
-      email: 'user@gmail.com',
-      avatar: `https://ui-avatars.com/api/?name=Google+User&background=ea4335&color=fff`,
-      role: 'user',
+      if (!response.ok) {
+        throw new Error('Failed to fetch user info')
+      }
+
+      const userData = await response.json()
+      
+      localStorage.setItem('auth_token', token)
+      localStorage.setItem('user', JSON.stringify(userData))
+      setUser(userData)
+    } catch (error) {
+      console.error('Failed to set token:', error)
+      throw error
     }
+  }
 
-    const token = 'mock_google_token_' + Date.now()
-    localStorage.setItem('auth_token', token)
-    localStorage.setItem('user', JSON.stringify(mockUser))
-
-    setUser(mockUser)
+  const loginWithGoogle = async () => {
+    // OAuth handled by backend redirect
+    throw new Error('Use handleSocialLogin instead')
   }
 
   const loginWithApple = async () => {
-    // Simulate OAuth flow
-    await new Promise(resolve => setTimeout(resolve, 1500))
-
-    const mockUser: User = {
-      id: 'apple_' + Date.now(),
-      name: 'Apple User',
-      email: 'user@icloud.com',
-      avatar: `https://ui-avatars.com/api/?name=Apple+User&background=000000&color=fff`,
-      role: 'user',
-    }
-
-    const token = 'mock_apple_token_' + Date.now()
-    localStorage.setItem('auth_token', token)
-    localStorage.setItem('user', JSON.stringify(mockUser))
-
-    setUser(mockUser)
+    // OAuth handled by backend redirect
+    throw new Error('Use handleSocialLogin instead')
   }
 
   const loginWithGithub = async () => {
-    // Simulate OAuth flow
-    await new Promise(resolve => setTimeout(resolve, 1500))
-
-    const mockUser: User = {
-      id: 'github_' + Date.now(),
-      name: 'GitHub User',
-      email: 'user@github.com',
-      avatar: `https://ui-avatars.com/api/?name=GitHub+User&background=24292e&color=fff`,
-      role: 'user',
-    }
-
-    const token = 'mock_github_token_' + Date.now()
-    localStorage.setItem('auth_token', token)
-    localStorage.setItem('user', JSON.stringify(mockUser))
-
-    setUser(mockUser)
+    // OAuth handled by backend redirect
+    throw new Error('Use handleSocialLogin instead')
   }
 
   const logout = () => {
@@ -178,6 +160,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         login,
         register,
         logout,
+        setToken,
         loginWithGoogle,
         loginWithApple,
         loginWithGithub,
