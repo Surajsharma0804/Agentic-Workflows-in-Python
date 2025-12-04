@@ -12,8 +12,11 @@ echo "HOST: 0.0.0.0"
 echo "ENVIRONMENT: ${ENVIRONMENT:-production}"
 echo "============================================"
 
-# Start the application immediately
-# Database initialization happens asynchronously in background
+# Run database migrations
+echo "Running database migrations..."
+alembic upgrade head || echo "Warning: Migrations failed, continuing anyway..."
+
+# Start the application
 echo "Starting uvicorn on 0.0.0.0:$PORT..."
 exec uvicorn agentic_workflows.api.server:app \
     --host 0.0.0.0 \
