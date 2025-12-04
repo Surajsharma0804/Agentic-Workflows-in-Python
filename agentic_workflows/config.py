@@ -114,8 +114,11 @@ class Settings(BaseSettings):
     @validator("cors_origins", pre=True)
     def parse_cors_origins(cls, v):
         if isinstance(v, str):
-            return [origin.strip() for origin in v.split(",")]
-        return v
+            # Handle single "*" or comma-separated list
+            if v.strip() == "*":
+                return ["*"]
+            return [origin.strip() for origin in v.split(",") if origin.strip()]
+        return v if v else ["*"]
     
     @property
     def is_production(self) -> bool:
