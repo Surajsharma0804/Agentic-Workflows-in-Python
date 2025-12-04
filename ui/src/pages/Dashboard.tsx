@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import {
@@ -7,7 +6,6 @@ import {
   XCircle,
   Clock,
   Zap,
-  TrendingUp,
   Server,
   Database,
   Cpu,
@@ -16,7 +14,6 @@ import {
   FileText,
 } from 'lucide-react'
 import { healthAPI, workflowAPI } from '@/lib/api'
-import { formatDuration } from '@/lib/utils'
 import StatCard from '@/components/StatCard'
 import ActivityChart from '@/components/ActivityChart'
 import { CardSkeleton, TableSkeleton } from '@/components/LoadingSkeleton'
@@ -24,9 +21,8 @@ import { useNavigate } from 'react-router-dom'
 
 export default function Dashboard() {
   const navigate = useNavigate()
-  const [selectedPeriod, setSelectedPeriod] = useState('7d')
 
-  const { data: health, isLoading: healthLoading } = useQuery({
+  const { data: health } = useQuery({
     queryKey: ['health'],
     queryFn: () => healthAPI.check(),
     refetchInterval: 5000,

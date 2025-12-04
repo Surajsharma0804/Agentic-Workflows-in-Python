@@ -180,7 +180,7 @@ export default function ResetPassword() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter new password"
-                icon={Lock}
+                leftIcon={<Lock className="w-5 h-5" />}
                 required
                 minLength={8}
               />
@@ -191,7 +191,7 @@ export default function ResetPassword() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirm new password"
-                icon={Lock}
+                leftIcon={<Lock className="w-5 h-5" />}
                 required
                 minLength={8}
               />

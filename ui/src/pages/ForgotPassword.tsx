@@ -5,7 +5,7 @@ import { Mail, ArrowLeft, Zap, Loader2, CheckCircle } from 'lucide-react'
 import { useAlert } from '../contexts/AlertContext'
 
 export default function ForgotPassword() {
-  const { showSuccess } = useAlert()
+  const { showSuccess, showError } = useAlert()
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
