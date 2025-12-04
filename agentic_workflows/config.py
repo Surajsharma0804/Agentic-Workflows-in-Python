@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     
     # API Server
     api_host: str = Field(default="0.0.0.0", env="API_HOST")
-    api_port: int = Field(default=8000, env="API_PORT")
+    api_port: int = Field(default=8000, env="PORT")  # Render uses PORT env var
     api_workers: int = Field(default=4, env="API_WORKERS")
     api_reload: bool = Field(default=False, env="API_RELOAD")
     

@@ -52,12 +52,12 @@ RUN pip install --no-cache-dir -e .
 # Switch to non-root user
 USER agentic
 
-# Expose ports
-EXPOSE 8000 9090
+# Expose port (Render assigns dynamically)
+EXPOSE 10000
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:${PORT:-8000}/api/health || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:${PORT:-10000}/api/health || exit 1
 
 # Default command
 CMD ["/app/start.sh"]
