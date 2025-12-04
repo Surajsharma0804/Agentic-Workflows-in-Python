@@ -42,6 +42,10 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 # Copy application code
 COPY --chown=agentic:agentic . .
 
+# Copy and make startup script executable
+COPY --chown=agentic:agentic start.sh /app/start.sh
+RUN chmod +x /app/start.sh
+
 # Install the package
 RUN pip install --no-cache-dir -e .
 
@@ -53,7 +57,7 @@ EXPOSE 8000 9090
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8000/api/health || exit 1
+    CMD curl -f http://localhost:${PORT:-8000}/api/health || exit 1
 
-# Default command (can be overridden)
-CMD ["agentic-server"]
+# Default command
+CMD ["/app/start.sh"]
