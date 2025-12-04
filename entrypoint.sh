@@ -10,7 +10,7 @@ echo "============================================"
 echo "PORT: $PORT"
 echo "HOST: 0.0.0.0"
 echo "ENVIRONMENT: ${ENVIRONMENT:-production}"
-echo "DATABASE_URL: ${DATABASE_URL:0:30}..."
+echo "DATABASE_URL: [configured]"
 echo "============================================"
 
 # Wait for PostgreSQL to be ready
