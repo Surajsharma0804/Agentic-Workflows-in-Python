@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { useState, forwardRef, InputHTMLAttributes } from 'react'
+import { useState, useEffect, forwardRef, InputHTMLAttributes } from 'react'
 
 interface AnimatedInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string
@@ -19,13 +19,19 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
       helperText,
       className = '',
       id,
+      value,
       ...props
     },
     ref
   ) => {
     const [isFocused, setIsFocused] = useState(false)
-    const [hasValue, setHasValue] = useState(false)
+    const [hasValue, setHasValue] = useState(!!value)
     const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`
+
+    // Update hasValue when value prop changes
+    useEffect(() => {
+      setHasValue(!!value && String(value).length > 0)
+    }, [value])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setHasValue(e.target.value.length > 0)
@@ -101,6 +107,7 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
               ${className}
             `}
             placeholder={showPlaceholder ? props.placeholder : ''}
+            value={value}
             {...(props as any)}
           />
 
