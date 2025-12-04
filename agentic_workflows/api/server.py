@@ -175,9 +175,9 @@ def create_app() -> FastAPI:
         logger.info("application_starting", version=settings.app_version, port=settings.api_port)
         logger.info("startup_complete", message="App ready to accept requests")
         
-        # Initialize database in background (non-blocking)
-        import asyncio
-        asyncio.create_task(init_database_async())
+        # Skip database init for now - will initialize on first request
+        # import asyncio
+        # asyncio.create_task(init_database_async())
     
     @app.on_event("shutdown")
     async def shutdown_event():
