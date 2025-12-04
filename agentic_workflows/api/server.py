@@ -111,19 +111,28 @@ def create_app() -> FastAPI:
     
     @app.on_event("startup")
     async def startup_event():
-        logger.info("application_starting", version=settings.app_version)
-        # Initialize database tables
-        try:
-            from ..db.database import init_db
-            from ..db.models import Base
-            logger.info("initializing_database_tables")
-            init_db()
-            logger.info("database_initialized_successfully", tables=list(Base.metadata.tables.keys()))
-        except Exception as e:
-            logger.error("database_initialization_failed", error=str(e), exc_info=True)
-            # Don't fail startup, but log the error
-            import traceback
-            logger.error("database_init_traceback", traceback=traceback.format_exc())
+        logger.info("application_starting", version=settings.app_version, port=settings.api_port)
+        # Initialize database tables with retry logic
+        import time
+        max_retries = 5
+        for attempt in range(max_retries):
+            try:
+                from ..db.database import init_db, engine
+                from ..db.models import Base
+                logger.info("initializing_database_tables", attempt=attempt + 1)
+                # Test connection first
+                engine.connect()
+                # Initialize tables
+                init_db()
+                logger.info("database_initialized_successfully", tables=list(Base.metadata.tables.keys()))
+                break
+            except Exception as e:
+                if attempt < max_retries - 1:
+                    logger.warning("database_init_retry", attempt=attempt + 1, error=str(e))
+                    time.sleep(2)
+                else:
+                    logger.error("database_initialization_failed", error=str(e))
+                    # Continue anyway - health check will show the issue
     
     @app.on_event("shutdown")
     async def shutdown_event():
