@@ -14,12 +14,26 @@ export default function ForgotPassword() {
     e.preventDefault()
     setIsLoading(true)
 
-    // Simulate API call
-    setTimeout(() => {
-      setEmailSent(true)
+    try {
+      const response = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setEmailSent(true)
+        showSuccess('Password reset email sent! Check your inbox.')
+      } else {
+        showError(data.detail || 'Failed to send reset email')
+      }
+    } catch (error) {
+      showError('Network error. Please try again.')
+    } finally {
       setIsLoading(false)
-      showSuccess('Password reset email sent! Check your inbox.')
-    }, 1500)
+    }
   }
 
   return (
