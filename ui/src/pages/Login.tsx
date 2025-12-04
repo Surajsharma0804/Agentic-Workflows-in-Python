@@ -242,10 +242,7 @@ export default function Login() {
 
               {/* Remember Me & Forgot Password */}
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <motion.label 
-                  whileHover={{ scale: 1.02 }}
-                  className="flex items-center cursor-pointer group"
-                >
+                <label className="flex items-center cursor-pointer group">
                   <div className="relative">
                     <input
                       type="checkbox"
@@ -255,62 +252,45 @@ export default function Login() {
                       aria-label="Remember me"
                     />
                     {formData.rememberMe && (
-                      <motion.div
-                        initial={{ scale: 0, rotate: -180 }}
-                        animate={{ scale: 1, rotate: 0 }}
-                        className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                      >
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                         <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                         </svg>
-                      </motion.div>
+                      </div>
                     )}
                   </div>
                   <span className="ml-3 text-sm font-medium text-text-secondary group-hover:text-text-primary transition-colors">
                     Remember me
                   </span>
-                </motion.label>
-                <motion.div whileHover={{ x: 3 }}>
-                  <Link
-                    to="/forgot-password"
-                    className="text-sm gradient-text hover:opacity-80 transition-all font-semibold inline-flex items-center gap-1"
-                  >
-                    Forgot password?
-                    <motion.span
-                      animate={{ x: [0, 3, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                    >
-                      →
-                    </motion.span>
-                  </Link>
-                </motion.div>
+                </label>
+                <Link
+                  to="/forgot-password"
+                  className="text-sm text-primary-400 hover:text-primary-300 transition-colors font-semibold"
+                >
+                  Forgot password?
+                </Link>
               </div>
 
               {/* Submit Button */}
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+              <Button
+                type="submit"
+                variant="neon"
+                size="lg"
+                isLoading={isLoading}
+                className="w-full btn-gradient btn-glow"
+                aria-label="Sign in to your account"
               >
-                <Button
-                  type="submit"
-                  variant="neon"
-                  size="lg"
-                  isLoading={isLoading}
-                  className="w-full btn-gradient btn-glow"
-                  aria-label="Sign in to your account"
-                >
-                  {!isLoading && 'Sign In'}
-                </Button>
-              </motion.div>
+                {!isLoading && 'Sign In'}
+              </Button>
           </form>
 
             {/* Divider with Gradient */}
             <div className="relative my-8">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+                <div className="w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
               </div>
               <div className="relative flex justify-center">
-                <span className="px-4 py-1 bg-surface text-text-muted text-sm">
+                <span className="px-6 py-2 bg-surface/90 backdrop-blur-sm text-text-secondary text-sm font-medium border border-border/30 rounded-full">
                   Or continue with
                 </span>
               </div>
@@ -378,49 +358,37 @@ export default function Login() {
               </motion.button>
             </div>
 
-            {/* Sign Up Link with Animation */}
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              className="mt-6 text-center"
-            >
+            {/* Sign Up Link */}
+            <div className="mt-6 text-center">
               <p className="text-sm text-text-secondary">
                 Don't have an account?{' '}
-                <motion.span whileHover={{ scale: 1.05 }} className="inline-block">
-                  <Link
-                    to="/register"
-                    className="gradient-text font-bold hover:opacity-80 transition-all inline-flex items-center gap-1"
-                  >
-                    Sign up
-                    <motion.span
-                      animate={{ rotate: [0, 10, -10, 0] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    >
-                      ✨
-                    </motion.span>
-                  </Link>
-                </motion.span>
+                <Link
+                  to="/register"
+                  className="text-primary-400 hover:text-primary-300 font-bold transition-colors"
+                >
+                  Sign up
+                </Link>
               </p>
-            </motion.div>
+            </div>
           </motion.div>
 
           {/* Footer */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="text-center text-xs sm:text-sm text-text-muted mt-6 sm:mt-8 px-4"
-          >
+          <p className="text-center text-xs sm:text-sm text-text-muted mt-6 sm:mt-8 px-4">
             By signing in, you agree to our{' '}
-            <Link to="/terms-of-service" className="text-primary hover:text-primary-hover transition-colors font-medium">
+            <Link 
+              to="/terms-of-service" 
+              className="text-accent-400 hover:text-accent-300 transition-colors font-semibold underline decoration-accent-400/30 hover:decoration-accent-300"
+            >
               Terms of Service
             </Link>
             {' '}and{' '}
-            <Link to="/privacy-policy" className="text-primary hover:text-primary-hover transition-colors font-medium">
+            <Link 
+              to="/privacy-policy" 
+              className="text-accent-400 hover:text-accent-300 transition-colors font-semibold underline decoration-accent-400/30 hover:decoration-accent-300"
+            >
               Privacy Policy
             </Link>
-          </motion.p>
+          </p>
         </motion.div>
       </div>
     </div>
