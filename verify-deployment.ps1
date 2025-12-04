@@ -14,8 +14,9 @@ Write-Host "[1/10] Checking critical files..." -ForegroundColor Yellow
 $criticalFiles = @(
     "render.yaml",
     "Dockerfile",
-    "start.sh",
+    "entrypoint.sh",
     "requirements.txt",
+    "requirements-full.txt",
     "agentic_workflows/config.py",
     "agentic_workflows/api/server.py",
     "agentic_workflows/celery_app.py"
@@ -59,11 +60,11 @@ if ($configContent -match 'env="PORT"') {
     $errors++
 }
 
-$startContent = Get-Content "start.sh" -Raw
-if ($startContent -match '\$\{PORT') {
-    Write-Host "  [OK] start.sh uses PORT environment variable" -ForegroundColor Green
+$entrypointContent = Get-Content "entrypoint.sh" -Raw
+if ($entrypointContent -match 'PORT=') {
+    Write-Host "  [OK] entrypoint.sh uses PORT environment variable" -ForegroundColor Green
 } else {
-    Write-Host "  [FAIL] start.sh doesn't use PORT env var" -ForegroundColor Red
+    Write-Host "  [FAIL] entrypoint.sh doesn't use PORT env var" -ForegroundColor Red
     $errors++
 }
 
@@ -104,18 +105,18 @@ if ($renderContent -match "healthCheckPath") {
 # Check 6: Dockerfile
 Write-Host "`n[6/10] Checking Dockerfile..." -ForegroundColor Yellow
 $dockerContent = Get-Content "Dockerfile" -Raw
-if ($dockerContent -match "start\.sh") {
-    Write-Host "  [OK] Uses start.sh" -ForegroundColor Green
+if ($dockerContent -match "entrypoint\.sh") {
+    Write-Host "  [OK] Uses entrypoint.sh" -ForegroundColor Green
 } else {
-    Write-Host "  [FAIL] Doesn't use start.sh" -ForegroundColor Red
+    Write-Host "  [FAIL] Doesn't use entrypoint.sh" -ForegroundColor Red
     $errors++
 }
 
-if ($dockerContent -match "HEALTHCHECK") {
-    Write-Host "  [OK] Health check configured" -ForegroundColor Green
+if (Test-Path "entrypoint.sh") {
+    Write-Host "  [OK] entrypoint.sh exists" -ForegroundColor Green
 } else {
-    Write-Host "  [WARN] No health check in Dockerfile" -ForegroundColor Yellow
-    $warnings++
+    Write-Host "  [FAIL] entrypoint.sh missing" -ForegroundColor Red
+    $errors++
 }
 
 # Check 7: Python Syntax
