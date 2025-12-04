@@ -16,6 +16,12 @@ RUN npm ci
 # Copy all frontend source files
 COPY ui/ ./
 
+# Debug: List what was copied
+RUN echo "=== Checking copied files ===" && \
+    ls -la && \
+    echo "=== Checking src/lib ===" && \
+    ls -la src/lib/ || echo "src/lib not found!"
+
 # Build the frontend
 RUN npm run build && ls -la dist/
 
