@@ -44,7 +44,7 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
     return (
       <div className="w-full">
         <div className="relative">
-          {/* Floating Label */}
+          {/* Floating Label with Gradient */}
           {label && (
             <motion.label
               htmlFor={inputId}
@@ -52,86 +52,127 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
                 top: isFocused || hasValue ? '-0.75rem' : '50%',
                 fontSize: isFocused || hasValue ? '0.75rem' : '1rem',
                 translateY: isFocused || hasValue ? '0' : '-50%',
+                scale: isFocused ? 1.05 : 1,
               }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.3, type: 'spring', stiffness: 300 }}
               className={`
-                absolute ${leftIcon ? 'left-10' : 'left-3'} px-2 pointer-events-none z-10
-                transition-all duration-200 font-medium
-                ${isFocused || hasValue ? 'bg-gradient-to-r from-surface via-surface to-surface' : 'bg-surface'}
-                ${isFocused ? 'text-primary-500' : hasValue ? 'text-primary-400' : 'text-text-muted'}
+                absolute ${leftIcon ? 'left-10' : 'left-4'} px-2 pointer-events-none z-20
+                transition-all duration-300 font-semibold
+                ${isFocused || hasValue ? 'glass-strong rounded-md' : 'bg-transparent'}
+                ${isFocused && !error ? 'gradient-text' : hasValue && !error ? 'text-primary-400' : 'text-text-muted'}
                 ${error ? 'text-danger-500' : ''}
+                ${isFocused ? 'shadow-lg' : ''}
               `}
             >
               {label}
             </motion.label>
           )}
 
-          {/* Left Icon */}
+          {/* Left Icon with Animation */}
           {leftIcon && (
-            <div className={`
-              absolute left-3 top-1/2 transform -translate-y-1/2 z-10
-              transition-colors duration-200
-              ${isFocused ? 'text-primary-500' : hasValue ? 'text-primary-400' : 'text-text-muted'}
-              ${error ? 'text-danger-500' : ''}
-            `}>
+            <motion.div 
+              animate={{
+                scale: isFocused ? 1.1 : 1,
+                rotate: isFocused ? [0, -5, 5, 0] : 0,
+              }}
+              transition={{ duration: 0.3 }}
+              className={`
+                absolute left-3 top-1/2 transform -translate-y-1/2 z-20
+                transition-all duration-300
+                ${isFocused && !error ? 'text-primary-500 drop-shadow-lg' : hasValue && !error ? 'text-primary-400' : 'text-text-muted'}
+                ${error ? 'text-danger-500' : ''}
+              `}
+            >
               {leftIcon}
-            </div>
+            </motion.div>
           )}
 
-          {/* Input */}
-          <motion.input
-            ref={ref}
-            id={inputId}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-            onChange={handleChange}
-            animate={{
-              borderColor: error
-                ? 'var(--color-danger-500)'
-                : isFocused
-                ? 'var(--primary)'
-                : hasValue
-                ? 'var(--color-primary-400)'
-                : 'var(--border)',
-            }}
-            transition={{ duration: 0.2 }}
-            className={`
-              w-full px-4 py-3 rounded-xl border-2
-              text-text-primary placeholder-text-muted/60
-              focus:outline-none transition-all duration-200
-              ${isFocused ? 'bg-surface/80 shadow-lg shadow-primary/10' : 'bg-surface'}
-              ${leftIcon ? 'pl-10' : ''}
-              ${rightIcon ? 'pr-10' : ''}
-              ${error ? 'border-danger-500 bg-danger-500/5' : ''}
-              ${isFocused && !error ? 'ring-4 ring-primary/10' : ''}
-              ${className}
-            `}
-            placeholder={showPlaceholder ? props.placeholder : ''}
-            value={value}
-            {...(props as any)}
-          />
+          {/* Input Container with Glow Effect */}
+          <div className="relative">
+            {/* Animated Border Glow */}
+            {isFocused && !error && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute -inset-0.5 bg-gradient-to-r from-primary via-accent to-primary rounded-xl blur-sm opacity-30 animate-pulse"
+              />
+            )}
+            
+            {/* Input */}
+            <motion.input
+              ref={ref}
+              id={inputId}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+              onChange={handleChange}
+              whileFocus={{ scale: 1.01 }}
+              transition={{ duration: 0.2 }}
+              className={`
+                relative w-full px-4 py-3.5 rounded-xl border-2
+                text-text-primary placeholder-text-muted/50
+                focus:outline-none transition-all duration-300
+                font-medium
+                ${isFocused 
+                  ? 'glass-strong border-primary shadow-xl shadow-primary/20 bg-surface/90' 
+                  : hasValue 
+                  ? 'glass border-primary/50 bg-surface/80' 
+                  : 'glass border-border/50 bg-surface/70'
+                }
+                ${leftIcon ? 'pl-11' : ''}
+                ${rightIcon ? 'pr-11' : ''}
+                ${error ? 'border-danger-500 bg-danger-500/10 shadow-lg shadow-danger-500/20' : ''}
+                ${isFocused && !error ? 'ring-4 ring-primary/20' : ''}
+                hover:border-primary/70 hover:shadow-lg hover:shadow-primary/10
+                ${className}
+              `}
+              style={{
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+              }}
+              placeholder={showPlaceholder ? props.placeholder : ''}
+              value={value}
+              {...(props as any)}
+            />
+          </div>
 
-          {/* Right Icon */}
+          {/* Right Icon with Hover Effect */}
           {rightIcon && (
-            <div className={`
-              absolute right-3 top-1/2 transform -translate-y-1/2
-              transition-colors duration-200
-              ${isFocused ? 'text-primary-500' : 'text-text-muted'}
-            `}>
+            <motion.div 
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className={`
+                absolute right-3 top-1/2 transform -translate-y-1/2 z-20
+                transition-all duration-300 cursor-pointer
+                ${isFocused && !error ? 'text-primary-500' : 'text-text-muted'}
+                ${error ? 'text-danger-500' : ''}
+                hover:text-primary-400
+              `}
+            >
               {rightIcon}
-            </div>
+            </motion.div>
           )}
         </div>
 
-        {/* Helper Text or Error */}
+        {/* Helper Text or Error with Animation */}
         {(helperText || error) && (
           <motion.p
-            initial={{ opacity: 0, y: -5 }}
-            animate={{ opacity: 1, y: 0 }}
-            className={`mt-1.5 text-sm ${
+            initial={{ opacity: 0, y: -5, x: -5 }}
+            animate={{ opacity: 1, y: 0, x: 0 }}
+            exit={{ opacity: 0, y: -5 }}
+            transition={{ duration: 0.3 }}
+            className={`mt-2 text-sm font-medium flex items-center gap-1 ${
               error ? 'text-danger-500' : 'text-text-muted'
             }`}
           >
+            {error && (
+              <motion.span
+                animate={{ rotate: [0, -10, 10, -10, 0] }}
+                transition={{ duration: 0.5 }}
+              >
+                ⚠️
+              </motion.span>
+            )}
             {error || helperText}
           </motion.p>
         )}

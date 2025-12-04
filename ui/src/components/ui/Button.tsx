@@ -36,33 +36,41 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const variants = {
       primary: `
         bg-gradient-to-r from-primary to-primary-hover text-text-inverse
-        hover:shadow-glow hover:-translate-y-0.5
-        border-2 border-transparent
+        hover:shadow-glow hover:-translate-y-1 hover:shadow-xl
+        border-2 border-transparent relative overflow-hidden
+        before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent
+        before:translate-x-[-200%] hover:before:translate-x-[200%] before:transition-transform before:duration-700
       `,
       secondary: `
-        bg-surface text-text-primary border-2 border-border
-        hover:border-primary hover:bg-bg-secondary
+        glass text-text-primary border-2 border-border/50
+        hover:border-primary hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-1
       `,
       success: `
         bg-gradient-to-r from-success-600 to-success-500 text-white
-        hover:shadow-lg hover:shadow-success-500/30 hover:-translate-y-0.5
-        border-2 border-transparent
+        hover:shadow-xl hover:shadow-success-500/40 hover:-translate-y-1
+        border-2 border-transparent relative overflow-hidden
+        before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent
+        before:translate-x-[-200%] hover:before:translate-x-[200%] before:transition-transform before:duration-700
       `,
       danger: `
         bg-gradient-to-r from-danger-600 to-danger-500 text-white
-        hover:shadow-lg hover:shadow-danger-500/30 hover:-translate-y-0.5
-        border-2 border-transparent
+        hover:shadow-xl hover:shadow-danger-500/40 hover:-translate-y-1
+        border-2 border-transparent relative overflow-hidden
+        before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent
+        before:translate-x-[-200%] hover:before:translate-x-[200%] before:transition-transform before:duration-700
       `,
       ghost: `
-        bg-transparent text-text-primary border-2 border-border
-        hover:bg-surface hover:border-primary
+        bg-transparent text-text-primary border-2 border-border/50
+        hover:glass hover:border-primary hover:shadow-lg hover:shadow-primary/20
       `,
       neon: `
         bg-gradient-to-r from-primary via-accent to-primary text-white
         bg-[length:200%_auto] hover:bg-right-bottom
-        shadow-lg shadow-primary/50 hover:shadow-xl hover:shadow-accent/50
-        hover:-translate-y-0.5 border-2 border-transparent
-        animate-glow
+        shadow-xl shadow-primary/50 hover:shadow-2xl hover:shadow-accent/60
+        hover:-translate-y-1 border-2 border-transparent
+        animate-glow relative overflow-hidden
+        before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/30 before:to-transparent
+        before:translate-x-[-200%] hover:before:translate-x-[200%] before:transition-transform before:duration-500
       `,
     }
 

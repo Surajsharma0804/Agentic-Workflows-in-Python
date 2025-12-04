@@ -80,17 +80,21 @@ export default function Dashboard() {
   ]
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 relative">
+      {/* Subtle Background Gradient */}
+      <div className="fixed inset-0 z-0 opacity-30 pointer-events-none" style={{ background: 'var(--gradient-mesh)' }} />
+      
       {/* Animated Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
+        className="relative z-10"
       >
-        <h1 className="text-5xl font-bold mb-3">
-          Welcome to <span className="glow-text">Agentic Workflows</span>
+        <h1 className="text-5xl font-bold mb-3 animate-slide-down">
+          Welcome to <span className="gradient-text animate-glow">Agentic Workflows</span>
         </h1>
-        <p className="text-xl text-gray-400">
+        <p className="text-xl text-text-secondary animate-fade-in">
           Elite AI-powered workflow automation platform
         </p>
       </motion.div>
@@ -100,38 +104,50 @@ export default function Dashboard() {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="card-gradient relative overflow-hidden"
+        className="card-glass relative overflow-hidden hover-lift p-6 rounded-2xl"
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10" />
-        <div className="relative flex items-center justify-between">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary-600/10 to-accent-600/10 animate-shimmer" />
+        <div className="relative flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center space-x-4">
             <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="w-4 h-4 bg-green-500 rounded-full shadow-lg shadow-green-500/50"
+              animate={{ scale: [1, 1.2, 1], opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              className="w-4 h-4 bg-success-500 rounded-full shadow-lg shadow-success-500/50 animate-pulse"
             />
             <div>
-              <span className="text-xl font-semibold">System Status</span>
-              <p className="text-sm text-gray-400 mt-1">All systems operational</p>
+              <span className="text-xl font-semibold gradient-text">System Status</span>
+              <p className="text-sm text-text-secondary mt-1">All systems operational</p>
             </div>
           </div>
           {health?.data && (
             <div className="flex items-center space-x-8">
-              <div className="text-center">
-                <Server className="w-6 h-6 text-blue-400 mx-auto mb-1" />
-                <p className="text-xs text-gray-400">API</p>
-                <p className="text-sm font-semibold text-green-400">Online</p>
-              </div>
-              <div className="text-center">
-                <Database className="w-6 h-6 text-purple-400 mx-auto mb-1" />
-                <p className="text-xs text-gray-400">Database</p>
-                <p className="text-sm font-semibold text-green-400">Connected</p>
-              </div>
-              <div className="text-center">
-                <Cpu className="w-6 h-6 text-cyan-400 mx-auto mb-1" />
-                <p className="text-xs text-gray-400">Workers</p>
-                <p className="text-sm font-semibold text-green-400">Active</p>
-              </div>
+              <motion.div 
+                className="text-center"
+                whileHover={{ scale: 1.1, y: -2 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <Server className="w-6 h-6 text-primary-400 mx-auto mb-1 animate-pulse" />
+                <p className="text-xs text-text-muted">API</p>
+                <p className="text-sm font-semibold text-success-400">Online</p>
+              </motion.div>
+              <motion.div 
+                className="text-center"
+                whileHover={{ scale: 1.1, y: -2 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <Database className="w-6 h-6 text-accent-400 mx-auto mb-1 animate-pulse" />
+                <p className="text-xs text-text-muted">Database</p>
+                <p className="text-sm font-semibold text-success-400">Connected</p>
+              </motion.div>
+              <motion.div 
+                className="text-center"
+                whileHover={{ scale: 1.1, y: -2 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <Cpu className="w-6 h-6 text-info-400 mx-auto mb-1 animate-pulse" />
+                <p className="text-xs text-text-muted">Workers</p>
+                <p className="text-sm font-semibold text-success-400">Active</p>
+              </motion.div>
             </div>
           )}
         </div>
@@ -164,49 +180,49 @@ export default function Dashboard() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="card"
+          className="card-glass hover-lift p-6 rounded-2xl"
         >
-          <h3 className="text-lg font-semibold mb-4">Performance Metrics</h3>
+          <h3 className="text-lg font-semibold mb-4 gradient-text">Performance Metrics</h3>
           <div className="space-y-4">
             <div>
               <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-400">Success Rate</span>
-                <span className="font-semibold text-green-400">94%</span>
+                <span className="text-text-secondary">Success Rate</span>
+                <span className="font-semibold text-success-400">94%</span>
               </div>
-              <div className="progress">
+              <div className="h-2 bg-surface rounded-full overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: '94%' }}
-                  transition={{ duration: 1, delay: 0.5 }}
-                  className="progress-bar"
+                  transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
+                  className="h-full bg-gradient-to-r from-success-600 to-success-400 rounded-full shadow-lg shadow-success-500/30"
                 />
               </div>
             </div>
             <div>
               <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-400">Avg. Execution Time</span>
-                <span className="font-semibold text-blue-400">2.3s</span>
+                <span className="text-text-secondary">Avg. Execution Time</span>
+                <span className="font-semibold text-primary-400">2.3s</span>
               </div>
-              <div className="progress">
+              <div className="h-2 bg-surface rounded-full overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: '65%' }}
-                  transition={{ duration: 1, delay: 0.7 }}
-                  className="progress-bar"
+                  transition={{ duration: 1, delay: 0.7, ease: "easeOut" }}
+                  className="h-full bg-gradient-to-r from-primary-600 to-primary-400 rounded-full shadow-lg shadow-primary-500/30"
                 />
               </div>
             </div>
             <div>
               <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-400">Resource Usage</span>
-                <span className="font-semibold text-yellow-400">45%</span>
+                <span className="text-text-secondary">Resource Usage</span>
+                <span className="font-semibold text-warning-400">45%</span>
               </div>
-              <div className="progress">
+              <div className="h-2 bg-surface rounded-full overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: '45%' }}
-                  transition={{ duration: 1, delay: 0.9 }}
-                  className="progress-bar"
+                  transition={{ duration: 1, delay: 0.9, ease: "easeOut" }}
+                  className="h-full bg-gradient-to-r from-warning-600 to-warning-400 rounded-full shadow-lg shadow-warning-500/30"
                 />
               </div>
             </div>
@@ -219,33 +235,33 @@ export default function Dashboard() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}
-        className="card"
+        className="card-glass hover-lift p-6 rounded-2xl"
       >
-        <h2 className="text-2xl font-bold mb-6">Quick Actions</h2>
+        <h2 className="text-2xl font-bold mb-6 gradient-text">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <motion.button
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.05, y: -4 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate('/run')}
-            className="btn-neon flex items-center justify-center space-x-3 py-4"
+            className="btn-gradient btn-glow flex items-center justify-center space-x-3 py-4 px-6 rounded-xl text-white font-semibold shadow-lg"
           >
             <Play className="w-5 h-5" />
             <span>Run New Workflow</span>
           </motion.button>
           <motion.button
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.05, y: -4 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate('/dag')}
-            className="btn-secondary flex items-center justify-center space-x-3 py-4"
+            className="glass hover-lift flex items-center justify-center space-x-3 py-4 px-6 rounded-xl font-semibold border-2 border-border/50 hover:border-primary transition-all"
           >
             <Eye className="w-5 h-5" />
             <span>View DAG</span>
           </motion.button>
           <motion.button
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.05, y: -4 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate('/audit')}
-            className="btn-secondary flex items-center justify-center space-x-3 py-4"
+            className="glass hover-lift flex items-center justify-center space-x-3 py-4 px-6 rounded-xl font-semibold border-2 border-border/50 hover:border-primary transition-all"
           >
             <FileText className="w-5 h-5" />
             <span>Check Audit Log</span>
@@ -258,13 +274,16 @@ export default function Dashboard() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="card"
+        className="card-glass hover-lift p-6 rounded-2xl"
       >
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold">Recent Workflows</h2>
-          <button className="text-sm text-blue-400 hover:text-blue-300 transition-colors">
+          <h2 className="text-2xl font-bold gradient-text">Recent Workflows</h2>
+          <motion.button 
+            whileHover={{ x: 5 }}
+            className="text-sm text-primary-400 hover:text-primary-300 transition-colors font-semibold"
+          >
             View All →
-          </button>
+          </motion.button>
         </div>
         {workflowsLoading ? (
           <TableSkeleton rows={5} />
@@ -277,24 +296,28 @@ export default function Dashboard() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
                 whileHover={{ scale: 1.02, x: 10 }}
-                className="flex items-center justify-between p-4 bg-gray-800/30 rounded-lg border border-gray-800 hover:border-gray-700 transition-all cursor-pointer"
+                className="flex items-center justify-between p-4 glass rounded-xl border border-border/30 hover:border-primary/50 transition-all cursor-pointer hover-lift"
               >
                 <div className="flex items-center space-x-4">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                    <Activity className="w-5 h-5" />
-                  </div>
+                  <motion.div 
+                    className="w-10 h-10 rounded-full gradient-primary flex items-center justify-center shadow-lg"
+                    whileHover={{ rotate: 360 }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    <Activity className="w-5 h-5 text-white" />
+                  </motion.div>
                   <div>
-                    <p className="font-medium">{workflow.name || workflow.id}</p>
-                    <p className="text-sm text-gray-400">{workflow.created_at || 'Just now'}</p>
+                    <p className="font-medium text-text-primary">{workflow.name || workflow.id}</p>
+                    <p className="text-sm text-text-secondary">{workflow.created_at || 'Just now'}</p>
                   </div>
                 </div>
                 <span
-                  className={`badge ${
+                  className={`px-3 py-1 rounded-full text-xs font-semibold ${
                     workflow.status === 'success'
-                      ? 'badge-success'
+                      ? 'bg-success-500/20 text-success-400 border border-success-500/30'
                       : workflow.status === 'failed'
-                      ? 'badge-error'
-                      : 'badge-warning'
+                      ? 'bg-danger-500/20 text-danger-400 border border-danger-500/30'
+                      : 'bg-warning-500/20 text-warning-400 border border-warning-500/30'
                   }`}
                 >
                   {workflow.status || 'pending'}
@@ -304,20 +327,28 @@ export default function Dashboard() {
           </div>
         ) : (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
             className="text-center py-12"
           >
-            <Zap className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-            <p className="text-gray-400 text-lg mb-4">
+            <motion.div
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Zap className="w-16 h-16 text-primary-400 mx-auto mb-4 animate-glow" />
+            </motion.div>
+            <p className="text-text-secondary text-lg mb-4">
               No workflows yet. Ready to get started?
             </p>
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => navigate('/run')}
-              className="btn-primary"
+              className="btn-gradient btn-glow px-8 py-3 rounded-xl text-white font-semibold shadow-lg"
             >
               Create Your First Workflow
-            </button>
+            </motion.button>
           </motion.div>
         )}
       </motion.div>
