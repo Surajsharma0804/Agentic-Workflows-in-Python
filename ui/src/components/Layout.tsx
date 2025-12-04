@@ -129,16 +129,91 @@ export default function Layout({ children }: LayoutProps) {
         )}
       </AnimatePresence>
 
-      {/* Sidebar - Desktop & Mobile Drawer */}
+      {/* Sidebar - Desktop (always visible) & Mobile Drawer */}
+      <aside className="hidden lg:flex lg:relative inset-y-0 left-0 w-72 bg-surface border-r-2 border-border flex-col z-50">
+        {/* Desktop Sidebar Content */}
+        {/* Logo */}
+        <div className="p-6 border-b-2 border-border flex items-center justify-between">
+          <Link to="/" className="flex items-center space-x-3 group">
+            <motion.div
+              whileHover={{ rotate: 360, scale: 1.1 }}
+              transition={{ duration: 0.5 }}
+              className="p-2 rounded-xl bg-gradient-to-br from-primary to-accent shadow-glow"
+            >
+              <Zap className="w-6 h-6 text-white" />
+            </motion.div>
+            <div>
+              <h1 className="text-xl font-bold text-text-primary">Agentic</h1>
+              <p className="text-xs text-text-muted">Workflows Platform</p>
+            </div>
+          </Link>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+          {navigation.map((item) => {
+            const isActive = location.pathname === item.href
+            const Icon = item.icon
+
+            return (
+              <Link
+                key={item.name}
+                to={item.href}
+                className={cn(
+                  'flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 relative group',
+                  isActive
+                    ? 'bg-gradient-to-r from-primary to-accent text-text-inverse shadow-glow'
+                    : 'text-text-secondary hover:bg-bg-secondary hover:text-text-primary'
+                )}
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="activeNav"
+                    className="absolute inset-0 bg-gradient-to-r from-primary to-accent rounded-xl"
+                    transition={{ type: 'spring', duration: 0.6 }}
+                  />
+                )}
+                <Icon className="w-5 h-5 relative z-10" />
+                <span className="font-medium relative z-10">{item.name}</span>
+                {isActive && (
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="ml-auto w-2 h-2 bg-white rounded-full relative z-10"
+                  />
+                )}
+              </Link>
+            )
+          })}
+        </nav>
+
+        {/* User Section */}
+        <div className="p-4 border-t-2 border-border">
+          <UserMenu />
+        </div>
+
+        {/* Footer */}
+        <div className="p-4 border-t-2 border-border">
+          <div className="text-xs text-text-muted text-center space-y-1">
+            <p className="font-medium">v2.0.0</p>
+            <div className="flex items-center justify-center space-x-2 mt-2">
+              <div className="w-2 h-2 bg-success-500 rounded-full animate-pulse" />
+              <span className="text-success-500">Online</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      {/* Mobile Sidebar Drawer */}
       <motion.aside
         initial={false}
         animate={{
           x: isMobileMenuOpen ? 0 : '-100%',
         }}
         transition={{ duration: 0.3, type: 'spring', damping: 25 }}
-        className="fixed lg:relative inset-y-0 left-0 w-72 bg-surface border-r-2 border-border flex flex-col z-50 lg:translate-x-0"
+        className="fixed lg:hidden inset-y-0 left-0 w-72 bg-surface border-r-2 border-border flex flex-col z-50"
       >
-        {/* Logo & Close Button */}
+        {/* Mobile Logo & Close Button */}
         <div className="p-6 border-b-2 border-border flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-3 group" onClick={() => setIsMobileMenuOpen(false)}>
             <motion.div

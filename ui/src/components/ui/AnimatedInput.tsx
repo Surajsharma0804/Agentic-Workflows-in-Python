@@ -32,6 +32,9 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
       props.onChange?.(e)
     }
 
+    // Don't show placeholder when label is present and not focused/filled
+    const showPlaceholder = !label || isFocused || hasValue
+
     return (
       <div className="w-full">
         <div className="relative">
@@ -46,7 +49,7 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
               }}
               transition={{ duration: 0.2 }}
               className={`
-                absolute left-3 px-2 bg-surface pointer-events-none z-10
+                absolute ${leftIcon ? 'left-10' : 'left-3'} px-2 bg-surface pointer-events-none z-10
                 transition-colors duration-200
                 ${isFocused ? 'text-primary' : 'text-text-secondary'}
                 ${error ? 'text-danger-500' : ''}
@@ -89,6 +92,7 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
               ${className}
             `}
             {...props}
+            placeholder={showPlaceholder ? props.placeholder : ''}
           />
 
           {/* Right Icon */}
