@@ -100,8 +100,8 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
               ${isFocused && !error ? 'ring-4 ring-primary/10' : ''}
               ${className}
             `}
-            {...props}
             placeholder={showPlaceholder ? props.placeholder : ''}
+            {...(props as any)}
           />
 
           {/* Right Icon */}
