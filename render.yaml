@@ -4,7 +4,10 @@ services:
     name: agentic-workflows-api
     runtime: docker
     plan: free
+    region: oregon
+    branch: main
     healthCheckPath: /api/health
+    autoDeploy: true
     envVars:
       - key: ENVIRONMENT
         value: production
@@ -25,3 +28,4 @@ databases:
     databaseName: agentic_workflows
     user: agentic
     plan: free
+    region: oregon
