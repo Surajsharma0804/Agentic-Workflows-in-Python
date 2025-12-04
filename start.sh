@@ -6,9 +6,5 @@ PORT=${PORT:-8000}
 
 echo "Starting server on port $PORT..."
 
-# Run uvicorn directly
-exec uvicorn agentic_workflows.api.server:app \
-    --host 0.0.0.0 \
-    --port $PORT \
-    --workers 1 \
-    --log-level info
+# Run minimal server for testing
+exec python minimal_server.py
