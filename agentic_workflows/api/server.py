@@ -16,6 +16,31 @@ logger = structlog.get_logger()
 settings = get_settings()
 
 
+async def init_database_async():
+    """Initialize database asynchronously (non-blocking)."""
+    import time
+    import asyncio
+    max_retries = 5
+    for attempt in range(max_retries):
+        try:
+            from ..db.database import init_db, engine
+            from ..db.models import Base
+            logger.info("initializing_database_tables", attempt=attempt + 1)
+            # Test connection first
+            await asyncio.to_thread(engine.connect)
+            # Initialize tables
+            await asyncio.to_thread(init_db)
+            logger.info("database_initialized_successfully", tables=list(Base.metadata.tables.keys()))
+            break
+        except Exception as e:
+            if attempt < max_retries - 1:
+                logger.warning("database_init_retry", attempt=attempt + 1, error=str(e))
+                await asyncio.sleep(2)
+            else:
+                logger.error("database_initialization_failed", error=str(e))
+                # Continue anyway - app will work without DB for health checks
+
+
 def create_app() -> FastAPI:
     """Create and configure FastAPI application."""
     
@@ -112,27 +137,11 @@ def create_app() -> FastAPI:
     @app.on_event("startup")
     async def startup_event():
         logger.info("application_starting", version=settings.app_version, port=settings.api_port)
-        # Initialize database tables with retry logic
-        import time
-        max_retries = 5
-        for attempt in range(max_retries):
-            try:
-                from ..db.database import init_db, engine
-                from ..db.models import Base
-                logger.info("initializing_database_tables", attempt=attempt + 1)
-                # Test connection first
-                engine.connect()
-                # Initialize tables
-                init_db()
-                logger.info("database_initialized_successfully", tables=list(Base.metadata.tables.keys()))
-                break
-            except Exception as e:
-                if attempt < max_retries - 1:
-                    logger.warning("database_init_retry", attempt=attempt + 1, error=str(e))
-                    time.sleep(2)
-                else:
-                    logger.error("database_initialization_failed", error=str(e))
-                    # Continue anyway - health check will show the issue
+        logger.info("startup_complete", message="App ready to accept requests")
+        
+        # Initialize database in background (non-blocking)
+        import asyncio
+        asyncio.create_task(init_database_async())
     
     @app.on_event("shutdown")
     async def shutdown_event():

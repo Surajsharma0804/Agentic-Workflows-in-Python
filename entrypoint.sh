@@ -13,11 +13,12 @@ echo "ENVIRONMENT: ${ENVIRONMENT:-production}"
 echo "============================================"
 
 # Start the application immediately
-# Database initialization happens in FastAPI startup event
+# Database initialization happens asynchronously in background
 echo "Starting uvicorn on 0.0.0.0:$PORT..."
 exec uvicorn agentic_workflows.api.server:app \
     --host 0.0.0.0 \
     --port "$PORT" \
     --workers 1 \
     --log-level info \
-    --timeout-keep-alive 120
+    --timeout-keep-alive 30 \
+    --timeout-graceful-shutdown 10
