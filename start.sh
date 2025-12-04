@@ -1,27 +1,29 @@
-#!/bin/bash
-# Startup script for Render.com - FREE TIER (No Redis)
+#!/bin/sh
+set -e
 
-# Use PORT environment variable from Render
-PORT=${PORT:-10000}
+# Use PORT environment variable from Render (default 10000)
+PORT="${PORT:-10000}"
 
 echo "========================================="
 echo "Agentic Workflows - FREE DEPLOYMENT"
 echo "Port: $PORT"
+echo "Host: 0.0.0.0"
 echo "Environment: ${ENVIRONMENT:-production}"
 echo "========================================="
 
 # Wait for database
 echo "Waiting for database to be ready..."
-sleep 10
+sleep 15
 
 # Initialize database tables
 echo "Initializing database..."
-python -c "from agentic_workflows.db.database import init_db; init_db()" || echo "Database init skipped"
+python -c "from agentic_workflows.db.database import init_db; init_db()" || echo "Database init skipped (may already exist)"
 
-# Start FastAPI server (no Redis/Celery)
-echo "Starting FastAPI server..."
+# Start FastAPI server
+echo "Starting FastAPI server on 0.0.0.0:$PORT..."
 exec uvicorn agentic_workflows.api.server:app \
     --host 0.0.0.0 \
-    --port $PORT \
+    --port "$PORT" \
     --workers 1 \
-    --log-level info
+    --log-level info \
+    --no-access-log

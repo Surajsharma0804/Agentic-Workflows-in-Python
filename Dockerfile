@@ -42,22 +42,18 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 # Copy application code
 COPY --chown=agentic:agentic . .
 
-# Copy and make startup script executable
-COPY --chown=agentic:agentic start.sh /app/start.sh
-RUN chmod +x /app/start.sh
-
 # Install the package
 RUN pip install --no-cache-dir -e .
+
+# Copy entrypoint script
+COPY --chown=agentic:agentic entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
 # Switch to non-root user
 USER agentic
 
-# Expose port (Render assigns dynamically)
+# Expose port (Render assigns dynamically via PORT env var)
 EXPOSE 10000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD curl -f http://localhost:${PORT:-10000}/api/health || exit 1
-
-# Default command
-CMD ["/app/start.sh"]
+# Start the application
+CMD ["/bin/sh", "/app/entrypoint.sh"]

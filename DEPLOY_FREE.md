@@ -1,8 +1,8 @@
 # 🚀 FREE Deployment Guide - Render.com
 
 **Cost**: $0/month  
-**Time**: 5-10 minutes  
-**Status**: Production Ready
+**Time**: 10-15 minutes  
+**Status**: Production Ready ✅
 
 ---
 
@@ -21,10 +21,11 @@ git push origin main
 3. Click "New +" → "Blueprint"
 4. Select: `Agentic-Workflows-in-Python`
 5. Click "Apply"
+6. **IMPORTANT**: Wait 10-15 minutes for first deployment
 
-### Step 3: Wait & Share
-- Wait 5-10 minutes for deployment
-- Get your URL: `https://agentic-workflows-api.onrender.com`
+### Step 3: Verify & Share
+- Check build logs for "Starting uvicorn on 0.0.0.0:10000"
+- Test: `https://your-app.onrender.com/api/health`
 - Share with friends!
 
 ---
