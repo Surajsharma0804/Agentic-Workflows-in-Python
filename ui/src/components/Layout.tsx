@@ -54,21 +54,21 @@ function UserMenu() {
       <motion.button
         whileHover={{ scale: 1.02 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center space-x-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all group"
+        className="w-full flex items-center space-x-3 p-3 rounded-xl bg-dark-surface border-2 border-dark-border hover:border-primary-500/50 transition-all group"
       >
         {user?.avatar ? (
-          <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full" />
+          <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full ring-2 ring-primary-500/50" />
         ) : (
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-600 to-accent-600 flex items-center justify-center shadow-glow">
             <User className="w-5 h-5 text-white" />
           </div>
         )}
         <div className="flex-1 text-left">
-          <p className="text-sm font-medium">{user?.name || 'User'}</p>
-          <p className="text-xs text-gray-400">{user?.email || 'user@example.com'}</p>
+          <p className="text-sm font-semibold text-dark-text">{user?.name || 'User'}</p>
+          <p className="text-xs text-dark-muted">{user?.email || 'user@example.com'}</p>
         </div>
         <ChevronDown className={cn(
-          'w-4 h-4 text-gray-400 transition-transform',
+          'w-4 h-4 text-dark-muted transition-transform group-hover:text-primary-500',
           isOpen && 'rotate-180'
         )} />
       </motion.button>
