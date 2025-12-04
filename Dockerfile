@@ -7,14 +7,17 @@ FROM node:18-slim AS frontend-builder
 
 WORKDIR /frontend
 
-# Copy frontend files
+# Copy package files first for better caching
 COPY ui/package*.json ./
-COPY ui/ ./
 
 # Install ALL dependencies (including devDependencies for build)
-RUN npm ci && \
-    npm run build && \
-    ls -la dist/
+RUN npm ci
+
+# Copy all frontend source files
+COPY ui/ ./
+
+# Build the frontend
+RUN npm run build && ls -la dist/
 
 # Stage 2: Python Builder
 FROM python:3.11-slim AS python-builder
