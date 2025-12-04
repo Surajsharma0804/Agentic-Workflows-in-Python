@@ -339,13 +339,13 @@ export default function Login() {
             className="text-center text-xs sm:text-sm text-text-muted mt-6 sm:mt-8 px-4"
           >
             By signing in, you agree to our{' '}
-            <a href="#" className="text-text-secondary hover:text-primary transition-colors">
+            <Link to="/terms-of-service" className="text-primary hover:text-primary-hover transition-colors font-medium">
               Terms of Service
-            </a>
+            </Link>
             {' '}and{' '}
-            <a href="#" className="text-text-secondary hover:text-primary transition-colors">
+            <Link to="/privacy-policy" className="text-primary hover:text-primary-hover transition-colors font-medium">
               Privacy Policy
-            </a>
+            </Link>
           </motion.p>
         </motion.div>
       </div>
