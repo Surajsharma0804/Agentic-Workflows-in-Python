@@ -6,12 +6,14 @@ from ..config import get_settings
 
 settings = get_settings()
 
-# Create database engine
+# Create database engine (FREE tier optimized)
 engine = create_engine(
     settings.database_url,
     pool_pre_ping=True,
-    pool_size=10,
-    max_overflow=20,
+    pool_size=5,  # Reduced for FREE tier (max 97 connections)
+    max_overflow=5,  # Reduced for FREE tier
+    pool_recycle=300,  # Recycle connections every 5 min
+    pool_timeout=30
 )
 
 # Create session factory
