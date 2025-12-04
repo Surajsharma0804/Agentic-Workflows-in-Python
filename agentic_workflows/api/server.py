@@ -125,6 +125,23 @@ def create_app() -> FastAPI:
             }
         )
     
+    # Debug endpoint to check filesystem
+    @app.get("/api/debug/filesystem")
+    async def debug_filesystem():
+        """Debug endpoint to check filesystem structure."""
+        import os
+        ui_dist_path = Path(__file__).parent.parent.parent / "ui" / "dist"
+        app_root = Path(__file__).parent.parent.parent
+        
+        return {
+            "app_root": str(app_root.absolute()),
+            "ui_dist_path": str(ui_dist_path.absolute()),
+            "ui_dist_exists": ui_dist_path.exists(),
+            "ui_dist_contents": [f.name for f in ui_dist_path.iterdir()] if ui_dist_path.exists() else [],
+            "cwd": os.getcwd(),
+            "file_location": str(Path(__file__).absolute())
+        }
+    
     # Include API routers FIRST (before static files)
     app.include_router(health.router, prefix="/api", tags=["Health"])
     app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
@@ -138,25 +155,45 @@ def create_app() -> FastAPI:
     
     # Serve React frontend (if built)
     ui_dist_path = Path(__file__).parent.parent.parent / "ui" / "dist"
+    logger.info("checking_frontend_path", 
+                path=str(ui_dist_path), 
+                exists=ui_dist_path.exists(),
+                absolute_path=str(ui_dist_path.absolute()))
+    
     if ui_dist_path.exists():
-        logger.info("serving_react_frontend", path=str(ui_dist_path))
+        # List contents for debugging
+        try:
+            contents = list(ui_dist_path.iterdir())
+            logger.info("serving_react_frontend", 
+                       path=str(ui_dist_path),
+                       files=[f.name for f in contents])
+        except Exception as e:
+            logger.error("error_listing_frontend", error=str(e))
         
         # Root path - serve index.html
         @app.get("/")
         async def root():
             """Serve React app root."""
             index_file = ui_dist_path / "index.html"
+            logger.info("serving_root", index_exists=index_file.exists())
             if index_file.exists():
                 return FileResponse(index_file)
             return JSONResponse(status_code=404, content={"error": "Frontend not built"})
         
         # Mount static files (JS, CSS, images)
-        app.mount("/assets", StaticFiles(directory=str(ui_dist_path / "assets")), name="assets")
+        assets_path = ui_dist_path / "assets"
+        if assets_path.exists():
+            app.mount("/assets", StaticFiles(directory=str(assets_path)), name="assets")
+            logger.info("mounted_assets", path=str(assets_path))
+        else:
+            logger.warning("assets_not_found", path=str(assets_path))
         
         # Serve index.html for all non-API routes (SPA routing)
         @app.get("/{full_path:path}")
         async def serve_react_app(full_path: str):
             """Serve React app for all non-API routes."""
+            logger.info("catch_all_route", path=full_path)
+            
             # If path starts with /api, let it 404 naturally
             if full_path.startswith("api/"):
                 return JSONResponse(status_code=404, content={"error": "Not Found"})
