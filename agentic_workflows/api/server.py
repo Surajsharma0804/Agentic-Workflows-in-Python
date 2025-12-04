@@ -3,6 +3,7 @@ import uvicorn
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.exceptions import RequestValidationError
 from fastapi.staticfiles import StaticFiles
@@ -66,7 +67,17 @@ def create_app() -> FastAPI:
         openapi_url="/api/openapi.json",
     )
     
-    # Middleware
+    # Middleware (order matters - SessionMiddleware must be added before others)
+    # Add SessionMiddleware for OAuth support
+    app.add_middleware(
+        SessionMiddleware,
+        secret_key=settings.secret_key,
+        session_cookie="agentic_session",
+        max_age=3600,  # 1 hour
+        same_site="lax",
+        https_only=settings.environment == "production"
+    )
+    
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
