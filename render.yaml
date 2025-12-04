@@ -1,18 +1,5 @@
 services:
-  # PostgreSQL Database
-  - type: pserv
-    name: agentic-workflows-db
-    plan: free
-    databaseName: agentic_workflows
-    databaseUser: agentic
-
-  # Redis Cache (Paid - $7/month required for full functionality)
-  - type: redis
-    name: agentic-workflows-redis
-    plan: starter
-    maxmemoryPolicy: allkeys-lru
-
-  # FastAPI Backend
+  # FastAPI Backend - FREE
   - type: web
     name: agentic-workflows-api
     runtime: docker
@@ -27,51 +14,16 @@ services:
         fromDatabase:
           name: agentic-workflows-db
           property: connectionString
-      - key: REDIS_URL
-        fromService:
-          name: agentic-workflows-redis
-          type: redis
-          property: connectionString
-      - key: CELERY_BROKER_URL
-        fromService:
-          name: agentic-workflows-redis
-          type: redis
-          property: connectionString
-      - key: CELERY_RESULT_BACKEND
-        fromService:
-          name: agentic-workflows-redis
-          type: redis
-          property: connectionString
       - key: SECRET_KEY
         generateValue: true
       - key: LOG_LEVEL
         value: INFO
+      - key: PORT
+        value: 10000
 
-  # Celery Worker (Background Tasks)
-  - type: worker
-    name: agentic-workflows-worker
-    runtime: docker
+databases:
+  # PostgreSQL Database - FREE
+  - name: agentic-workflows-db
+    databaseName: agentic_workflows
+    user: agentic
     plan: free
-    dockerCommand: celery -A agentic_workflows.celery_app worker --loglevel=info --concurrency=2
-    envVars:
-      - key: ENVIRONMENT
-        value: production
-      - key: DATABASE_URL
-        fromDatabase:
-          name: agentic-workflows-db
-          property: connectionString
-      - key: REDIS_URL
-        fromService:
-          name: agentic-workflows-redis
-          type: redis
-          property: connectionString
-      - key: CELERY_BROKER_URL
-        fromService:
-          name: agentic-workflows-redis
-          type: redis
-          property: connectionString
-      - key: CELERY_RESULT_BACKEND
-        fromService:
-          name: agentic-workflows-redis
-          type: redis
-          property: connectionString
