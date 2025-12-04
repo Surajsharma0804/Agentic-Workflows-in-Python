@@ -2,8 +2,7 @@
 from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 from alembic import context
-from agentic_workflows.db.session import Base
-from agentic_workflows.db.models import *
+from agentic_workflows.db.models import Base, User
 from agentic_workflows.config import get_settings
 
 config = context.config
