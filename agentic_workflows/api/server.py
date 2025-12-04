@@ -123,6 +123,12 @@ def create_app() -> FastAPI:
             }
         )
     
+    # Root path handler for Render health check
+    @app.get("/")
+    async def root():
+        """Root endpoint - redirects to health check."""
+        return {"status": "ok", "message": "Agentic Workflows API", "health": "/api/health", "docs": "/api/docs"}
+    
     # Include routers
     app.include_router(health.router, prefix="/api", tags=["Health"])
     app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
