@@ -1,8 +1,0 @@
-Subject: Project Update
-Hi team, I wanted to give you a quick update on the project status. We've completed the first phase of development and are now moving into testing. The initial feedback from stakeholders has been very positive. We're on track to meet our deadline next month.
-
-Subject: Meeting Reminder
-This is a reminder about tomorrow's team meeting at 2 PM. We'll be discussing the Q4 roadmap and reviewing the latest sprint results. Please come prepared with your updates and any blockers you're facing.
-
-Subject: Welcome to the Team
-Welcome aboard! We're excited to have you join our team. Your onboarding schedule has been sent to your email. If you have any questions, feel free to reach out to HR or your manager. Looking forward to working with you!
