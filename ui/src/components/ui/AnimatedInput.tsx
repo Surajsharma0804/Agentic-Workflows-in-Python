@@ -38,9 +38,6 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
       props.onChange?.(e)
     }
 
-    // Never show placeholder when label is present (label acts as placeholder)
-    const showPlaceholder = !label
-
     return (
       <div className="w-full">
         <div className="relative">

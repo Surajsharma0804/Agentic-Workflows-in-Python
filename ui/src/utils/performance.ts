@@ -8,6 +8,7 @@
  * @param wait Wait time in milliseconds (default: 200ms)
  * @returns Debounced function
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function debounce<T extends (...args: any[]) => any>(
   fn: T,
   wait = 200
@@ -33,6 +34,7 @@ export function debounce<T extends (...args: any[]) => any>(
  * @param limit Time limit in milliseconds (default: 200ms)
  * @returns Throttled function
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function throttle<T extends (...args: any[]) => any>(
   fn: T,
   limit = 200
@@ -155,10 +157,9 @@ export function prefersReducedMotion(): boolean {
  * @returns Connection effective type or 'unknown'
  */
 export function getConnectionSpeed(): string {
-  const connection =
-    (navigator as any).connection ||
-    (navigator as any).mozConnection ||
-    (navigator as any).webkitConnection;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const nav = navigator as any;
+  const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
 
   return connection?.effectiveType || 'unknown';
 }
@@ -169,6 +170,7 @@ export function getConnectionSpeed(): string {
  */
 export function isLowEndDevice(): boolean {
   const connection = getConnectionSpeed();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const memory = (navigator as any).deviceMemory;
 
   // Consider device low-end if:
@@ -213,8 +215,10 @@ export function reportWebVitals(metric: {
   console.log('[Web Vitals]', metric);
 
   // Example: Send to Google Analytics
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    (window as any).gtag('event', metric.name, {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const win = window as any;
+  if (typeof window !== 'undefined' && win.gtag) {
+    win.gtag('event', metric.name, {
       value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
       event_category: 'Web Vitals',
       event_label: metric.id,
