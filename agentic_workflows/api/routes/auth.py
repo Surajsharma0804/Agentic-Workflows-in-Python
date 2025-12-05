@@ -21,11 +21,10 @@ settings = get_settings()
 
 # JWT settings - MUST be set via environment variable in production
 SECRET_KEY = settings.secret_key
-if SECRET_KEY == "change-me-in-production":
-    import warnings
-    warnings.warn(
-        "WARNING: Using default SECRET_KEY! Set SECRET_KEY environment variable in production!",
-        RuntimeWarning
+if SECRET_KEY == "change-me-in-production" and settings.environment == "production":
+    raise ValueError(
+        "CRITICAL: SECRET_KEY must be set in production! "
+        "Set the SECRET_KEY environment variable."
     )
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
