@@ -332,11 +332,16 @@ async def google_callback(request: Request, db: Session = Depends(get_db)):
     """Handle Google OAuth callback."""
     try:
         # Get access token
+        logger.info("google_callback_started")
         token = await oauth.google.authorize_access_token(request)
+        logger.info("google_token_received", has_access_token=bool(token.get('access_token')))
         
         # Get user info
         user_info = await get_google_user_info(token['access_token'])
+        logger.info("google_user_info_received", user_info=user_info)
+        
         if not user_info:
+            logger.error("google_user_info_empty")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Failed to get user information from Google"
@@ -390,7 +395,9 @@ async def google_callback(request: Request, db: Session = Depends(get_db)):
         )
         
     except Exception as e:
-        logger.error("google_oauth_failed", error=str(e))
+        logger.error("google_oauth_failed", error=str(e), error_type=type(e).__name__)
+        import traceback
+        logger.error("google_oauth_traceback", traceback=traceback.format_exc())
         frontend_url = str(request.base_url).rstrip('/')
         return RedirectResponse(
             url=f"{frontend_url}/login?error=google_auth_failed"
