@@ -3,10 +3,19 @@ from .spec import WorkflowSpec, TaskSpec
 from .audit import AuditLog
 import importlib
 
+# Simple factory to resolve plugin classes by name
 PLUGIN_REGISTRY = {
+    # Core plugins
     "file_organizer": "agentic_workflows.plugins.file_organizer.FileOrganizer",
     "email_summarizer": "agentic_workflows.plugins.email_summarizer.EmailSummarizer",
     "http_task": "agentic_workflows.plugins.http_task.HTTPTask",
+    
+    # Advanced plugins
+    "web_scraper": "agentic_workflows.plugins.advanced.web_scraper.WebScraperPlugin",
+    "image_processor": "agentic_workflows.plugins.advanced.image_processor.ImageProcessorPlugin",
+    "pdf_extractor": "agentic_workflows.plugins.advanced.pdf_extractor.PDFExtractorPlugin",
+    "sql_query": "agentic_workflows.plugins.advanced.sql_query.SQLQueryPlugin",
+    "shell_command": "agentic_workflows.plugins.advanced.shell_command.ShellCommandPlugin",
 }
 
 def resolve_plugin(type_name: str):
@@ -44,8 +53,10 @@ class ExecutorAgent:
             typ = step["type"]
             params = dict(step.get("params", {}))
             params.setdefault("dry_run", dry_run)
+            # resolve plugin
             cls = resolve_plugin(typ)
             plugin = cls(params=params, audit=self.audit)
+            # get high-level plan for visibility
             p = plugin.plan()
             self.audit.record({"agent": "executor", "task_id": step["task_id"], "planned_actions": len(p)})
             if dry_run:

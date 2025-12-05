@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Mail, Lock, Eye, EyeOff, Zap, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
@@ -10,6 +10,7 @@ import AnimatedLoginHero from '../components/ui/AnimatedLoginHero'
 
 export default function Login() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { login, loginWithGoogle, loginWithApple, loginWithGithub } = useAuth()
   const { showSuccess, showError } = useAlert()
   const [showPassword, setShowPassword] = useState(false)
@@ -22,6 +23,20 @@ export default function Login() {
     rememberMe: false,
   })
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
+
+  // Handle OAuth errors from URL
+  useEffect(() => {
+    const error = searchParams.get('error')
+    const provider = searchParams.get('provider')
+    
+    if (error === 'oauth_not_configured' && provider) {
+      showError(`${provider.charAt(0).toUpperCase() + provider.slice(1)} OAuth is not configured. Please use email/password login or contact the administrator to set up OAuth credentials.`)
+      // Clear the error from URL
+      searchParams.delete('error')
+      searchParams.delete('provider')
+      navigate({ search: searchParams.toString() }, { replace: true })
+    }
+  }, [searchParams, showError, navigate])
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {}

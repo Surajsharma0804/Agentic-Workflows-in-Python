@@ -31,7 +31,27 @@ class FileOrganizer(PluginBase):
 
     def __init__(self, params: dict, audit=None):
         super().__init__(params, audit=audit)
-        self.target = Path(params.get("target", ".")).expanduser().resolve()
+        
+        # Validate and secure target path
+        target_str = params.get("target", ".")
+        self.target = Path(target_str).expanduser().resolve()
+        
+        # Security: Ensure target is within allowed directories
+        # For FREE tier, restrict to current working directory and subdirectories
+        allowed_base = Path.cwd().resolve()
+        try:
+            self.target.relative_to(allowed_base)
+        except ValueError:
+            raise ValueError(
+                f"Security: Target path must be within {allowed_base}, got {self.target}"
+            )
+        
+        # Validate target exists and is a directory
+        if not self.target.exists():
+            raise FileNotFoundError(f"Target directory does not exist: {self.target}")
+        if not self.target.is_dir():
+            raise ValueError(f"Target must be a directory, not a file: {self.target}")
+        
         self.categories = params.get("categories", DEFAULT_CATEGORIES)
         self.dry_run = params.get("dry_run", True)
         self.allow_destructive = params.get("allow_destructive", False)
@@ -74,6 +94,7 @@ class FileOrganizer(PluginBase):
             if self.dry_run:
                 results.append({"action": a, "status": "planned"})
                 continue
+            # actual move
             src = Path(a["src"])
             dst = Path(a["dest"])
             dst.parent.mkdir(parents=True, exist_ok=True)

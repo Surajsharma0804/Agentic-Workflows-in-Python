@@ -316,10 +316,11 @@ async def logout():
 @router.get("/google/login")
 async def google_login(request: Request):
     """Initiate Google OAuth login flow."""
-    if not settings.google_client_id:
-        raise HTTPException(
-            status_code=status.HTTP_501_NOT_IMPLEMENTED,
-            detail="Google OAuth is not configured"
+    if not settings.google_client_id or not settings.google_client_secret:
+        # Redirect to login with error message
+        frontend_url = str(request.base_url).rstrip('/')
+        return RedirectResponse(
+            url=f"{frontend_url}/login?error=oauth_not_configured&provider=google"
         )
     
     redirect_uri = settings.google_redirect_uri or f"{request.base_url}api/auth/google/callback"
@@ -399,10 +400,11 @@ async def google_callback(request: Request, db: Session = Depends(get_db)):
 @router.get("/github/login")
 async def github_login(request: Request):
     """Initiate GitHub OAuth login flow."""
-    if not settings.github_client_id:
-        raise HTTPException(
-            status_code=status.HTTP_501_NOT_IMPLEMENTED,
-            detail="GitHub OAuth is not configured"
+    if not settings.github_client_id or not settings.github_client_secret:
+        # Redirect to login with error message
+        frontend_url = str(request.base_url).rstrip('/')
+        return RedirectResponse(
+            url=f"{frontend_url}/login?error=oauth_not_configured&provider=github"
         )
     
     redirect_uri = settings.github_redirect_uri or f"{request.base_url}api/auth/github/callback"
