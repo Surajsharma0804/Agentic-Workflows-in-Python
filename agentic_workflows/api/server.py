@@ -10,6 +10,7 @@ from fastapi.staticfiles import StaticFiles
 import structlog
 import time
 from pathlib import Path
+from contextlib import asynccontextmanager
 
 from ..config import get_settings
 from ..core.exceptions import AgenticWorkflowsError
@@ -66,6 +67,19 @@ async def init_database_async():
                 # Continue anyway - app will work without DB for health checks
 
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan context manager for startup and shutdown events."""
+    # Startup
+    logger.info("application_starting", version=settings.app_version, port=settings.api_port)
+    logger.info("startup_complete", message="App ready to accept requests")
+    
+    yield
+    
+    # Shutdown
+    logger.info("application_shutting_down")
+
+
 def create_app() -> FastAPI:
     """Create and configure FastAPI application."""
     
@@ -76,6 +90,7 @@ def create_app() -> FastAPI:
         docs_url="/api/docs",
         redoc_url="/api/redoc",
         openapi_url="/api/openapi.json",
+        lifespan=lifespan,
     )
     
     # Rate limiting setup
@@ -277,19 +292,6 @@ def create_app() -> FastAPI:
             status_code=404,
             content={"error": "Not Found", "path": request.url.path}
         )
-    
-    @app.on_event("startup")
-    async def startup_event():
-        logger.info("application_starting", version=settings.app_version, port=settings.api_port)
-        logger.info("startup_complete", message="App ready to accept requests")
-        
-        # Skip database init for now - will initialize on first request
-        # import asyncio
-        # asyncio.create_task(init_database_async())
-    
-    @app.on_event("shutdown")
-    async def shutdown_event():
-        logger.info("application_shutting_down")
     
     return app
 
