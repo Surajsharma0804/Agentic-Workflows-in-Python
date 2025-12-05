@@ -16,7 +16,7 @@ from ..core.exceptions import AgenticWorkflowsError
 
 # Import routes with error handling
 try:
-    from .routes import workflows, tasks, plugins, health, auth
+    from .routes import workflows, tasks, plugins, health, auth, llm, audit
     ROUTES_AVAILABLE = True
 except Exception as e:
     import sys
@@ -156,9 +156,6 @@ def create_app() -> FastAPI:
             app.include_router(workflows.router, prefix="/api/workflows", tags=["Workflows"])
             app.include_router(tasks.router, prefix="/api/tasks", tags=["Tasks"])
             app.include_router(plugins.router, prefix="/api/plugins", tags=["Plugins"])
-            
-            # AI-powered endpoints
-            from .routes import llm, audit
             app.include_router(llm.router, prefix="/api/llm", tags=["AI & LLM"])
             app.include_router(audit.router, prefix="/api/audit", tags=["Audit Logs"])
             logger.info("all_routes_loaded_successfully")
