@@ -16,27 +16,27 @@
     "test:e2e:headed": "playwright test --headed"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.21.0",
+    "@headlessui/react": "^1.7.17",
     "@tanstack/react-query": "^5.17.0",
     "axios": "^1.6.5",
-    "zustand": "^4.4.7",
-    "lucide-react": "^0.309.0",
     "clsx": "^2.1.0",
-    "tailwind-merge": "^2.2.0",
-    "react-hot-toast": "^2.4.1",
-    "recharts": "^2.10.3",
     "date-fns": "^3.0.6",
-    "react-syntax-highlighter": "^15.5.0",
-    "react-markdown": "^9.0.1",
     "framer-motion": "^10.18.0",
+    "lucide-react": "^0.309.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-flow-renderer": "^10.3.17",
-    "@headlessui/react": "^1.7.17",
-    "react-loading-skeleton": "^3.3.1"
+    "react-hot-toast": "^2.4.1",
+    "react-loading-skeleton": "^3.3.1",
+    "react-markdown": "^9.0.1",
+    "react-router-dom": "^6.21.0",
+    "react-syntax-highlighter": "^15.5.0",
+    "recharts": "^2.10.3",
+    "tailwind-merge": "^2.2.0",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.0",
+    "@playwright/test": "^1.57.0",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
     "@types/react-syntax-highlighter": "^15.5.11",
@@ -51,6 +51,6 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3",
     "vite": "^5.0.11",
-    "vite-plugin-image-optimizer": "^1.1.7"
+    "vite-plugin-image-optimizer": "^1.1.9"
   }
 }
