@@ -286,8 +286,21 @@ async def verify_reset_token(token: str, db: Session = Depends(get_db)):
 
 
 @router.get("/me")
-async def get_current_user(token: str, db: Session = Depends(get_db)):
+async def get_current_user(
+    request: Request,
+    db: Session = Depends(get_db)
+):
     """Get current user from token."""
+    # Get token from Authorization header
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Missing or invalid authorization header"
+        )
+    
+    token = auth_header.replace("Bearer ", "")
+    
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email: str = payload.get("sub")
