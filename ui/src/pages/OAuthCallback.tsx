@@ -23,12 +23,18 @@ export default function OAuthCallback() {
     }
 
     if (token) {
-      // Store token
-      localStorage.setItem('token', token)
-      setToken(token)
+      // Store token with correct key
+      localStorage.setItem('auth_token', token)
       
-      showSuccess(`Successfully logged in with ${provider}!`)
-      setTimeout(() => navigate('/'), 1000)
+      // Call setToken to update auth context
+      setToken(token).then(() => {
+        showSuccess(`Successfully logged in with ${provider}!`)
+        setTimeout(() => navigate('/'), 1000)
+      }).catch((err) => {
+        console.error('Token validation failed:', err)
+        showError('Authentication failed. Please try again.')
+        setTimeout(() => navigate('/login'), 2000)
+      })
     } else {
       showError('No authentication token received')
       setTimeout(() => navigate('/login'), 2000)
