@@ -1,12 +1,8 @@
-# Pull Request
-
 ## Description
-Please include a summary of the changes and the related issue.
 
-Fixes # (issue)
+<!-- Provide a brief description of the changes -->
 
 ## Type of Change
-Please delete options that are not relevant.
 
 - [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
@@ -14,32 +10,44 @@ Please delete options that are not relevant.
 - [ ] Documentation update
 - [ ] Performance improvement
 - [ ] Code refactoring
-- [ ] Tests
-- [ ] CI/CD changes
+
+## Related Issue
+
+<!-- Link to the issue this PR addresses -->
+Fixes #(issue number)
 
 ## Changes Made
-- Change 1
-- Change 2
-- Change 3
+
+<!-- List the specific changes made in this PR -->
+
+- 
+- 
+- 
 
 ## Testing
-Please describe the tests that you ran to verify your changes.
 
-- [ ] Test A
-- [ ] Test B
+<!-- Describe the tests you ran to verify your changes -->
+
+- [ ] All existing tests pass
+- [ ] Added new tests for new functionality
+- [ ] Manual testing completed
+- [ ] Tested on multiple browsers (if UI change)
 
 ## Checklist
-- [ ] My code follows the style guidelines of this project
-- [ ] I have performed a self-review of my own code
+
+- [ ] My code follows the project's code style
+- [ ] I have performed a self-review of my code
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation
-- [ ] My changes generate no new warnings
+- [ ] My changes generate no new warnings or errors
 - [ ] I have added tests that prove my fix is effective or that my feature works
 - [ ] New and existing unit tests pass locally with my changes
 - [ ] Any dependent changes have been merged and published
 
 ## Screenshots (if applicable)
-Add screenshots to help explain your changes.
+
+<!-- Add screenshots to help explain your changes -->
 
 ## Additional Notes
-Add any other notes about the PR here.
+
+<!-- Any additional information that reviewers should know -->
