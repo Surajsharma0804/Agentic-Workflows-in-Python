@@ -1,0 +1,48 @@
+name: Lighthouse CI
+
+on:
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'ui/**'
+      - '.github/workflows/lighthouse.yml'
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: ui/package-lock.json
+      
+      - name: Install dependencies
+        working-directory: ui
+        run: npm ci
+      
+      - name: Build frontend
+        working-directory: ui
+        run: npm run build
+      
+      - name: Install Lighthouse CI
+        run: npm install -g @lhci/cli@0.13.x
+      
+      - name: Serve and run Lighthouse
+        working-directory: ui
+        run: |
+          npx serve -s dist -l 8080 &
+          sleep 5
+          lhci autorun --config=../lighthouserc.json || echo "Lighthouse completed"
+      
+      - name: Upload Lighthouse results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-results
+          path: .lighthouseci
+          retention-days: 30

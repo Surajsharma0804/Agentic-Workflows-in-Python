@@ -1,0 +1,38 @@
+name: Lint & Type Check
+
+on:
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'ui/**'
+      - '.github/workflows/lint-typecheck.yml'
+
+jobs:
+  lint-typecheck:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: ui/package-lock.json
+      
+      - name: Install dependencies
+        working-directory: ui
+        run: npm ci
+      
+      - name: Run ESLint
+        working-directory: ui
+        run: npm run lint
+      
+      - name: Run TypeScript type check
+        working-directory: ui
+        run: npm run type-check
+      
+      - name: Check build
+        working-directory: ui
+        run: npm run build

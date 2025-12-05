@@ -53,14 +53,40 @@ jobs:
         pip install -r requirements-full.txt
         pip install -e .
     
-    - name: Run tests
+    - name: Initialize test database
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+      run: |
+        python -c "from agentic_workflows.db.database import init_db; init_db()"
+    
+    - name: Run tests with coverage
       env:
         DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
         REDIS_URL: redis://localhost:6379/0
+        SECRET_KEY: test-secret-key-for-ci-only
       run: |
-        pytest -v --cov=agentic_workflows --cov-report=xml --cov-report=term
+        pytest -v --cov=agentic_workflows --cov-report=xml --cov-report=term --cov-report=html
     
-    - name: Upload coverage
+    - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
+      if: always()
       with:
         file: ./coverage.xml
+        flags: backend
+        name: backend-coverage
+    
+    - name: Upload coverage report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: coverage-report
+        path: htmlcov/
+        retention-days: 30
+    
+    - name: Comment coverage on PR
+      if: github.event_name == 'pull_request'
+      uses: py-cov-action/python-coverage-comment-action@v3
+      with:
+        GITHUB_TOKEN: ${{ github.token }}
+        MINIMUM_GREEN: 80
+        MINIMUM_ORANGE: 60
