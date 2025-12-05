@@ -26,7 +26,15 @@ tasks:
     orch = Orchestrator(audit_path=str(audit_path))
     result = orch.run_spec(str(spec_path), dry_run=True)
     
-    assert result["spec"] == "Test Workflow"
-    assert len(result["plan"]) == 1
-    assert result["plan"][0]["type"] == "file_organizer"
+    # Verify new response structure
+    assert result["workflow_name"] == "Test Workflow"
+    assert result["status"] in ("success", "partial_failure")
+    assert result["dry_run"] is True
+    assert "workflow_id" in result
+    assert "duration_seconds" in result
+    assert "start_timestamp" in result
+    assert "end_timestamp" in result
+    assert result["tasks_total"] == 1
+    assert "results" in result
+    assert "metadata" in result
     assert audit_path.exists()

@@ -98,29 +98,79 @@ class FileOrganizer(PluginBase):
         return actions
 
     def execute(self):
+        """Execute file organization with rich, dynamic output."""
         import shutil
         plan = self.plan()
         results = []
+        moved_count = 0
+        failed_count = 0
+        planned_count = 0
+        moved_files = []
+        failed_files = []
+        
         for a in plan:
             if a["action"] == "error":
                 results.append({"action": a, "status": "failed"})
+                failed_count += 1
+                failed_files.append({"reason": a.get("reason"), "target": a.get("target")})
                 continue
+                
             if self.dry_run:
                 results.append({"action": a, "status": "planned"})
+                planned_count += 1
                 continue
+                
             # actual move
-            src = Path(a["src"])
-            dst = Path(a["dest"])
-            dst.parent.mkdir(parents=True, exist_ok=True)
-            final = dst
-            i = 1
-            while final.exists():
-                stem = final.stem
-                suffix = final.suffix
-                final = dst.parent / f"{stem}_{i}{suffix}"
-                i += 1
-            shutil.move(str(src), str(final))
-            results.append({"action": a, "status": "moved", "final": str(final)})
-            if self.audit:
-                self.audit.record({"plugin": self.name, "action": "moved", "src": str(src), "dst": str(final)})
-        return {"status": "ok", "results": results}
+            try:
+                src = Path(a["src"])
+                dst = Path(a["dest"])
+                dst.parent.mkdir(parents=True, exist_ok=True)
+                final = dst
+                i = 1
+                while final.exists():
+                    stem = final.stem
+                    suffix = final.suffix
+                    final = dst.parent / f"{stem}_{i}{suffix}"
+                    i += 1
+                shutil.move(str(src), str(final))
+                results.append({"action": a, "status": "moved", "final": str(final)})
+                moved_count += 1
+                moved_files.append({"from": str(src), "to": str(final), "category": dst.parent.name})
+                if self.audit:
+                    self.audit.record({
+                        "plugin": self.name,
+                        "action": "moved",
+                        "src": str(src),
+                        "dst": str(final)
+                    })
+            except Exception as e:
+                results.append({"action": a, "status": "failed", "error": str(e)})
+                failed_count += 1
+                failed_files.append({"file": str(a.get("src")), "error": str(e)})
+                if self.audit:
+                    self.audit.record({
+                        "plugin": self.name,
+                        "action": "failed",
+                        "src": str(a.get("src")),
+                        "error": str(e)
+                    })
+        
+        # Return rich, dynamic response
+        response = {
+            "status": "completed" if failed_count == 0 else "partial",
+            "files_moved": moved_count,
+            "files_failed": failed_count,
+            "files_planned": planned_count,
+            "total_processed": len(plan),
+            "dry_run": self.dry_run
+        }
+        
+        # Add file details (limit to prevent huge responses)
+        if moved_files:
+            response["moved_files"] = moved_files[:50]  # First 50
+        if failed_files:
+            response["failed_files"] = failed_files
+        if self.dry_run and results:
+            response["planned_actions"] = results[:20]  # First 20 planned actions
+            
+        return response
