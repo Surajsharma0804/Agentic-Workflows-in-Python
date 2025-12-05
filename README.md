@@ -1,6 +1,6 @@
 # 🤖 Agentic Workflows - AI-Powered Task Automation
 
-> **"I hate manually organizing files, summarizing emails, and running the same scripts over and over"**
+> **Enterprise-grade workflow automation platform with AI integration**
 
 Stop wasting 10 hours/week on repetitive tasks. Built with Kiro in 2 weeks (would take 3-4 months normally).
 
@@ -8,93 +8,59 @@ Stop wasting 10 hours/week on repetitive tasks. Built with Kiro in 2 weeks (woul
 [![Security](https://img.shields.io/badge/security-hardened-blue)]()
 [![FREE Tier](https://img.shields.io/badge/FREE%20tier-optimized-orange)]()
 [![Live Demo](https://img.shields.io/badge/demo-live-success)](https://agentic-workflows-pm7o.onrender.com)
-[![Kiro Powered](https://img.shields.io/badge/built%20with-Kiro-purple)]()
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+**Live Demo**: https://agentic-workflows-pm7o.onrender.com  
+**API Docs**: https://agentic-workflows-pm7o.onrender.com/api/docs
 
 ---
 
 ## 📋 Table of Contents
 
-- [The Problem](#-the-problem)
-- [The Solution](#-the-solution)
-- [Quick Deploy](#-quick-deploy-2-minutes)
+- [Quick Start](#-quick-start)
 - [Features](#-features)
-- [Built-in Plugins](#-built-in-plugins)
-- [API Endpoints](#-api-endpoints)
-- [Usage Examples](#-usage-examples)
 - [Architecture](#-architecture)
-- [Tech Stack](#-tech-stack)
-- [Environment Variables](#-environment-variables)
-- [OAuth Setup](#-oauth-setup-optional)
-- [Development](#-development)
 - [Deployment](#-deployment)
-- [Troubleshooting](#-troubleshooting)
+- [API Documentation](#-api-documentation)
+- [Development](#-development)
+- [Configuration](#-configuration)
+- [Security](#-security)
 - [Contributing](#-contributing)
+- [Troubleshooting](#-troubleshooting)
 - [License](#-license)
 
 ---
 
-## 😤 The Problem
+## 🚀 Quick Start
 
-Every week, I wasted **10 hours** on boring tasks:
-
-| Task | Time Wasted | Frequency |
-|------|-------------|-----------|
-| 📁 Organizing Downloads | 30 min | 5x/week |
-| 📧 Email Summarization | 1 hour | Daily |
-| 🔄 Running Scripts | 45 min | 3x/week |
-| 🗂️ File Management | 1 hour | 2x/week |
-| 📊 Report Generation | 2 hours | Weekly |
-| **TOTAL** | **10 hours/week** | **520 hours/year** |
-
-**That's 3 months of full-time work wasted on repetitive tasks!**
-
----
-
-## ✨ The Solution
-
-**Agentic Workflows** automates everything with:
-
-### Core Features
-- 🤖 **AI-Powered Orchestration** - Chain tasks intelligently
-- 🔌 **10+ Built-in Plugins** - File organizer, email summarizer, web scraper, etc.
-- 🎨 **Visual Dashboard** - Beautiful React interface
-- 🔒 **Enterprise Security** - JWT + OAuth2 (Google, Apple, GitHub)
-- ☁️ **FREE Deployment** - Optimized for Render.com FREE tier
-- ⚡ **Fast & Efficient** - <2s startup, ~150MB RAM usage
-
-### Time Savings
-- **Before**: 10 hours/week on manual tasks
-- **After**: 1 hour/week managing workflows
-- **Saved**: 9 hours/week = **468 hours/year**
-- **Value**: $23,400/year (at $50/hour)
-
----
-
-## 🚀 Quick Deploy (2 Minutes)
-
-### Option 1: Deploy to Render.com (Recommended - FREE)
+### Deploy to Render.com (FREE - 2 Minutes)
 
 1. **Fork** this repository
 2. Go to [Render Dashboard](https://dashboard.render.com)
 3. Click **"New +" → "Blueprint"**
 4. Connect your forked repo
 5. Click **"Apply"**
-6. Wait 8-10 minutes
-7. Done! Test: `curl https://YOUR-APP.onrender.com/api/health`
+6. Wait 8-10 minutes for deployment
+7. **Done!** Your app is live
 
-### Option 2: Local Development
+**Verify deployment:**
+```bash
+curl https://YOUR-APP.onrender.com/api/health
+```
+
+### Local Development
 
 ```bash
 # Clone repository
 git clone https://github.com/Surajsharma0804/Agentic-Workflows-in-Python.git
-cd Agentic-Workflows-in-Python
+cd Agentic-Workflows-in-Python/agentic-workflows
 
 # Backend setup
 python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements-full.txt
 
-# Database setup
+# Database migrations
 alembic upgrade head
 
 # Start backend
@@ -104,170 +70,39 @@ uvicorn agentic_workflows.api.server:app --reload
 cd ui
 npm install
 npm run dev
-
-# Access application
-# Frontend: http://localhost:5173
-# Backend API: http://localhost:8000
-# API Docs: http://localhost:8000/api/docs
 ```
+
+**Access:**
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:8000
+- API Docs: http://localhost:8000/api/docs
 
 ---
 
-## ✅ Features
+## ✨ Features
 
-### Authentication & Security
-- ✅ JWT authentication
-- ✅ OAuth2 (Google, Apple, GitHub)
-- ✅ Password reset via email
-- ✅ Session management
-- ✅ CORS configured
-- ✅ Input validation
-- ✅ SQL injection protection
-- ✅ Path traversal protection
+### Core Capabilities
+- ✅ **Workflow Management** - Create, execute, and monitor workflows
+- ✅ **AI Integration** - OpenAI GPT-4, Anthropic Claude support
+- ✅ **Plugin System** - Extensible architecture with 3 built-in plugins
+- ✅ **Authentication** - JWT + OAuth2 (Google, GitHub)
+- ✅ **Audit Logging** - Complete activity tracking
+- ✅ **Real-time Execution** - Background task processing
+- ✅ **REST API** - 30+ endpoints with full documentation
+- ✅ **Modern UI** - React 18 + TypeScript + Tailwind CSS
 
-### Workflow Management
-- ✅ Create, read, update, delete workflows
-- ✅ Visual workflow builder
-- ✅ Task chaining
-- ✅ Conditional execution
-- ✅ Error handling & retry logic
-- ✅ Execution history
-- ✅ Real-time monitoring
+### Built-in Plugins
 
-### User Interface
-- ✅ Responsive design (mobile to TV)
-- ✅ Dark/light theme
-- ✅ Smooth animations
-- ✅ Loading states
-- ✅ Error boundaries
-- ✅ Accessibility (WCAG AA)
-- ✅ Professional UI/UX
+1. **File Organizer** - Organize files by type, date, or custom rules
+2. **Email Summarizer** - AI-powered email summaries
+3. **HTTP Task** - Make HTTP requests to external APIs
 
-### Performance
-- ✅ Async/await throughout
-- ✅ Database connection pooling
-- ✅ Optimized for 512MB RAM
-- ✅ Fast cold starts (<30s)
-- ✅ Efficient caching
-- ✅ Lazy loading
+### AI Features
 
----
-
-## 🔌 Built-in Plugins
-
-1. **📁 File Organizer** - Sort files by type, date, or custom rules
-   ```json
-   {
-     "plugin": "file_organizer",
-     "params": {
-       "source": "~/Downloads",
-       "organize_by": "type",
-       "create_folders": true
-     }
-   }
-   ```
-
-2. **📧 Email Summarizer** - AI-powered email summaries
-   ```json
-   {
-     "plugin": "email_summarizer",
-     "params": {
-       "folder": "inbox",
-       "max_emails": 50,
-       "summary_length": "brief"
-     }
-   }
-   ```
-
-3. **🌐 Web Scraper** - Extract data from websites
-4. **📄 PDF Extractor** - Extract text from PDFs
-5. **🖼️ Image Processor** - Batch process images
-6. **🗄️ SQL Query Runner** - Automate database tasks
-7. **💻 Shell Command** - Run scripts safely
-8. **☁️ S3 Uploader** - Upload to cloud storage
-9. **💬 Slack Notifier** - Send team notifications
-10. **🔗 HTTP Task** - Make API calls
-
----
-
-## 🔧 API Endpoints
-
-### Core
-- `GET /api/health` - Health check
-- `GET /api/docs` - Interactive API documentation
-- `GET /api/openapi.json` - OpenAPI schema
-
-### Authentication
-- `POST /api/auth/register` - Register user
-- `POST /api/auth/login` - Login user
-- `POST /api/auth/refresh` - Refresh token
-- `POST /api/auth/forgot-password` - Request password reset
-- `POST /api/auth/reset-password` - Reset password
-- `GET /api/auth/{provider}/login` - OAuth login (Google, Apple, GitHub)
-- `GET /api/auth/{provider}/callback` - OAuth callback
-
-### Workflows
-- `GET /api/workflows` - List workflows
-- `POST /api/workflows` - Create workflow
-- `GET /api/workflows/{id}` - Get workflow details
-- `PUT /api/workflows/{id}` - Update workflow
-- `DELETE /api/workflows/{id}` - Delete workflow
-- `POST /api/workflows/{id}/execute` - Execute workflow
-
-### Plugins
-- `GET /api/plugins` - List available plugins
-- `GET /api/plugins/{name}` - Plugin details
-
----
-
-## 📖 Usage Examples
-
-### Register User
-```bash
-curl -X POST https://YOUR-APP.onrender.com/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "password": "SecurePass123!",
-    "full_name": "John Doe"
-  }'
-```
-
-### Login
-```bash
-curl -X POST https://YOUR-APP.onrender.com/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "password": "SecurePass123!"
-  }'
-```
-
-### Create Workflow
-```bash
-curl -X POST https://YOUR-APP.onrender.com/api/workflows \
-  -H "Authorization: Bearer YOUR_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Organize Downloads",
-    "description": "Sort files by type",
-    "tasks": [
-      {
-        "plugin": "file_organizer",
-        "params": {
-          "source": "~/Downloads",
-          "organize_by": "type"
-        }
-      }
-    ]
-  }'
-```
-
-### Execute Workflow
-```bash
-curl -X POST https://YOUR-APP.onrender.com/api/workflows/1/execute \
-  -H "Authorization: Bearer YOUR_TOKEN"
-```
+- **Chat Assistant** - Get help with workflow design
+- **Workflow Generation** - Create workflows from natural language
+- **Error Recovery** - AI-powered error suggestions
+- **Workflow Validation** - Intelligent workflow checking
 
 ---
 
@@ -296,158 +131,31 @@ curl -X POST https://YOUR-APP.onrender.com/api/workflows/1/execute \
 └──────────────────────────────────────────┘
 ```
 
----
+### Tech Stack
 
-## 🛠️ Tech Stack
+**Backend:**
+- FastAPI - Modern async Python web framework
+- SQLAlchemy - SQL toolkit and ORM
+- Alembic - Database migrations
+- Pydantic - Data validation
+- Structlog - Structured logging
+- Authlib - OAuth 2.0 client
 
-### Backend
-- **FastAPI** - Modern async Python web framework
-- **SQLAlchemy** - SQL toolkit and ORM
-- **Alembic** - Database migration tool
-- **Authlib** - OAuth 2.0 client
-- **Pydantic** - Data validation
-- **Structlog** - Structured logging
-- **Bcrypt** - Password hashing
+**Frontend:**
+- React 18 - UI library
+- TypeScript - Type safety
+- Tailwind CSS - Utility-first CSS
+- Framer Motion - Animations
+- React Router - Navigation
+- Axios - HTTP client
 
-### Frontend
-- **React 18** - UI library
-- **TypeScript** - Type safety
-- **Tailwind CSS** - Utility-first CSS
-- **Framer Motion** - Animations
-- **React Router** - Navigation
-- **Axios** - HTTP client
-- **Zustand** - State management
+**Database:**
+- PostgreSQL - Production
+- SQLite - Development
 
-### Database
-- **PostgreSQL** - Production database
-- **SQLite** - Development database
-
-### Deployment
-- **Render.com** - Cloud platform (FREE tier)
-- **Docker** - Containerization
-- **GitHub Actions** - CI/CD
-
----
-
-## 🔐 Environment Variables
-
-### Required (Auto-configured in render.yaml)
-```env
-PORT=10000                    # Auto-set by Render
-ENVIRONMENT=production
-DEBUG=false
-DATABASE_URL=postgres://...   # From Render database
-SECRET_KEY=your-secret-key    # Auto-generated
-```
-
-### Optional (Add in Render Dashboard)
-```env
-# AI Features
-OPENAI_API_KEY=sk-...
-
-# Email (for password reset)
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USERNAME=your-email@gmail.com
-SMTP_PASSWORD=your-app-password
-SMTP_FROM_EMAIL=noreply@yourapp.com
-
-# OAuth (optional)
-GOOGLE_CLIENT_ID=your-client-id
-GOOGLE_CLIENT_SECRET=your-client-secret
-APPLE_CLIENT_ID=your-client-id
-APPLE_CLIENT_SECRET=your-client-secret
-GITHUB_CLIENT_ID=your-client-id
-GITHUB_CLIENT_SECRET=your-client-secret
-
-# Slack (optional)
-SLACK_WEBHOOK_URL=https://hooks.slack.com/...
-```
-
----
-
-## 🔑 OAuth Setup (Optional)
-
-### Google OAuth
-
-1. Go to [Google Cloud Console](https://console.cloud.google.com)
-2. Create a new project
-3. Enable Google+ API
-4. Create OAuth 2.0 credentials
-5. Add authorized redirect URI: `https://your-app.onrender.com/api/auth/google/callback`
-6. Copy Client ID and Client Secret
-7. Add to Render environment variables
-
-### Apple OAuth
-
-1. Go to [Apple Developer](https://developer.apple.com)
-2. Create an App ID
-3. Enable Sign in with Apple
-4. Create a Service ID
-5. Configure redirect URI: `https://your-app.onrender.com/api/auth/apple/callback`
-6. Generate a private key
-7. Add credentials to Render environment variables
-
-### GitHub OAuth
-
-1. Go to [GitHub Settings](https://github.com/settings/developers)
-2. Click "New OAuth App"
-3. Set callback URL: `https://your-app.onrender.com/api/auth/github/callback`
-4. Copy Client ID and Client Secret
-5. Add to Render environment variables
-
-**Note**: OAuth is optional. Email/password login works without any configuration.
-
----
-
-## 💻 Development
-
-### Prerequisites
-- Python 3.11+
-- Node.js 18+
-- PostgreSQL (or SQLite for development)
-
-### Backend Development
-```bash
-# Install dependencies
-pip install -r requirements-full.txt
-
-# Run database migrations
-alembic upgrade head
-
-# Start development server
-uvicorn agentic_workflows.api.server:app --reload --port 8000
-
-# Run tests
-pytest
-
-# Check code quality
-ruff check .
-mypy agentic_workflows
-```
-
-### Frontend Development
-```bash
-cd ui
-
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Run tests
-npm test
-
-# Check types
-npm run type-check
-
-# Lint code
-npm run lint
-```
+**Deployment:**
+- Docker - Containerization
+- Render.com - Cloud platform (FREE tier)
 
 ---
 
@@ -455,17 +163,17 @@ npm run lint
 
 ### Render.com (Recommended - FREE)
 
-**Automatic Deployment**:
+**Automatic Deployment:**
 1. Fork this repository
 2. Connect to Render.com
 3. Use Blueprint (render.yaml)
 4. Deploy automatically
 
-**Manual Deployment**:
-1. Create Web Service
+**Manual Deployment:**
+1. Create Web Service on Render
 2. Connect GitHub repository
-3. Set build command: `pip install -r requirements-full.txt && cd ui && npm install && npm run build`
-4. Set start command: `./entrypoint.sh`
+3. Build command: `pip install -r requirements-full.txt && cd ui && npm install && npm run build`
+4. Start command: `./entrypoint.sh`
 5. Add PostgreSQL database
 6. Set environment variables
 7. Deploy
@@ -483,91 +191,440 @@ docker run -p 8000:8000 \
   agentic-workflows
 ```
 
-### Manual Server
+### Environment Variables
 
+**Required:**
 ```bash
-# Install dependencies
-pip install -r requirements-full.txt
-cd ui && npm install && npm run build && cd ..
+DATABASE_URL=postgresql://user:password@host:port/database
+SECRET_KEY=<generate-strong-key-32-chars>
+ENVIRONMENT=production
+DEBUG=false
+```
 
-# Run migrations
-alembic upgrade head
+**Optional - OAuth:**
+```bash
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+GITHUB_CLIENT_ID=your-github-client-id
+GITHUB_CLIENT_SECRET=your-github-client-secret
+```
 
-# Start with gunicorn
-gunicorn agentic_workflows.api.server:app \
-  --workers 4 \
-  --worker-class uvicorn.workers.UvicornWorker \
-  --bind 0.0.0.0:8000
+**Optional - AI Features:**
+```bash
+OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=sk-ant-...
+```
+
+**Generate SECRET_KEY:**
+```bash
+python -c "import secrets; print(secrets.token_urlsafe(32))"
 ```
 
 ---
 
-## 🐛 Troubleshooting
+## 📚 API Documentation
 
-### Health Check Timeout
-**Status**: ✅ FIXED - Health check now responds instantly
+### Interactive Documentation
+- **Swagger UI**: https://agentic-workflows-pm7o.onrender.com/api/docs
+- **ReDoc**: https://agentic-workflows-pm7o.onrender.com/api/redoc
 
-### Deployment Timeout
-**Status**: ✅ FIXED - Database init is async, non-blocking
+### Key Endpoints
 
-### Port Binding Error
-**Status**: ✅ FIXED - PORT env var correctly configured
+**Authentication:**
+```bash
+POST /api/auth/register  # Register user
+POST /api/auth/login     # Login user
+GET  /api/auth/me        # Get current user
+```
 
-### OAuth Not Working
-**Solution**: OAuth requires configuration. Use email/password login or configure OAuth providers in environment variables.
+**Workflows:**
+```bash
+GET    /api/workflows           # List workflows
+POST   /api/workflows           # Create workflow
+GET    /api/workflows/{id}      # Get workflow
+PUT    /api/workflows/{id}      # Update workflow
+DELETE /api/workflows/{id}      # Delete workflow
+POST   /api/workflows/{id}/execute  # Execute workflow
+```
 
-### Database Connection Error
-**Solution**: Check DATABASE_URL environment variable. For local development, SQLite is used automatically.
+**Plugins:**
+```bash
+GET  /api/plugins              # List plugins
+GET  /api/plugins/{name}       # Get plugin details
+POST /api/plugins/{name}/test  # Test plugin
+```
 
-### Build Fails
-**Solution**: Ensure Node.js 18+ and Python 3.11+ are installed. Clear caches: `rm -rf node_modules ui/node_modules && npm install`
+**AI/LLM:**
+```bash
+POST /api/llm/chat              # Chat with AI
+POST /api/llm/generate-workflow # Generate workflow
+GET  /api/llm/providers         # List LLM providers
+```
+
+**Health:**
+```bash
+GET /api/health  # Health check
+GET /api/ready   # Readiness check
+GET /api/live    # Liveness check
+```
+
+### Example Usage
+
+**Register and Login:**
+```bash
+# Register
+curl -X POST https://agentic-workflows-pm7o.onrender.com/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"user@example.com","password":"SecurePass123!","full_name":"John Doe"}'
+
+# Login
+curl -X POST https://agentic-workflows-pm7o.onrender.com/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"user@example.com","password":"SecurePass123!"}'
+```
+
+**Create and Execute Workflow:**
+```bash
+# Create workflow
+curl -X POST https://agentic-workflows-pm7o.onrender.com/api/workflows \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "File Organizer",
+    "description": "Organize downloads folder",
+    "spec": "name: Organize\ntasks:\n  - id: organize\n    type: file_organizer\n    params:\n      source_dir: ./downloads"
+  }'
+
+# Execute workflow
+curl -X POST https://agentic-workflows-pm7o.onrender.com/api/workflows/1/execute \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
 
 ---
 
-## 📊 Performance
+## 💻 Development
 
-- **Startup**: <2 seconds (was 60s)
-- **Health Check**: <1 second (instant)
-- **Memory**: ~150MB (optimized for 512MB)
-- **Build Time**: 5-8 minutes (optimized)
-- **Cold Start**: ~30 seconds (FREE tier normal)
+### Prerequisites
+- Python 3.11+
+- Node.js 18+
+- PostgreSQL (or SQLite for development)
+
+### Backend Development
+
+```bash
+# Install dependencies
+pip install -r requirements-full.txt
+
+# Run migrations
+alembic upgrade head
+
+# Start development server
+uvicorn agentic_workflows.api.server:app --reload --port 8000
+
+# Run tests
+pytest
+
+# Code quality
+ruff check .
+black .
+```
+
+### Frontend Development
+
+```bash
+cd ui
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Run tests
+npm test
+
+# Type check
+npm run type-check
+```
+
+### Adding New Plugins
+
+1. Create plugin file in `agentic_workflows/plugins/`
+2. Inherit from `PluginBase`
+3. Implement `plan()` and `execute()` methods
+4. Register in `plugins/__init__.py`
+5. Add to plugin registry in `api/routes/plugins.py`
+
+**Example:**
+```python
+from .base import PluginBase
+
+class MyPlugin(PluginBase):
+    name = "my_plugin"
+    
+    def plan(self) -> list:
+        return [{"action": "do_something", "target": "file.txt"}]
+    
+    def execute(self) -> dict:
+        # Your implementation
+        return {"status": "success", "message": "Done!"}
+```
 
 ---
 
-## 🎯 FREE Tier Specs
+## ⚙️ Configuration
 
-| Resource | Limit | Optimized |
-|----------|-------|-----------|
-| RAM | 512 MB | ✅ ~150MB usage |
-| CPU | Shared | ✅ Single worker |
-| Database | 1 GB | ✅ Pool size: 5 |
-| Sleep | 15 min | ✅ Fast cold start |
-| Build | Standard | ✅ 5-8 minutes |
+### Database Configuration
+
+**PostgreSQL (Production):**
+```bash
+DATABASE_URL=postgresql://user:password@host:5432/database
+```
+
+**SQLite (Development):**
+```bash
+DATABASE_URL=sqlite:///./agentic_workflows.db
+```
+
+### OAuth Configuration
+
+**Google OAuth:**
+1. Go to [Google Cloud Console](https://console.cloud.google.com)
+2. Create OAuth 2.0 credentials
+3. Add redirect URI: `https://your-app.onrender.com/api/auth/google/callback`
+4. Set environment variables:
+```bash
+GOOGLE_CLIENT_ID=your-client-id
+GOOGLE_CLIENT_SECRET=your-client-secret
+```
+
+**GitHub OAuth:**
+1. Go to [GitHub Settings](https://github.com/settings/developers)
+2. Create OAuth App
+3. Set callback URL: `https://your-app.onrender.com/api/auth/github/callback`
+4. Set environment variables:
+```bash
+GITHUB_CLIENT_ID=your-client-id
+GITHUB_CLIENT_SECRET=your-client-secret
+```
+
+### Rate Limiting
+
+```bash
+RATE_LIMIT_ENABLED=true
+RATE_LIMIT_PER_MINUTE=60
+```
+
+---
+
+## 🔒 Security
+
+### Security Features
+
+- ✅ JWT authentication
+- ✅ Password hashing (bcrypt)
+- ✅ OAuth2 integration
+- ✅ HTTPS enforcement (production)
+- ✅ CORS configuration
+- ✅ SQL injection prevention
+- ✅ Input validation
+- ✅ Rate limiting
+- ✅ Audit logging
+- ✅ Session management
+
+### Security Best Practices
+
+1. **Use Strong Secrets**
+   ```bash
+   # Generate strong SECRET_KEY
+   python -c "import secrets; print(secrets.token_urlsafe(32))"
+   ```
+
+2. **Enable HTTPS** - Always use HTTPS in production
+
+3. **Keep Dependencies Updated**
+   ```bash
+   pip install --upgrade -r requirements-full.txt
+   ```
+
+4. **Enable Rate Limiting** - Set `RATE_LIMIT_ENABLED=true`
+
+5. **Monitor Logs** - Check logs regularly for suspicious activity
+
+6. **Regular Backups** - Backup database regularly
+
+### Reporting Security Issues
+
+If you discover a security vulnerability:
+
+1. **Do NOT** create a public GitHub issue
+2. Email: surajkumarind08@gmail.com
+3. Include:
+   - Description of vulnerability
+   - Steps to reproduce
+   - Potential impact
+   - Suggested fix (if any)
+
+**Response Timeline:**
+- Initial response: Within 48 hours
+- Status update: Within 7 days
+- Fix timeline: Based on severity
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please follow these steps:
+We welcome contributions! Here's how to get started:
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+### How to Contribute
 
-### Development Guidelines
-- Follow PEP 8 for Python code
-- Use TypeScript for frontend code
-- Write tests for new features
-- Update documentation
-- Ensure all tests pass
+1. **Fork** the repository
+2. **Create a branch**: `git checkout -b feature/your-feature`
+3. **Make changes** following our coding standards
+4. **Test** your changes thoroughly
+5. **Commit**: `git commit -m "feat: add new feature"`
+6. **Push**: `git push origin feature/your-feature`
+7. **Create Pull Request**
+
+### Coding Standards
+
+**Python:**
+- Follow PEP 8
+- Use type hints
+- Write docstrings
+- Use async/await for I/O
+- Add tests for new features
+
+**TypeScript:**
+- Use TypeScript for type safety
+- Follow React best practices
+- Use functional components
+- Keep components small
+- Add proper error handling
+
+### Commit Message Format
+
+Use conventional commits:
+- `feat:` New feature
+- `fix:` Bug fix
+- `docs:` Documentation
+- `style:` Code style
+- `refactor:` Code refactoring
+- `test:` Tests
+- `chore:` Maintenance
+
+**Examples:**
+```
+feat: add Slack notification plugin
+fix: resolve OAuth callback error
+docs: update API documentation
+```
+
+### Code of Conduct
+
+- Be respectful and inclusive
+- Welcome newcomers
+- Focus on constructive feedback
+- Help others learn
 
 ---
 
-## 📄 License
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**1. Application Won't Start**
+```bash
+# Check logs
+docker logs <container-id>
+
+# Verify environment variables
+echo $DATABASE_URL
+echo $SECRET_KEY
+
+# Check database connection
+psql $DATABASE_URL
+```
+
+**2. Database Connection Error**
+```bash
+# Verify DATABASE_URL format
+postgresql://user:password@host:5432/database
+
+# Run migrations
+alembic upgrade head
+
+# Check database is running
+pg_isready -h host -p 5432
+```
+
+**3. OAuth Not Working**
+- Verify client ID and secret are set
+- Check redirect URIs match exactly
+- Ensure HTTPS is used in production
+- Review OAuth provider settings
+
+**4. Build Fails**
+```bash
+# Clear caches
+rm -rf node_modules ui/node_modules
+rm -rf __pycache__ **/__pycache__
+
+# Reinstall dependencies
+pip install -r requirements-full.txt
+cd ui && npm install
+```
+
+**5. Health Check Timeout**
+- Check if app is running
+- Verify PORT environment variable
+- Check database connection
+- Review application logs
+
+### Getting Help
+
+- **Issues**: [GitHub Issues](https://github.com/Surajsharma0804/Agentic-Workflows-in-Python/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/Surajsharma0804/Agentic-Workflows-in-Python/discussions)
+- **Email**: surajkumarind08@gmail.com
+
+---
+
+## 📊 Performance
+
+### Metrics
+
+- **Startup Time**: < 2 seconds
+- **Health Check**: < 1 second
+- **API Response**: < 500ms
+- **Memory Usage**: ~150MB
+- **Build Time**: 5-8 minutes
+
+### Optimization
+
+**FREE Tier Optimized:**
+- Single worker process
+- Connection pooling (max 5)
+- Efficient memory usage
+- Fast cold starts
+- Optimized Docker image
+
+---
+
+## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+### MIT License Summary
+
+- ✅ Commercial use
+- ✅ Modification
+- ✅ Distribution
+- ✅ Private use
+- ❌ Liability
+- ❌ Warranty
 
 ---
 
@@ -590,44 +647,65 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
+## 📈 Project Stats
+
+- **Version**: 1.0.0
+- **Status**: ✅ Production Ready
+- **Lines of Code**: 15,000+
+- **API Endpoints**: 30+
+- **Plugins**: 3 built-in
+- **LLM Providers**: 3 supported
+- **Database Tables**: 4
+- **Test Coverage**: Comprehensive
+
+---
+
+## 🎯 Roadmap
+
+### Current (v1.0.0)
+- ✅ Core workflow engine
+- ✅ Plugin system
+- ✅ AI integration
+- ✅ Authentication
+- ✅ REST API
+- ✅ Web UI
+
+### Planned (v1.1.0)
+- [ ] Workflow scheduling (cron)
+- [ ] More plugins (Slack, Email, Database)
+- [ ] Workflow templates
+- [ ] Team collaboration
+- [ ] Workflow versioning
+
+### Future (v2.0.0)
+- [ ] Workflow marketplace
+- [ ] Advanced analytics
+- [ ] Webhook triggers
+- [ ] Mobile app
+- [ ] CI/CD integration
+
+---
+
+## 🌟 Star History
+
+If you find this project useful, please consider giving it a star ⭐
+
+---
+
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/Surajsharma0804/Agentic-Workflows-in-Python/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/Surajsharma0804/Agentic-Workflows-in-Python/discussions)
-- **Email**: surajkumarind08@gmail.com
+Need help? We're here for you:
+
+- 📧 **Email**: surajkumarind08@gmail.com
+- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/Surajsharma0804/Agentic-Workflows-in-Python/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/Surajsharma0804/Agentic-Workflows-in-Python/discussions)
+- 📚 **Documentation**: [API Docs](https://agentic-workflows-pm7o.onrender.com/api/docs)
 
 ---
 
-## 🎉 Success Indicators
-
-After deployment:
-- ✅ Render shows "Live" status (green)
-- ✅ Health endpoint returns `{"status": "healthy"}`
-- ✅ API docs accessible at `/api/docs`
-- ✅ Can register and login users
-- ✅ Plugins endpoint returns data
-- ✅ No errors in logs
-
----
-
-## 🚀 What's Next?
-
-1. Test your deployment
-2. Register a user
-3. Create your first workflow
-4. Add AI features (optional)
-5. Monitor usage in Render dashboard
-6. Star the repository ⭐
-7. Share with others!
-
----
-
+**Built with ❤️ using Kiro IDE**  
 **Version**: 1.0.0  
-**Status**: ✅ Production Ready (FREE Tier Optimized)  
 **Last Updated**: December 2025  
-**Deployment Time**: 8-10 minutes  
-**Built with**: ❤️ and Kiro IDE
+**Status**: ✅ Production Ready
 
----
-
-Made with ❤️ for developers who hate repetitive tasks
+🚀 **Ready to automate your workflows!**
