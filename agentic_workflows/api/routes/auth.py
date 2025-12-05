@@ -575,3 +575,34 @@ async def apple_callback(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Apple Sign In failed"
         )
+
+
+
+# Helper function for protected routes
+async def get_current_user_from_token(
+    request: Request,
+    db: Session = Depends(get_db)
+) -> User:
+    """Get current user from Authorization header token."""
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Missing or invalid authorization header"
+        )
+    
+    token = auth_header.replace("Bearer ", "")
+    
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None:
+            raise HTTPException(status_code=401, detail="Invalid authentication token")
+    except jwt.JWTError:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    
+    user = db.query(User).filter(User.email == email).first()
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    return user
