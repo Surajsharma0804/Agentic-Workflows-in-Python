@@ -1,9 +1,0 @@
-id: lazy-file-butler
-name: Lazy File Butler (full)
-description: Organize downloads, deduplicate, normalize. Example plugin run.
-tasks:
-  - id: scan_and_plan
-    type: file_organizer
-    params:
-      target: ./examples/demo_downloads
-      dry_run: true
