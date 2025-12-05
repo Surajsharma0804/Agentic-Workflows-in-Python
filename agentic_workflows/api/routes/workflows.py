@@ -9,7 +9,7 @@ import structlog
 
 from ...db.database import get_db
 from ...db.models import Workflow, WorkflowExecution, User, AuditLog
-from ...runner import execute_workflow_spec
+from ...core.orchestrator import Orchestrator
 from .auth import get_current_user_from_token
 
 logger = structlog.get_logger()
@@ -209,6 +209,9 @@ async def delete_workflow(
 async def run_workflow_background(execution_id: int, workflow_spec: dict, db_session):
     """Run workflow in background."""
     from ...db.database import SessionLocal
+    import tempfile
+    import os
+    
     db = SessionLocal()
     
     try:
@@ -220,15 +223,26 @@ async def run_workflow_background(execution_id: int, workflow_spec: dict, db_ses
         execution.started_at = datetime.utcnow()
         db.commit()
         
-        # Execute workflow
-        result = await execute_workflow_spec(workflow_spec)
+        # Execute workflow using Orchestrator
+        # Create temporary file for workflow spec
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
+            f.write(workflow_spec)
+            spec_file = f.name
         
-        execution.status = "completed"
-        execution.result = result
-        execution.completed_at = datetime.utcnow()
-        db.commit()
-        
-        logger.info("workflow_execution_completed", execution_id=execution_id)
+        try:
+            orchestrator = Orchestrator()
+            result = orchestrator.run_spec(spec_file, dry_run=False)
+            
+            execution.status = "completed"
+            execution.result = {"output": str(result), "status": "success"}
+            execution.completed_at = datetime.utcnow()
+            db.commit()
+            
+            logger.info("workflow_execution_completed", execution_id=execution_id)
+        finally:
+            # Clean up temp file
+            if os.path.exists(spec_file):
+                os.unlink(spec_file)
         
     except Exception as e:
         execution.status = "failed"

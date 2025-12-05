@@ -25,7 +25,7 @@ class AuditLogResponse(BaseModel):
     created_at: str
 
 
-@router.get("/", response_model=List[AuditLogResponse])
+@router.get("/logs", response_model=List[AuditLogResponse])
 async def list_audit_logs(
     resource_type: Optional[str] = Query(None),
     action: Optional[str] = Query(None),
@@ -45,7 +45,7 @@ async def list_audit_logs(
     return [log.to_dict() for log in logs]
 
 
-@router.get("/{log_id}", response_model=AuditLogResponse)
+@router.get("/logs/{log_id}", response_model=AuditLogResponse)
 async def get_audit_log(
     log_id: int,
     db: Session = Depends(get_db),
@@ -62,3 +62,38 @@ async def get_audit_log(
         raise HTTPException(status_code=404, detail="Audit log not found")
     
     return log.to_dict()
+
+
+@router.get("/stats")
+async def get_audit_stats(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user_from_token)
+):
+    """Get audit log statistics for current user."""
+    from sqlalchemy import func
+    
+    total_logs = db.query(func.count(AuditLog.id)).filter(
+        AuditLog.user_id == current_user.id
+    ).scalar()
+    
+    # Group by action
+    by_action = db.query(
+        AuditLog.action,
+        func.count(AuditLog.id).label('count')
+    ).filter(
+        AuditLog.user_id == current_user.id
+    ).group_by(AuditLog.action).all()
+    
+    # Group by resource type
+    by_resource = db.query(
+        AuditLog.resource_type,
+        func.count(AuditLog.id).label('count')
+    ).filter(
+        AuditLog.user_id == current_user.id
+    ).group_by(AuditLog.resource_type).all()
+    
+    return {
+        "total_logs": total_logs,
+        "by_action": {action: count for action, count in by_action},
+        "by_resource_type": {resource: count for resource, count in by_resource}
+    }
