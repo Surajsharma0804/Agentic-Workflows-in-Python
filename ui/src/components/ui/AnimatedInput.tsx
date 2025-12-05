@@ -49,19 +49,18 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
             <motion.label
               htmlFor={inputId}
               animate={{
-                top: isFocused || hasValue ? '-0.75rem' : '50%',
-                fontSize: isFocused || hasValue ? '0.75rem' : '1rem',
+                top: isFocused || hasValue ? '-0.625rem' : '50%',
+                fontSize: isFocused || hasValue ? '0.75rem' : '0.95rem',
                 translateY: isFocused || hasValue ? '0' : '-50%',
-                scale: isFocused ? 1.05 : 1,
+                scale: isFocused ? 1.02 : 1,
               }}
-              transition={{ duration: 0.3, type: 'spring', stiffness: 300 }}
+              transition={{ duration: 0.2, type: 'spring', stiffness: 400, damping: 25 }}
               className={`
                 absolute ${leftIcon ? 'left-10' : 'left-4'} px-2 pointer-events-none z-20
-                transition-all duration-300 font-semibold
-                ${isFocused || hasValue ? 'glass-strong rounded-md' : 'bg-transparent'}
+                transition-all duration-200 font-semibold
+                ${isFocused || hasValue ? 'glass-strong rounded-md shadow-sm' : 'bg-transparent'}
                 ${isFocused && !error ? 'gradient-text' : hasValue && !error ? 'text-primary-400' : 'text-text-muted'}
                 ${error ? 'text-danger-500' : ''}
-                ${isFocused ? 'shadow-lg' : ''}
               `}
             >
               {label}
@@ -107,14 +106,14 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
               onBlur={() => setIsFocused(false)}
               onChange={handleChange}
               className={`
-                relative w-full px-4 py-3.5 rounded-xl border-2
-                text-text-primary placeholder-text-muted/50
-                focus:outline-none transition-all duration-300
-                font-medium
+                relative w-full px-4 py-4 rounded-xl border-2
+                text-text-primary placeholder-transparent
+                focus:outline-none transition-all duration-200
+                font-medium text-base
                 ${isFocused 
-                  ? 'glass-strong border-primary shadow-xl shadow-primary/20 bg-surface/90' 
+                  ? 'glass-strong border-primary shadow-xl shadow-primary/20 bg-surface/90 pt-5 pb-3' 
                   : hasValue 
-                  ? 'glass border-primary/50 bg-surface/80' 
+                  ? 'glass border-primary/50 bg-surface/80 pt-5 pb-3' 
                   : 'glass border-border/50 bg-surface/70'
                 }
                 ${leftIcon ? 'pl-11' : ''}
@@ -128,7 +127,7 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
                 backdropFilter: 'blur(12px)',
                 WebkitBackdropFilter: 'blur(12px)',
               }}
-              placeholder={showPlaceholder ? props.placeholder : ''}
+              placeholder={label || props.placeholder || ''}
               value={value}
               {...props}
             />
