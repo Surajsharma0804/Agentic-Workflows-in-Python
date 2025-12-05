@@ -4,9 +4,13 @@ import tempfile
 from pathlib import Path
 
 def test_orchestrator_dry_run(tmp_path):
+    # Create test directory
+    test_dir = tmp_path / "test_dir"
+    test_dir.mkdir()
+    
     # Create a simple spec file
     spec_path = tmp_path / "test_spec.yaml"
-    spec_path.write_text("""
+    spec_path.write_text(f"""
 id: test-workflow
 name: Test Workflow
 description: A test workflow
@@ -14,7 +18,7 @@ tasks:
   - id: task1
     type: file_organizer
     params:
-      target: ./test_dir
+      target: {str(test_dir)}
       dry_run: true
 """)
     
