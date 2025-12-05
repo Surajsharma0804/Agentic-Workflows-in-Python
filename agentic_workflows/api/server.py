@@ -14,6 +14,7 @@ from contextlib import asynccontextmanager
 
 from ..config import get_settings
 from ..core.exceptions import AgenticWorkflowsError
+from ..utils.sentry import init_sentry
 
 # Rate limiting
 try:
@@ -72,6 +73,10 @@ async def lifespan(app: FastAPI):
     """Lifespan context manager for startup and shutdown events."""
     # Startup
     logger.info("application_starting", version=settings.app_version, port=settings.api_port)
+    
+    # Initialize Sentry
+    init_sentry(environment=settings.environment)
+    
     logger.info("startup_complete", message="App ready to accept requests")
     
     yield

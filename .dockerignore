@@ -7,38 +7,55 @@ __pycache__/
 *.egg-info/
 dist/
 build/
-
-# Virtual environments
+.pytest_cache/
+.coverage
+htmlcov/
 .venv/
 venv/
 ENV/
+
+# Node
+node_modules/
+npm-debug.log*
+.npm
 
 # IDE
 .vscode/
 .idea/
 *.swp
+*.swo
 
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-
-# Logs
-*.log
-audit.log
+# OS
+.DS_Store
+Thumbs.db
 
 # Git
 .git/
 .gitignore
+.github/
 
 # Documentation
-docs/
 *.md
+!README.md
+docs/
 
-# Examples
-examples/
+# Tests
+tests/
+*.test.ts
+*.spec.ts
+e2e/
 
 # Development
 .env
 .env.local
-docker-compose.override.yml
+.env.*.local
+docker-compose.yml
+Dockerfile
+
+# Logs
+*.log
+logs/
+
+# Temporary
+*.tmp
+.cache/
