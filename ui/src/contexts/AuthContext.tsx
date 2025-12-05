@@ -29,15 +29,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Check for stored auth token
-    const token = localStorage.getItem('auth_token')
-    const storedUser = localStorage.getItem('user')
-    
-    if (token && storedUser) {
-      setUser(JSON.parse(storedUser))
+    const initAuth = async () => {
+      // Check for stored auth token
+      const token = localStorage.getItem('auth_token')
+      const storedUser = localStorage.getItem('user')
+      
+      if (token && storedUser) {
+        try {
+          // Validate token is still valid by fetching current user
+          const response = await fetch('/api/auth/me', {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          })
+          
+          if (response.ok) {
+            const userData = await response.json()
+            localStorage.setItem('user', JSON.stringify(userData))
+            setUser(userData)
+          } else {
+            // Token is invalid, clear storage
+            localStorage.removeItem('auth_token')
+            localStorage.removeItem('user')
+            setUser(null)
+          }
+        } catch (error) {
+          // Network error or invalid token
+          console.error('Auth validation error:', error)
+          localStorage.removeItem('auth_token')
+          localStorage.removeItem('user')
+          setUser(null)
+        }
+      }
+      
+      setIsLoading(false)
     }
     
-    setIsLoading(false)
+    initAuth()
   }, [])
 
   const login = async (email: string, password: string, rememberMe = false) => {
@@ -107,22 +135,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const setToken = async (token: string) => {
-    // Fetch user info with token
-    const response = await fetch('/api/auth/me', {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    })
+    try {
+      // Fetch user info with token
+      const response = await fetch('/api/auth/me', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      })
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch user info')
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.error('Failed to fetch user info:', response.status, errorText)
+        throw new Error('Failed to fetch user info')
+      }
+
+      const userData = await response.json()
+      
+      // Store both token and user data
+      localStorage.setItem('auth_token', token)
+      localStorage.setItem('user', JSON.stringify(userData))
+      
+      // Update state
+      setUser(userData)
+      
+      return userData
+    } catch (error) {
+      console.error('setToken error:', error)
+      // Clean up on error
+      localStorage.removeItem('auth_token')
+      localStorage.removeItem('user')
+      setUser(null)
+      throw error
     }
-
-    const userData = await response.json()
-    
-    localStorage.setItem('auth_token', token)
-    localStorage.setItem('user', JSON.stringify(userData))
-    setUser(userData)
   }
 
   const loginWithGoogle = async () => {
