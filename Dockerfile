@@ -9,7 +9,7 @@ COPY ui/ ./
 RUN npm run build
 
 # Stage 2: Python dependencies
-FROM python:3.11-slim AS python-builder
+FROM python:3.14-slim AS python-builder
 WORKDIR /build
 
 # Install system dependencies
@@ -24,7 +24,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir --user -r requirements-full.txt
 
 # Stage 3: Final production image
-FROM python:3.11-slim
+FROM python:3.14-slim
 WORKDIR /app
 
 # Install runtime dependencies only
