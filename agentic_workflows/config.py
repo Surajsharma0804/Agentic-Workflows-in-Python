@@ -74,8 +74,8 @@ class Settings(BaseSettings):
     metrics_port: int = 9090
     sentry_dsn: Optional[str] = None
     
-    # CORS
-    cors_origins: List[str] = ["*"]  # Allow all origins (frontend served from same domain)
+    # CORS - use Field with json_schema_extra to prevent JSON parsing
+    cors_origins: str = "*"  # Allow all origins (will be parsed to list)
     
     # Rate Limiting
     rate_limit_enabled: bool = True
@@ -121,15 +121,22 @@ class Settings(BaseSettings):
         env_prefix=""
     )
     
-    @field_validator("cors_origins", mode="before")
+    @field_validator("cors_origins", mode="after")
     @classmethod
     def parse_cors_origins(cls, v):
-        if isinstance(v, str):
-            # Handle single "*" or comma-separated list
-            if v.strip() == "*":
+        # Already a string, return as-is
+        # FastAPI will handle it correctly
+        return v
+    
+    def get_cors_origins_list(self) -> List[str]:
+        """Get CORS origins as a list."""
+        if isinstance(self.cors_origins, list):
+            return self.cors_origins
+        if isinstance(self.cors_origins, str):
+            if self.cors_origins.strip() == "*":
                 return ["*"]
-            return [origin.strip() for origin in v.split(",") if origin.strip()]
-        return v if v else ["*"]
+            return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+        return ["*"]
     
     @property
     def is_production(self) -> bool:
