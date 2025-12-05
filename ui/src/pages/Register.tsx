@@ -45,8 +45,9 @@ export default function Register() {
       await register(formData.name, formData.email, formData.password, formData.company)
       showSuccess('Account created successfully! Welcome aboard.')
       navigate('/')
-    } catch (error: any) {
-      showError(error.message || 'Registration failed. Please try again.')
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Registration failed. Please try again.'
+      showError(errorMessage)
     } finally {
       setIsLoading(false)
     }
@@ -61,8 +62,9 @@ export default function Register() {
       
       showSuccess(`Account created successfully with ${provider}!`)
       navigate('/')
-    } catch (error: any) {
-      showError(error.message || `${provider} registration failed. Please try again.`)
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : `${provider} registration failed. Please try again.`
+      showError(errorMessage)
     } finally {
       setIsLoading(false)
     }

@@ -40,17 +40,17 @@ api.interceptors.response.use(
 
 // API methods
 export const workflowAPI = {
-  run: (spec: any) => api.post('/run', spec),
-  plan: (spec: any) => api.post('/plan', spec),
+  run: (spec: Record<string, unknown>) => api.post('/run', spec),
+  plan: (spec: Record<string, unknown>) => api.post('/plan', spec),
   list: () => api.get('/workflows'),
   get: (id: string) => api.get(`/workflows/${id}`),
 }
 
 export const llmAPI = {
-  plan: (spec: any) => api.post('/llm/plan', spec),
-  recovery: (error: string, context: any) =>
+  plan: (spec: Record<string, unknown>) => api.post('/llm/plan', spec),
+  recovery: (error: string, context: Record<string, unknown>) =>
     api.post('/llm/recovery', { error, context }),
-  validate: (spec: any) => api.post('/llm/validate', spec),
+  validate: (spec: Record<string, unknown>) => api.post('/llm/validate', spec),
 }
 
 export const pluginAPI = {
@@ -59,7 +59,7 @@ export const pluginAPI = {
 }
 
 export const auditAPI = {
-  list: (params?: any) => api.get('/audit', { params }),
+  list: (params?: Record<string, unknown>) => api.get('/audit', { params }),
   export: () => api.get('/audit/export'),
 }
 

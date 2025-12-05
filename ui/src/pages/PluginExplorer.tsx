@@ -193,7 +193,7 @@ export default function PluginExplorer() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {[
           { label: 'Total Plugins', value: plugins?.data?.length || 0, icon: Puzzle, color: 'blue' },
-          { label: 'Enabled', value: plugins?.data?.filter((p: any) => p.enabled).length || 0, icon: CheckCircle, color: 'green' },
+          { label: 'Enabled', value: plugins?.data?.filter((p) => p.enabled).length || 0, icon: CheckCircle, color: 'green' },
           { label: 'Categories', value: 7, icon: Code, color: 'purple' },
           { label: 'Total Downloads', value: '11.5K', icon: Zap, color: 'yellow' },
         ].map((stat, index) => (

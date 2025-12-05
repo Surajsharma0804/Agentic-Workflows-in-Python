@@ -45,31 +45,37 @@ export default function Dashboard() {
     { name: 'Sun', value: 20 },
   ]
 
+  interface Workflow {
+    status: string
+  }
+
+  const workflowData = workflows?.data as Workflow[] | undefined
+
   const stats = [
     {
       title: 'Total Workflows',
-      value: workflows?.data?.length || 0,
+      value: workflowData?.length || 0,
       icon: Activity,
       color: 'blue' as const,
       trend: { value: 12, isPositive: true },
     },
     {
       title: 'Successful',
-      value: workflows?.data?.filter((w: any) => w.status === 'success').length || 0,
+      value: workflowData?.filter((w) => w.status === 'success').length || 0,
       icon: CheckCircle,
       color: 'green' as const,
       trend: { value: 8, isPositive: true },
     },
     {
       title: 'Failed',
-      value: workflows?.data?.filter((w: any) => w.status === 'failed').length || 0,
+      value: workflowData?.filter((w) => w.status === 'failed').length || 0,
       icon: XCircle,
       color: 'red' as const,
       trend: { value: 3, isPositive: false },
     },
     {
       title: 'Running',
-      value: workflows?.data?.filter((w: any) => w.status === 'running').length || 0,
+      value: workflowData?.filter((w) => w.status === 'running').length || 0,
       icon: Clock,
       color: 'yellow' as const,
     },
@@ -285,7 +291,7 @@ export default function Dashboard() {
           <TableSkeleton rows={5} />
         ) : workflows?.data?.length > 0 ? (
           <div className="space-y-3">
-            {workflows.data.slice(0, 5).map((workflow: any, index: number) => (
+            {(workflows.data as Array<{ id: string; name: string; status: string; last_run?: string; created_at?: string }>).slice(0, 5).map((workflow, index: number) => (
               <motion.div
                 key={workflow.id}
                 initial={{ opacity: 0, x: -20 }}

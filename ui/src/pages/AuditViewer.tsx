@@ -12,12 +12,24 @@ import {
 } from 'lucide-react'
 import { TableSkeleton } from '@/components/LoadingSkeleton'
 
+interface AuditLog {
+  id: string
+  timestamp: string
+  workflow_id: string
+  workflow_name: string
+  action: string
+  status: string
+  user: string
+  duration: string
+  details: string
+}
+
 export default function AuditViewer() {
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const [dateRange, setDateRange] = useState('7d')
 
-  const { data: auditLogs, isLoading } = useQuery({
+  const { data: auditLogs, isLoading } = useQuery<{ data: AuditLog[] }>({
     queryKey: ['audit', statusFilter, dateRange],
     queryFn: async () => {
       // Mock audit data
@@ -37,7 +49,7 @@ export default function AuditViewer() {
     },
   })
 
-  const filteredLogs = auditLogs?.data?.filter((log: any) => {
+  const filteredLogs = auditLogs?.data?.filter((log) => {
     const matchesSearch = log.workflow_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          log.action.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesStatus = statusFilter === 'all' || log.status === statusFilter
@@ -60,7 +72,7 @@ export default function AuditViewer() {
   const exportLogs = () => {
     const csv = [
       ['Timestamp', 'Workflow', 'Action', 'Status', 'Duration', 'User'].join(','),
-      ...filteredLogs.map((log: any) => 
+      ...(filteredLogs || []).map((log) => 
         [log.timestamp, log.workflow_name, log.action, log.status, log.duration, log.user].join(',')
       )
     ].join('\\n')
@@ -147,9 +159,9 @@ export default function AuditViewer() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {[
           { label: 'Total Events', value: auditLogs?.data?.length || 0, icon: FileText, color: 'blue' },
-          { label: 'Successful', value: auditLogs?.data?.filter((l: any) => l.status === 'success').length || 0, icon: CheckCircle, color: 'green' },
-          { label: 'Failed', value: auditLogs?.data?.filter((l: any) => l.status === 'failed').length || 0, icon: XCircle, color: 'red' },
-          { label: 'Warnings', value: auditLogs?.data?.filter((l: any) => l.status === 'warning').length || 0, icon: AlertTriangle, color: 'yellow' },
+          { label: 'Successful', value: auditLogs?.data?.filter((l) => l.status === 'success').length || 0, icon: CheckCircle, color: 'green' },
+          { label: 'Failed', value: auditLogs?.data?.filter((l) => l.status === 'failed').length || 0, icon: XCircle, color: 'red' },
+          { label: 'Warnings', value: auditLogs?.data?.filter((l) => l.status === 'warning').length || 0, icon: AlertTriangle, color: 'yellow' },
         ].map((stat, index) => (
           <motion.div
             key={stat.label}
@@ -194,7 +206,7 @@ export default function AuditViewer() {
                 </tr>
               </thead>
               <tbody>
-                {filteredLogs?.map((log: any, index: number) => (
+                {filteredLogs?.map((log, index: number) => (
                   <motion.tr
                     key={log.id}
                     initial={{ opacity: 0, x: -20 }}

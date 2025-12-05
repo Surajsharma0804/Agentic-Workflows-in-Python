@@ -67,8 +67,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       storage.setItem('user', JSON.stringify(user))
 
       setUser(user)
-    } catch (error: any) {
-      throw new Error(error.message || 'Login failed. Please check your credentials.')
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Login failed. Please check your credentials.'
+      throw new Error(errorMessage)
     }
   }
 
@@ -99,8 +100,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.setItem('user', JSON.stringify(user))
 
       setUser(user)
-    } catch (error: any) {
-      throw new Error(error.message || 'Registration failed. Please try again.')
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Registration failed. Please try again.'
+      throw new Error(errorMessage)
     }
   }
 

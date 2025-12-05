@@ -100,14 +100,12 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
             )}
             
             {/* Input */}
-            <motion.input
+            <input
               ref={ref}
               id={inputId}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
               onChange={handleChange}
-              whileFocus={{ scale: 1.01 }}
-              transition={{ duration: 0.2 }}
               className={`
                 relative w-full px-4 py-3.5 rounded-xl border-2
                 text-text-primary placeholder-text-muted/50
@@ -132,7 +130,7 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
               }}
               placeholder={showPlaceholder ? props.placeholder : ''}
               value={value}
-              {...(props as any)}
+              {...props}
             />
           </div>
 
