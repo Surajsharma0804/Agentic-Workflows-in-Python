@@ -4,7 +4,7 @@
 FROM node:18-slim AS frontend-builder
 WORKDIR /frontend
 COPY ui/package*.json ./
-RUN npm ci --only=production
+RUN npm ci
 COPY ui/ ./
 RUN npm run build
 
