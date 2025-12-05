@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Mail, ArrowLeft, Zap, Loader2, CheckCircle } from 'lucide-react'
-import { useAlert } from '../contexts/AlertContext'
+import { useAlert } from '../hooks'
 
 export default function ForgotPassword() {
   const { showSuccess, showError } = useAlert()

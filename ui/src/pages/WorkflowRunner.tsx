@@ -13,7 +13,7 @@ import {
   Sparkles,
   Code,
 } from 'lucide-react'
-import { useAlert } from '../contexts/AlertContext'
+import { useAlert } from '../hooks'
 
 const exampleSpecs = [
   {

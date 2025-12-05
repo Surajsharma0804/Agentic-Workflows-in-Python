@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Lock, ArrowLeft, Zap, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
-import { useAlert } from '../contexts/AlertContext'
+import { useAlert } from '../hooks'
 import AnimatedInput from '../components/ui/AnimatedInput'
 
 export default function ResetPassword() {

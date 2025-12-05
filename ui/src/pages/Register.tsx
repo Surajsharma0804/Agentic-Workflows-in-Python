@@ -2,8 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Mail, Lock, Eye, EyeOff, Zap, Loader2, User, Building } from 'lucide-react'
-import { useAuth } from '../contexts/AuthContext'
-import { useAlert } from '../contexts/AlertContext'
+import { useAuth, useAlert } from '../hooks'
 
 export default function Register() {
   const navigate = useNavigate()

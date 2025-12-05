@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode, useCallback } from 'react'
+import { createContext, useState, ReactNode, useCallback } from 'react'
 import { AlertContainer, AlertType } from '../components/Alert'
 
 interface Alert {
@@ -7,7 +7,7 @@ interface Alert {
   message: string
 }
 
-interface AlertContextType {
+export interface AlertContextType {
   showAlert: (type: AlertType, message: string) => void
   showSuccess: (message: string) => void
   showError: (message: string) => void
@@ -15,7 +15,7 @@ interface AlertContextType {
   showInfo: (message: string) => void
 }
 
-const AlertContext = createContext<AlertContextType | undefined>(undefined)
+export const AlertContext = createContext<AlertContextType | undefined>(undefined)
 
 export function AlertProvider({ children }: { children: ReactNode }) {
   const [alerts, setAlerts] = useState<Alert[]>([])
@@ -51,12 +51,4 @@ export function AlertProvider({ children }: { children: ReactNode }) {
       <AlertContainer alerts={alerts} onClose={closeAlert} />
     </AlertContext.Provider>
   )
-}
-
-export function useAlert() {
-  const context = useContext(AlertContext)
-  if (context === undefined) {
-    throw new Error('useAlert must be used within an AlertProvider')
-  }
-  return context
 }

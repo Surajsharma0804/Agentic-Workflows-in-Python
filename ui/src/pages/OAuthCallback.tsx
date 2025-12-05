@@ -2,8 +2,7 @@ import { useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Loader2, AlertCircle } from 'lucide-react'
-import { useAuth } from '../contexts/AuthContext'
-import { useAlert } from '../contexts/AlertContext'
+import { useAuth, useAlert } from '../hooks'
 
 export default function OAuthCallback() {
   const navigate = useNavigate()

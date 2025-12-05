@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Save, Key, Bell, Database } from 'lucide-react'
-import { useAlert } from '../contexts/AlertContext'
+import { useAlert } from '../hooks'
 
 export default function Settings() {
   const { showSuccess } = useAlert()

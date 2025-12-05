@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Bot, Send, Sparkles, Loader2, User } from 'lucide-react'
-import { useAlert } from '../contexts/AlertContext'
+import { useAlert } from '../hooks'
 
 interface Message {
   id: string

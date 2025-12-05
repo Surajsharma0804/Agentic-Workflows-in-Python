@@ -20,7 +20,7 @@ import {
   Mail,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuth } from '@/hooks'
 import toast from 'react-hot-toast'
 import ParticleBackground from './ParticleBackground'
 
