@@ -40,7 +40,7 @@ RUN groupadd -r agentic --gid=1000 && \
     useradd -r -g agentic --uid=1000 --home-dir=/app agentic
 
 # Copy Python dependencies from builder
-COPY --from=python-builder /root/.local /home/agentic/.local
+COPY --from=python-builder --chown=agentic:agentic /root/.local /home/agentic/.local
 
 # Copy frontend build
 COPY --from=frontend-builder --chown=agentic:agentic /frontend/dist ./ui/dist
@@ -50,6 +50,7 @@ COPY --chown=agentic:agentic . .
 
 # Set environment variables
 ENV PATH=/home/agentic/.local/bin:$PATH \
+    PYTHONPATH=/home/agentic/.local/lib/python3.11/site-packages:$PYTHONPATH \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PORT=10000
