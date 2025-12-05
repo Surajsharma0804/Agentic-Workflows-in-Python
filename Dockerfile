@@ -1,7 +1,7 @@
 # Multi-stage build for production-ready backend
 
 # Stage 1: Build frontend
-FROM node:18-slim AS frontend-builder
+FROM node:25-slim AS frontend-builder
 WORKDIR /frontend
 COPY ui/package*.json ./
 RUN npm ci
