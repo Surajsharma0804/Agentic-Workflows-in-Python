@@ -93,10 +93,13 @@ export default function Dashboard() {
         transition={{ duration: 0.5 }}
         className="relative z-10"
       >
-        <h1 className="text-5xl font-bold mb-3 animate-slide-down">
-          Welcome to <span className="gradient-text animate-glow">Agentic Workflows</span>
+        <h1 className="text-4xl md:text-5xl font-bold mb-3 animate-slide-down">
+          Welcome to{' '}
+          <span className="bg-gradient-to-r from-primary-400 via-accent-400 to-primary-400 bg-clip-text text-transparent animate-glow">
+            Agentic Workflows
+          </span>
         </h1>
-        <p className="text-xl text-text-secondary animate-fade-in">
+        <p className="text-lg md:text-xl text-text-secondary animate-fade-in">
           Elite AI-powered workflow automation platform
         </p>
       </motion.div>
