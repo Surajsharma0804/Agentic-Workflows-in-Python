@@ -67,7 +67,6 @@ COPY --from=python-builder /usr/local/bin /usr/local/bin
 
 # Copy application code
 COPY --chown=agentic:agentic agentic_workflows/ ./agentic_workflows/
-COPY --chown=agentic:agentic .kiro/ ./.kiro/
 COPY --chown=agentic:agentic alembic/ ./alembic/
 COPY --chown=agentic:agentic alembic.ini ./
 COPY --chown=agentic:agentic pyproject.toml ./
