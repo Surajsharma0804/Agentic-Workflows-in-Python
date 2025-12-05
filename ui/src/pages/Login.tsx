@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Mail, Lock, Eye, EyeOff, Zap, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, Zap, CheckCircle } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useAlert } from '../contexts/AlertContext'
 import AnimatedInput from '../components/ui/AnimatedInput'
@@ -11,7 +11,7 @@ import AnimatedLoginHero from '../components/ui/AnimatedLoginHero'
 export default function Login() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const { login, loginWithGoogle, loginWithApple, loginWithGithub } = useAuth()
+  const { login } = useAuth()
   const { showSuccess, showError } = useAlert()
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -78,9 +78,10 @@ export default function Login() {
       setTimeout(() => {
         navigate('/')
       }, 1000)
-    } catch (error: any) {
+    } catch (err) {
       setLoginError(true)
-      showError(error.message || 'Login failed. Please check your credentials.')
+      const errorMessage = err instanceof Error ? err.message : 'Login failed. Please check your credentials.'
+      showError(errorMessage)
       setTimeout(() => setLoginError(false), 500)
     } finally {
       setIsLoading(false)

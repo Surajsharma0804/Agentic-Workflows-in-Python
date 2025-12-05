@@ -17,7 +17,7 @@ import {
 } from 'lucide-react'
 import { CardSkeleton } from '@/components/LoadingSkeleton'
 
-const pluginIcons: Record<string, any> = {
+const pluginIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   file_organizer: FileText,
   email_summarizer: Mail,
   http_task: Globe,
@@ -28,22 +28,21 @@ const pluginIcons: Record<string, any> = {
   web_scraper: Globe,
 }
 
-const pluginColors: Record<string, string> = {
-  file_organizer: 'blue',
-  email_summarizer: 'green',
-  http_task: 'purple',
-  shell_command: 'yellow',
-  sql_query: 'cyan',
-  pdf_extractor: 'red',
-  image_processor: 'pink',
-  web_scraper: 'indigo',
-}
-
 export default function PluginExplorer() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
 
-  const { data: plugins, isLoading } = useQuery({
+  interface Plugin {
+    name: string
+    version: string
+    description: string
+    enabled: boolean
+    category: string
+    downloads: number
+    rating: number
+  }
+
+  const { data: plugins, isLoading } = useQuery<{ data: Plugin[] }>({
     queryKey: ['plugins'],
     queryFn: async () => {
       // Mock plugin data
@@ -136,7 +135,7 @@ export default function PluginExplorer() {
     { id: 'media', name: 'Media', count: 1 },
   ]
 
-  const filteredPlugins = plugins?.data?.filter((plugin: any) => {
+  const filteredPlugins = plugins?.data?.filter((plugin) => {
     const matchesSearch = plugin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          plugin.description.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesCategory = selectedCategory === 'all' || plugin.category === selectedCategory
@@ -225,7 +224,7 @@ export default function PluginExplorer() {
             <CardSkeleton />
           </>
         ) : (
-          filteredPlugins?.map((plugin: any, index: number) => {
+          filteredPlugins?.map((plugin, index: number) => {
             const Icon = pluginIcons[plugin.name] || Puzzle
             
             return (
@@ -245,7 +244,7 @@ export default function PluginExplorer() {
                 </div>
                 
                 <h3 className="text-lg font-semibold mb-2 group-hover:text-blue-400 transition-colors">
-                  {plugin.name.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}
+                  {plugin.name.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
                 </h3>
                 
                 <p className="text-sm text-gray-400 mb-4">

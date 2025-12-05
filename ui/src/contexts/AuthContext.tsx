@@ -105,26 +105,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const setToken = async (token: string) => {
-    try {
-      // Fetch user info with token
-      const response = await fetch('/api/auth/me', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      })
+    // Fetch user info with token
+    const response = await fetch('/api/auth/me', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    })
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch user info')
-      }
-
-      const userData = await response.json()
-      
-      localStorage.setItem('auth_token', token)
-      localStorage.setItem('user', JSON.stringify(userData))
-      setUser(userData)
-    } catch (error) {
-      throw error
+    if (!response.ok) {
+      throw new Error('Failed to fetch user info')
     }
+
+    const userData = await response.json()
+    
+    localStorage.setItem('auth_token', token)
+    localStorage.setItem('user', JSON.stringify(userData))
+    setUser(userData)
   }
 
   const loginWithGoogle = async () => {

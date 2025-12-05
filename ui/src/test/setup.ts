@@ -18,6 +18,7 @@ Object.defineProperty(window, 'matchMedia', {
 
 // Mock IntersectionObserver for tests
 if (typeof window !== 'undefined') {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (window as any).IntersectionObserver = class IntersectionObserver {
     constructor() {}
     disconnect() {}
@@ -26,9 +27,10 @@ if (typeof window !== 'undefined') {
       return []
     }
     unobserve() {}
-  }
+  };
 
   // Mock ResizeObserver for tests
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (window as any).ResizeObserver = class ResizeObserver {
     constructor() {}
     disconnect() {}

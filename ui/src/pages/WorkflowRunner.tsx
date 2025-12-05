@@ -14,7 +14,6 @@ import {
   Code,
 } from 'lucide-react'
 import { useAlert } from '../contexts/AlertContext'
-import axios from 'axios'
 
 const exampleSpecs = [
   {
@@ -84,15 +83,28 @@ tasks:
   },
 ]
 
+interface WorkflowResult {
+  status: string
+  workflow_id?: string
+  duration?: string
+  tasks_completed?: number
+  tasks_total?: number
+  results?: Record<string, unknown>
+  timestamp?: string
+  tasks?: Array<{ id: string; type: string; dependencies: string[] }>
+  estimated_duration?: string
+  validation?: string
+}
+
 export default function WorkflowRunner() {
   const { showSuccess, showError, showInfo } = useAlert()
   const [spec, setSpec] = useState(exampleSpecs[0].spec)
-  const [result, setResult] = useState<any>(null)
+  const [result, setResult] = useState<WorkflowResult | null>(null)
   const [selectedTemplate, setSelectedTemplate] = useState(0)
   const [isExecuting, setIsExecuting] = useState(false)
 
   const runMutation = useMutation({
-    mutationFn: async (specText: string) => {
+    mutationFn: async () => {
       setIsExecuting(true)
       // Simulate API call with realistic delay
       await new Promise(resolve => setTimeout(resolve, 2000))
@@ -119,14 +131,14 @@ export default function WorkflowRunner() {
       setIsExecuting(false)
       showSuccess('🎉 Workflow executed successfully!')
     },
-    onError: (error: any) => {
+    onError: () => {
       setIsExecuting(false)
       showError('Failed to run workflow. Please check your spec and try again.')
     },
   })
 
   const planMutation = useMutation({
-    mutationFn: async (specText: string) => {
+    mutationFn: async () => {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000))
       
@@ -149,7 +161,7 @@ export default function WorkflowRunner() {
       setResult(data.data)
       showSuccess('📋 Workflow plan generated successfully!')
     },
-    onError: (error: any) => {
+    onError: () => {
       showError('Failed to generate plan. Please try again.')
     },
   })
@@ -265,7 +277,7 @@ export default function WorkflowRunner() {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => runMutation.mutate(spec)}
+              onClick={() => runMutation.mutate()}
               disabled={runMutation.isPending}
               className="btn-neon flex-1 flex items-center justify-center space-x-2 py-4"
             >
@@ -282,7 +294,7 @@ export default function WorkflowRunner() {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => planMutation.mutate(spec)}
+              onClick={() => planMutation.mutate()}
               disabled={planMutation.isPending}
               className="btn-secondary flex items-center justify-center space-x-2 px-6"
             >

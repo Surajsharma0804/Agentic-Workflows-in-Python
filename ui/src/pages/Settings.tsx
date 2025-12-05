@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Settings as SettingsIcon, Save, Key, Bell, Shield, Database, Zap } from 'lucide-react'
+import { Save, Key, Bell, Database } from 'lucide-react'
 import { useAlert } from '../contexts/AlertContext'
 
 export default function Settings() {
