@@ -19,9 +19,10 @@ def test_liveness_check():
     assert response.status_code == 200
 
 def test_list_workflows():
+    """Test workflows endpoint requires authentication."""
     response = client.get("/api/workflows/")
-    assert response.status_code == 200
-    assert isinstance(response.json(), list)
+    # Workflows endpoint requires authentication
+    assert response.status_code == 401
 
 def test_list_plugins():
     response = client.get("/api/plugins/")
