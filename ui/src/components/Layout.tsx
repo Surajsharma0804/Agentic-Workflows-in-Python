@@ -105,18 +105,26 @@ function NotificationBell() {
         whileHover={{ scale: 1.1, y: -2 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 rounded-lg glass hover:shadow-lg hover:shadow-primary/20 transition-all"
+        className="relative p-3 rounded-xl transition-all border-2"
+        style={{
+          background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%)',
+          borderColor: 'rgba(99, 102, 241, 0.3)',
+          boxShadow: '0 0 20px rgba(99, 102, 241, 0.2)'
+        }}
         aria-label="Notifications"
       >
-        <Bell className="w-5 h-5 text-text-primary" />
+        <Bell className="w-5 h-5 text-primary-400" />
         {unreadCount > 0 && (
           <>
             <motion.span 
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="absolute top-1 right-1 w-2 h-2 bg-danger-500 rounded-full shadow-lg shadow-danger-500/50"
+              animate={{ scale: [1, 1.3, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+              className="absolute top-1 right-1 w-3 h-3 bg-danger-500 rounded-full shadow-lg"
+              style={{
+                boxShadow: '0 0 15px rgba(239, 68, 68, 0.8)'
+              }}
             />
-            <span className="absolute -top-1 -right-1 w-5 h-5 bg-danger-500 rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-lg">
+            <span className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-danger-500 to-danger-600 rounded-full flex items-center justify-center text-[11px] font-bold text-white shadow-lg border-2 border-surface">
               {unreadCount}
             </span>
           </>
@@ -140,43 +148,51 @@ function NotificationBell() {
               initial={{ opacity: 0, y: 10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
-              className="absolute right-0 mt-2 w-80 sm:w-96 glass-strong border border-border/50 rounded-xl shadow-2xl overflow-hidden z-50"
+              className="absolute right-0 mt-2 w-80 sm:w-96 bg-surface border-2 border-primary/30 rounded-xl shadow-2xl overflow-hidden z-50"
+              style={{
+                background: 'linear-gradient(135deg, rgba(26, 35, 50, 0.98) 0%, rgba(20, 27, 45, 0.98) 100%)',
+                backdropFilter: 'blur(20px)',
+                boxShadow: '0 0 40px rgba(99, 102, 241, 0.3), 0 20px 40px rgba(0, 0, 0, 0.5)'
+              }}
             >
               {/* Header */}
-              <div className="p-4 border-b border-border/30 flex items-center justify-between">
-                <div>
-                  <h3 className="font-semibold text-text-primary">Notifications</h3>
-                  <p className="text-xs text-text-muted">{unreadCount} unread</p>
-                </div>
-                {notifications.length > 0 && (
-                  <div className="flex space-x-2">
-                    {unreadCount > 0 && (
-                      <button
-                        onClick={markAllAsRead}
-                        className="text-xs text-primary-400 hover:text-primary-300 transition-colors"
-                      >
-                        Mark all read
-                      </button>
-                    )}
-                    <button
-                      onClick={clearAll}
-                      className="text-xs text-danger-400 hover:text-danger-300 transition-colors"
-                    >
-                      Clear all
-                    </button>
+              <div className="p-4 border-b-2 border-primary/20 bg-gradient-to-r from-primary/10 to-accent/10">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-bold text-lg text-text-primary">Notifications</h3>
+                    <p className="text-sm text-primary-400 font-medium">{unreadCount} unread messages</p>
                   </div>
-                )}
+                  {notifications.length > 0 && (
+                    <div className="flex flex-col space-y-1">
+                      {unreadCount > 0 && (
+                        <button
+                          onClick={markAllAsRead}
+                          className="text-xs text-primary-400 hover:text-primary-300 transition-colors font-semibold px-2 py-1 rounded hover:bg-primary/10"
+                        >
+                          Mark all read
+                        </button>
+                      )}
+                      <button
+                        onClick={clearAll}
+                        className="text-xs text-danger-400 hover:text-danger-300 transition-colors font-semibold px-2 py-1 rounded hover:bg-danger-500/10"
+                      >
+                        Clear all
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Notifications List */}
               <div className="max-h-96 overflow-y-auto custom-scrollbar">
                 {notifications.length === 0 ? (
                   <div className="p-8 text-center">
-                    <Bell className="w-12 h-12 text-text-muted mx-auto mb-3 opacity-50" />
-                    <p className="text-text-muted">No notifications</p>
+                    <Bell className="w-16 h-16 text-primary-400 mx-auto mb-4 opacity-50" />
+                    <p className="text-text-secondary font-medium">No notifications</p>
+                    <p className="text-xs text-text-muted mt-1">You're all caught up!</p>
                   </div>
                 ) : (
-                  <div className="divide-y divide-border/30">
+                  <div className="divide-y divide-primary/10">
                     {notifications.map((notification) => (
                       <motion.div
                         key={notification.id}
@@ -184,32 +200,39 @@ function NotificationBell() {
                         animate={{ opacity: 1, x: 0 }}
                         onClick={() => markAsRead(notification.id)}
                         className={cn(
-                          'p-4 hover:bg-bg-secondary/50 transition-colors cursor-pointer',
-                          !notification.read && 'bg-primary/5'
+                          'p-4 hover:bg-primary/10 transition-all cursor-pointer border-l-4',
+                          !notification.read ? 'bg-primary/5 border-primary' : 'border-transparent hover:border-primary/30'
                         )}
                       >
                         <div className="flex items-start space-x-3">
                           <div className={cn(
-                            'w-2 h-2 rounded-full mt-2 flex-shrink-0',
-                            notification.type === 'success' && 'bg-success-500',
-                            notification.type === 'error' && 'bg-danger-500',
-                            notification.type === 'info' && 'bg-info-500',
-                            !notification.read && 'animate-pulse'
-                          )} />
+                            'w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0',
+                            notification.type === 'success' && 'bg-success-500/20 text-success-500',
+                            notification.type === 'error' && 'bg-danger-500/20 text-danger-500',
+                            notification.type === 'info' && 'bg-info-500/20 text-info-500',
+                            !notification.read && 'ring-2 ring-primary/50'
+                          )}>
+                            {notification.type === 'success' && '✓'}
+                            {notification.type === 'error' && '✕'}
+                            {notification.type === 'info' && 'ℹ'}
+                          </div>
                           <div className="flex-1 min-w-0">
                             <p className={cn(
-                              'text-sm font-medium',
+                              'text-sm font-semibold',
                               !notification.read ? 'text-text-primary' : 'text-text-secondary'
                             )}>
                               {notification.title}
                             </p>
-                            <p className="text-xs text-text-muted mt-1">
+                            <p className="text-sm text-text-secondary mt-1">
                               {notification.message}
                             </p>
-                            <p className="text-xs text-text-muted mt-2">
+                            <p className="text-xs text-primary-400 mt-2 font-medium">
                               {notification.time}
                             </p>
                           </div>
+                          {!notification.read && (
+                            <div className="w-2 h-2 rounded-full bg-primary animate-pulse flex-shrink-0 mt-2" />
+                          )}
                         </div>
                       </motion.div>
                     ))}
@@ -319,21 +342,30 @@ export default function Layout({ children }: LayoutProps) {
       </AnimatePresence>
 
       {/* Sidebar - Desktop (always visible) & Mobile Drawer */}
-      <aside className="hidden lg:flex lg:relative inset-y-0 left-0 w-72 glass-strong border-r-2 border-border/30 flex-col z-50 backdrop-blur-xl">
+      <aside className="hidden lg:flex lg:relative inset-y-0 left-0 w-72 flex-col z-50"
+        style={{
+          background: 'linear-gradient(180deg, rgba(26, 35, 50, 0.95) 0%, rgba(20, 27, 45, 0.95) 100%)',
+          backdropFilter: 'blur(20px)',
+          borderRight: '2px solid rgba(99, 102, 241, 0.2)',
+          boxShadow: '4px 0 24px rgba(0, 0, 0, 0.3)'
+        }}>
         {/* Desktop Sidebar Content */}
         {/* Logo */}
-        <div className="p-6 border-b-2 border-border/30 flex items-center justify-between">
+        <div className="p-6 border-b-2 border-primary/20 bg-gradient-to-r from-primary/10 to-accent/10">
           <Link to="/" className="flex items-center space-x-3 group">
             <motion.div
               whileHover={{ rotate: 360, scale: 1.1 }}
               transition={{ duration: 0.5 }}
-              className="p-2 rounded-xl gradient-primary shadow-glow animate-glow"
+              className="p-3 rounded-xl bg-gradient-to-br from-primary to-accent shadow-lg"
+              style={{
+                boxShadow: '0 0 30px rgba(99, 102, 241, 0.5)'
+              }}
             >
               <Zap className="w-6 h-6 text-white" />
             </motion.div>
             <div>
-              <h1 className="text-xl font-bold gradient-text">Agentic</h1>
-              <p className="text-xs text-text-muted">Workflows Platform</p>
+              <h1 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-400">Agentic</h1>
+              <p className="text-xs text-primary-400 font-medium">Workflows Platform</p>
             </div>
           </Link>
         </div>
@@ -351,24 +383,28 @@ export default function Layout({ children }: LayoutProps) {
                 className={cn(
                   'flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 relative group',
                   isActive
-                    ? 'gradient-primary text-text-inverse shadow-glow animate-glow'
-                    : 'text-text-secondary hover:glass hover:text-text-primary hover-lift'
+                    ? 'text-white shadow-lg'
+                    : 'text-text-secondary hover:text-text-primary hover:bg-primary/10'
                 )}
               >
                 {isActive && (
                   <motion.div
                     layoutId="activeNav"
-                    className="absolute inset-0 gradient-primary rounded-xl shadow-xl"
+                    className="absolute inset-0 rounded-xl"
+                    style={{
+                      background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                      boxShadow: '0 0 30px rgba(99, 102, 241, 0.5)'
+                    }}
                     transition={{ type: 'spring', duration: 0.6 }}
                   />
                 )}
-                <Icon className="w-5 h-5 relative z-10" />
-                <span className="font-medium relative z-10">{item.name}</span>
+                <Icon className={cn("w-5 h-5 relative z-10", isActive && "drop-shadow-lg")} />
+                <span className={cn("font-semibold relative z-10", isActive && "drop-shadow-lg")}>{item.name}</span>
                 {isActive && (
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="ml-auto w-2 h-2 bg-white rounded-full relative z-10 shadow-lg"
+                    className="ml-auto w-2 h-2 bg-white rounded-full relative z-10 shadow-lg animate-pulse"
                   />
                 )}
               </Link>
@@ -495,23 +531,29 @@ export default function Layout({ children }: LayoutProps) {
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Top Bar */}
-        <div className="glass-strong border-b-2 border-border/30 px-4 sm:px-6 lg:px-8 py-4 sticky top-0 z-30 backdrop-blur-xl">
+        <div className="px-4 sm:px-6 lg:px-8 py-4 sticky top-0 z-30"
+          style={{
+            background: 'linear-gradient(135deg, rgba(26, 35, 50, 0.95) 0%, rgba(20, 27, 45, 0.95) 100%)',
+            backdropFilter: 'blur(20px)',
+            borderBottom: '2px solid rgba(99, 102, 241, 0.2)',
+            boxShadow: '0 4px 24px rgba(0, 0, 0, 0.3)'
+          }}>
           <div className="flex items-center justify-between">
             {/* Hamburger Menu (Mobile) */}
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className="lg:hidden p-2 rounded-lg hover:bg-bg-secondary transition-colors"
+              className="lg:hidden p-2 rounded-lg hover:bg-primary/10 transition-colors border border-primary/20"
               aria-label="Open menu"
             >
-              <Menu className="w-6 h-6 text-text-primary" />
+              <Menu className="w-6 h-6 text-primary-400" />
             </button>
 
             {/* Page Title */}
             <div className="flex-1 lg:flex-none">
-              <h2 className="text-lg sm:text-xl font-semibold gradient-text">
+              <h2 className="text-lg sm:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-400">
                 {navigation.find(n => n.href === location.pathname)?.name || 'Dashboard'}
               </h2>
-              <p className="text-xs sm:text-sm text-text-muted hidden sm:block">
+              <p className="text-xs sm:text-sm text-primary-400 font-medium hidden sm:block">
                 {new Date().toLocaleDateString('en-US', { 
                   weekday: 'long', 
                   month: 'short', 
