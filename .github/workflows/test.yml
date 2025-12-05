@@ -70,7 +70,7 @@ jobs:
         pytest -v --cov=agentic_workflows --cov-report=xml --cov-report=term --cov-report=html
     
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
       if: always()
       with:
         file: ./coverage.xml
