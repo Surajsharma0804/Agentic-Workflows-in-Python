@@ -158,8 +158,9 @@ def create_app() -> FastAPI:
             app.include_router(plugins.router, prefix="/api/plugins", tags=["Plugins"])
             
             # AI-powered endpoints
-            from .routes import llm
+            from .routes import llm, audit
             app.include_router(llm.router, prefix="/api/llm", tags=["AI & LLM"])
+            app.include_router(audit.router, prefix="/api/audit", tags=["Audit Logs"])
             logger.info("all_routes_loaded_successfully")
         except Exception as e:
             logger.warning("some_routes_failed_to_load", error=str(e))

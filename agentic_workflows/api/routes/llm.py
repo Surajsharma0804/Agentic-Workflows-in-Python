@@ -39,6 +39,19 @@ class LLMTestRequest(BaseModel):
     prompt: str
 
 
+class ChatRequest(BaseModel):
+    """Request for AI chat."""
+    message: str
+    context: Optional[Dict[str, Any]] = None
+    provider: Optional[str] = None
+
+
+class GenerateWorkflowRequest(BaseModel):
+    """Request to generate workflow from description."""
+    description: str
+    provider: Optional[str] = None
+
+
 @router.post("/plan")
 async def plan_workflow(request: PlanRequest):
     """
@@ -184,6 +197,164 @@ async def test_llm_provider(request: LLMTestRequest):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"LLM test failed: {str(e)}"
         )
+
+
+@router.post("/chat")
+async def chat_with_ai(request: ChatRequest):
+    """
+    Chat with AI assistant about workflows and automation.
+    
+    Provides intelligent responses about workflow design, troubleshooting, and best practices.
+    """
+    try:
+        llm = get_llm_provider(request.provider)
+        
+        if not llm.is_available():
+            return {
+                "status": "unavailable",
+                "message": "AI provider not available. Using fallback response.",
+                "response": "I'm currently running in demo mode. To enable full AI capabilities, please configure an LLM provider (OpenAI or Claude) in your environment variables."
+            }
+        
+        # Build context-aware prompt
+        system_prompt = """You are an AI assistant for Agentic Workflows, an enterprise workflow automation platform.
+You help users design, troubleshoot, and optimize their workflows. Be concise, practical, and focus on actionable advice."""
+        
+        context_info = ""
+        if request.context:
+            context_info = f"\n\nContext: {request.context}"
+        
+        full_prompt = f"{system_prompt}\n\nUser: {request.message}{context_info}\n\nAssistant:"
+        
+        response = await llm.complete(full_prompt)
+        
+        return {
+            "status": "success",
+            "response": response.content,
+            "provider": response.model,
+            "tokens_used": response.tokens_used
+        }
+    
+    except Exception as e:
+        logger.error("chat_failed", error=str(e))
+        # Provide fallback response
+        return {
+            "status": "fallback",
+            "response": "I'm here to help with workflow automation! I can assist with:\n\n• Designing workflows\n• Troubleshooting errors\n• Optimizing performance\n• Best practices\n\nWhat would you like to know?",
+            "note": "AI provider unavailable, showing fallback response"
+        }
+
+
+@router.post("/generate-workflow")
+async def generate_workflow(request: GenerateWorkflowRequest):
+    """
+    Generate a workflow specification from natural language description.
+    
+    Uses AI to convert user requirements into a structured workflow YAML.
+    """
+    try:
+        llm = get_llm_provider(request.provider)
+        
+        if not llm.is_available():
+            # Return a template workflow
+            template = {
+                "name": "Generated Workflow",
+                "description": request.description,
+                "tasks": [
+                    {
+                        "id": "task_1",
+                        "type": "http_task",
+                        "params": {
+                            "url": "https://api.example.com/data",
+                            "method": "GET"
+                        }
+                    }
+                ],
+                "note": "This is a template. Configure an AI provider for intelligent workflow generation."
+            }
+            return {
+                "status": "template",
+                "workflow": template,
+                "message": "AI provider not available. Returning template workflow."
+            }
+        
+        # Build workflow generation prompt
+        prompt = f"""Generate a workflow specification in YAML format for the following requirement:
+
+{request.description}
+
+The workflow should include:
+- A descriptive name
+- Clear description
+- List of tasks with appropriate plugins (file_organizer, email_summarizer, http_task)
+- Task dependencies if needed
+- Proper error handling
+
+Return only valid YAML that follows this structure:
+```yaml
+name: Workflow Name
+description: Description
+tasks:
+  - id: task_1
+    type: plugin_name
+    params:
+      key: value
+    depends_on: []
+```"""
+        
+        response = await llm.complete(prompt)
+        
+        # Extract YAML from response
+        import yaml
+        import re
+        
+        # Try to extract YAML from code blocks
+        yaml_match = re.search(r'```(?:yaml)?\n(.*?)\n```', response.content, re.DOTALL)
+        if yaml_match:
+            yaml_content = yaml_match.group(1)
+        else:
+            yaml_content = response.content
+        
+        try:
+            workflow_spec = yaml.safe_load(yaml_content)
+        except yaml.YAMLError:
+            # If parsing fails, return raw response
+            workflow_spec = {
+                "name": "Generated Workflow",
+                "description": request.description,
+                "raw_response": response.content
+            }
+        
+        return {
+            "status": "success",
+            "workflow": workflow_spec,
+            "provider": response.model,
+            "tokens_used": response.tokens_used
+        }
+    
+    except Exception as e:
+        logger.error("generate_workflow_failed", error=str(e))
+        # Return template on error
+        template = {
+            "name": "Generated Workflow",
+            "description": request.description,
+            "tasks": [
+                {
+                    "id": "task_1",
+                    "type": "http_task",
+                    "params": {
+                        "url": "https://api.example.com/data",
+                        "method": "GET"
+                    }
+                }
+            ]
+        }
+        return {
+            "status": "error",
+            "workflow": template,
+            "error": str(e),
+            "message": "Failed to generate workflow. Returning template."
+        }
 
 
 @router.get("/providers")
