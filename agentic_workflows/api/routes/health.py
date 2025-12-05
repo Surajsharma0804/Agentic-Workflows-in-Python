@@ -52,9 +52,22 @@ async def readiness_check():
     Readiness check endpoint.
     
     Returns whether the service is ready to accept requests.
+    Checks database connectivity.
     """
-    # Add checks for database, redis, etc.
-    return {"status": "ready"}
+    checks = {"status": "ready", "checks": {}}
+    
+    # Check database
+    try:
+        from ...db.database import SessionLocal
+        db = SessionLocal()
+        db.execute("SELECT 1")
+        db.close()
+        checks["checks"]["database"] = "connected"
+    except Exception as e:
+        checks["checks"]["database"] = f"error: {str(e)}"
+        checks["status"] = "degraded"
+    
+    return checks
 
 
 @router.get("/live", status_code=status.HTTP_200_OK)

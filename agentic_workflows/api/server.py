@@ -14,6 +14,17 @@ from pathlib import Path
 from ..config import get_settings
 from ..core.exceptions import AgenticWorkflowsError
 
+# Rate limiting
+try:
+    from slowapi import Limiter, _rate_limit_exceeded_handler
+    from slowapi.util import get_remote_address
+    from slowapi.errors import RateLimitExceeded
+    RATE_LIMIT_AVAILABLE = True
+except ImportError:
+    RATE_LIMIT_AVAILABLE = False
+    logger = structlog.get_logger()
+    logger.warning("slowapi_not_installed", note="Rate limiting disabled")
+
 # Import routes with error handling
 try:
     from .routes import workflows, tasks, plugins, health, auth, llm, audit
@@ -66,6 +77,13 @@ def create_app() -> FastAPI:
         redoc_url="/api/redoc",
         openapi_url="/api/openapi.json",
     )
+    
+    # Rate limiting setup
+    if RATE_LIMIT_AVAILABLE and settings.rate_limit_enabled:
+        limiter = Limiter(key_func=get_remote_address)
+        app.state.limiter = limiter
+        app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+        logger.info("rate_limiting_enabled", limit=f"{settings.rate_limit_per_minute}/minute")
     
     # Middleware (order matters - SessionMiddleware must be added before others)
     # Add SessionMiddleware for OAuth support

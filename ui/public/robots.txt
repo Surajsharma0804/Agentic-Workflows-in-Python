@@ -1,4 +1,8 @@
+# Robots.txt for Agentic Workflows
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /admin/
 
-Sitemap: https://agentic-workflows.onrender.com/sitemap.xml
+# Sitemap
+Sitemap: https://agentic-workflows-pm7o.onrender.com/sitemap.xml
