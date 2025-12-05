@@ -1,7 +1,6 @@
 """Database models for authentication and users."""
 from sqlalchemy import Column, String, Boolean, DateTime, Integer, Text, JSON, ForeignKey
-from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship, declarative_base
 from datetime import datetime
 import bcrypt
 

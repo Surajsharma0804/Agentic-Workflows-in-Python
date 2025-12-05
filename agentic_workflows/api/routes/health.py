@@ -1,7 +1,7 @@
 """Health check endpoints."""
 from fastapi import APIRouter, status
 from pydantic import BaseModel
-from datetime import datetime
+from datetime import datetime, timezone
 import platform
 import sys
 import os
@@ -32,7 +32,7 @@ async def health_check():
             "status": "healthy",
             "version": settings.app_version,
             "environment": settings.environment,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "port": os.getenv("PORT", "unknown")
         }
     except Exception as e:
@@ -41,7 +41,7 @@ async def health_check():
             "status": "healthy",
             "version": "1.0.0",
             "environment": os.getenv("ENVIRONMENT", "production"),
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "error": str(e)
         }
 

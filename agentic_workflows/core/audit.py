@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 class AuditLog:
@@ -8,7 +8,7 @@ class AuditLog:
 
     def record(self, entry: dict):
         entry = dict(entry)
-        entry.setdefault("ts", datetime.utcnow().isoformat() + "Z")
+        entry.setdefault("ts", datetime.now(timezone.utc).isoformat())
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with self.path.open("a", encoding="utf-8") as f:
             f.write(json.dumps(entry, ensure_ascii=False) + "\n")
