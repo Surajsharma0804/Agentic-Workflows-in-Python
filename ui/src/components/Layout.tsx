@@ -39,6 +39,190 @@ const navigation = [
   { name: 'About', href: '/about', icon: Info },
 ]
 
+// Mock notifications data
+const mockNotifications = [
+  {
+    id: '1',
+    title: 'Workflow Completed',
+    message: 'File organization workflow completed successfully',
+    time: '2 minutes ago',
+    type: 'success',
+    read: false,
+  },
+  {
+    id: '2',
+    title: 'New Plugin Available',
+    message: 'Check out the new SQL Query plugin',
+    time: '1 hour ago',
+    type: 'info',
+    read: false,
+  },
+  {
+    id: '3',
+    title: 'System Update',
+    message: 'Platform updated to v2.0.0',
+    time: '3 hours ago',
+    type: 'info',
+    read: true,
+  },
+  {
+    id: '4',
+    title: 'Workflow Failed',
+    message: 'Data pipeline workflow encountered an error',
+    time: '5 hours ago',
+    type: 'error',
+    read: true,
+  },
+]
+
+function NotificationBell() {
+  const [isOpen, setIsOpen] = useState(false)
+  const [notifications, setNotifications] = useState(mockNotifications)
+  
+  const unreadCount = notifications.filter(n => !n.read).length
+
+  const markAsRead = (id: string) => {
+    setNotifications(prev => 
+      prev.map(n => n.id === id ? { ...n, read: true } : n)
+    )
+  }
+
+  const markAllAsRead = () => {
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })))
+    toast.success('All notifications marked as read')
+  }
+
+  const clearAll = () => {
+    setNotifications([])
+    toast.success('All notifications cleared')
+    setIsOpen(false)
+  }
+
+  return (
+    <div className="relative">
+      <motion.button
+        whileHover={{ scale: 1.1, y: -2 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={() => setIsOpen(!isOpen)}
+        className="relative p-2 rounded-lg glass hover:shadow-lg hover:shadow-primary/20 transition-all"
+        aria-label="Notifications"
+      >
+        <Bell className="w-5 h-5 text-text-primary" />
+        {unreadCount > 0 && (
+          <>
+            <motion.span 
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="absolute top-1 right-1 w-2 h-2 bg-danger-500 rounded-full shadow-lg shadow-danger-500/50"
+            />
+            <span className="absolute -top-1 -right-1 w-5 h-5 bg-danger-500 rounded-full flex items-center justify-center text-[10px] font-bold text-white shadow-lg">
+              {unreadCount}
+            </span>
+          </>
+        )}
+      </motion.button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              className="fixed inset-0 z-40"
+            />
+            
+            {/* Dropdown */}
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+              className="absolute right-0 mt-2 w-80 sm:w-96 glass-strong border border-border/50 rounded-xl shadow-2xl overflow-hidden z-50"
+            >
+              {/* Header */}
+              <div className="p-4 border-b border-border/30 flex items-center justify-between">
+                <div>
+                  <h3 className="font-semibold text-text-primary">Notifications</h3>
+                  <p className="text-xs text-text-muted">{unreadCount} unread</p>
+                </div>
+                {notifications.length > 0 && (
+                  <div className="flex space-x-2">
+                    {unreadCount > 0 && (
+                      <button
+                        onClick={markAllAsRead}
+                        className="text-xs text-primary-400 hover:text-primary-300 transition-colors"
+                      >
+                        Mark all read
+                      </button>
+                    )}
+                    <button
+                      onClick={clearAll}
+                      className="text-xs text-danger-400 hover:text-danger-300 transition-colors"
+                    >
+                      Clear all
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Notifications List */}
+              <div className="max-h-96 overflow-y-auto custom-scrollbar">
+                {notifications.length === 0 ? (
+                  <div className="p-8 text-center">
+                    <Bell className="w-12 h-12 text-text-muted mx-auto mb-3 opacity-50" />
+                    <p className="text-text-muted">No notifications</p>
+                  </div>
+                ) : (
+                  <div className="divide-y divide-border/30">
+                    {notifications.map((notification) => (
+                      <motion.div
+                        key={notification.id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        onClick={() => markAsRead(notification.id)}
+                        className={cn(
+                          'p-4 hover:bg-bg-secondary/50 transition-colors cursor-pointer',
+                          !notification.read && 'bg-primary/5'
+                        )}
+                      >
+                        <div className="flex items-start space-x-3">
+                          <div className={cn(
+                            'w-2 h-2 rounded-full mt-2 flex-shrink-0',
+                            notification.type === 'success' && 'bg-success-500',
+                            notification.type === 'error' && 'bg-danger-500',
+                            notification.type === 'info' && 'bg-info-500',
+                            !notification.read && 'animate-pulse'
+                          )} />
+                          <div className="flex-1 min-w-0">
+                            <p className={cn(
+                              'text-sm font-medium',
+                              !notification.read ? 'text-text-primary' : 'text-text-secondary'
+                            )}>
+                              {notification.title}
+                            </p>
+                            <p className="text-xs text-text-muted mt-1">
+                              {notification.message}
+                            </p>
+                            <p className="text-xs text-text-muted mt-2">
+                              {notification.time}
+                            </p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
 function UserMenu() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
@@ -334,19 +518,7 @@ export default function Layout({ children }: LayoutProps) {
 
             {/* Actions */}
             <div className="flex items-center space-x-2 sm:space-x-4">
-              <motion.button
-                whileHover={{ scale: 1.1, y: -2 }}
-                whileTap={{ scale: 0.9 }}
-                className="relative p-2 rounded-lg glass hover:shadow-lg hover:shadow-primary/20 transition-all"
-                aria-label="Notifications"
-              >
-                <Bell className="w-5 h-5 text-text-primary" />
-                <motion.span 
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="absolute top-1 right-1 w-2 h-2 bg-danger-500 rounded-full shadow-lg shadow-danger-500/50"
-                />
-              </motion.button>
+              <NotificationBell />
             </div>
           </div>
         </div>
