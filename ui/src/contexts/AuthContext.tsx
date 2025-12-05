@@ -123,7 +123,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.setItem('user', JSON.stringify(userData))
       setUser(userData)
     } catch (error) {
-      console.error('Failed to set token:', error)
       throw error
     }
   }

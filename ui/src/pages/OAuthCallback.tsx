@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Loader2, CheckCircle, AlertCircle } from 'lucide-react'
+import { Loader2, AlertCircle } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useAlert } from '../contexts/AlertContext'
 
@@ -30,8 +30,7 @@ export default function OAuthCallback() {
       setToken(token).then(() => {
         showSuccess(`Successfully logged in with ${provider}!`)
         setTimeout(() => navigate('/'), 1000)
-      }).catch((err) => {
-        console.error('Token validation failed:', err)
+      }).catch(() => {
         showError('Authentication failed. Please try again.')
         setTimeout(() => navigate('/login'), 2000)
       })
