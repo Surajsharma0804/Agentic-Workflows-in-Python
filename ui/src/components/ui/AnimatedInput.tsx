@@ -38,8 +38,8 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
       props.onChange?.(e)
     }
 
-    // Don't show placeholder when label is present and not focused/filled
-    const showPlaceholder = !label || isFocused || hasValue
+    // Never show placeholder when label is present (label acts as placeholder)
+    const showPlaceholder = !label
 
     return (
       <div className="w-full">
