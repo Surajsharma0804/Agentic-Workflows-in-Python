@@ -2,7 +2,7 @@
 
 > **Enterprise-grade workflow automation platform with AI integration**
 
-Stop wasting 10 hours/week on repetitive tasks. Built with Kiro in 2 weeks (would take 3-4 months normally).
+Stop wasting 10 hours/week on repetitive tasks.
 
 [![Deploy Status](https://img.shields.io/badge/deploy-ready-brightgreen)]()
 [![Security](https://img.shields.io/badge/security-hardened-blue)]()
@@ -639,7 +639,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- Built with [Kiro IDE](https://kiro.ai) - AI-powered development
 - Deployed on [Render.com](https://render.com) - FREE tier hosting
 - UI inspired by modern design systems
 - Community feedback and contributions
@@ -742,7 +741,6 @@ Need help? We're here for you:
 
 ---
 
-**Built with ❤️ using Kiro IDE**  
 **Version**: 1.0.0  
 **Last Updated**: December 2025  
 **Status**: ✅ Production Ready

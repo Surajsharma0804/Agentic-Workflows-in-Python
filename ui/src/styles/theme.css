@@ -205,21 +205,80 @@
 
 /* Explicit theme overrides */
 [data-theme="light"] {
+  /* Light backgrounds */
   --bg: #ffffff;
   --bg-secondary: var(--color-neutral-50);
   --surface: #ffffff;
+  --surface-elevated: var(--color-neutral-50);
+  --border: var(--color-neutral-200);
+  --border-hover: var(--color-neutral-300);
+  
+  /* Dark text for light backgrounds */
   --text-primary: var(--color-neutral-900);
   --text-secondary: var(--color-neutral-600);
+  --text-muted: var(--color-neutral-500);
+  --text-inverse: #ffffff;
+  
+  /* Vibrant colors for light mode */
+  --primary: var(--color-primary-600);
+  --primary-hover: var(--color-primary-700);
+  --primary-active: var(--color-primary-800);
+  
+  --accent: var(--color-accent-600);
+  --accent-hover: var(--color-accent-700);
+  
+  /* Light mode glass effect */
   --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(99, 102, 241, 0.15);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  --glass-backdrop: blur(12px);
+  
+  /* Light mode shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.3);
 }
 
 [data-theme="dark"] {
+  /* Deep space background with rich colors */
   --bg: #0a0e27;
   --bg-secondary: #141b2d;
   --surface: #1a2332;
+  --surface-elevated: #232d3f;
+  --border: #2d3b54;
+  --border-hover: #3d4d6e;
+  
+  /* Bright, readable text */
   --text-primary: #f0f4ff;
   --text-secondary: #b8c5e0;
+  --text-muted: #7a8ba8;
+  --text-inverse: #0a0e27;
+  
+  /* Vibrant primary colors */
+  --primary: #6366f1;
+  --primary-hover: #7c7ff5;
+  --primary-active: #5558e3;
+  
+  /* Vibrant accent */
+  --accent: #06b6d4;
+  --accent-hover: #22d3ee;
+  
+  /* Enhanced glass effect */
   --glass-bg: rgba(26, 35, 50, 0.7);
+  --glass-border: rgba(99, 102, 241, 0.2);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  --glass-backdrop: blur(16px);
+  
+  /* Stronger shadows for depth */
+  --shadow-sm: 0 2px 4px 0 rgb(0 0 0 / 0.4);
+  --shadow: 0 4px 6px 0 rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.5);
+  --shadow-md: 0 8px 12px -2px rgb(0 0 0 / 0.5), 0 4px 8px -4px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 16px 24px -4px rgb(0 0 0 / 0.5), 0 8px 12px -8px rgb(0 0 0 / 0.5);
+  --shadow-xl: 0 24px 32px -6px rgb(0 0 0 / 0.5), 0 12px 16px -10px rgb(0 0 0 / 0.5);
+  --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.6), 0 0 80px rgba(99, 102, 241, 0.3);
 }
 
 /* === REDUCED MOTION === */
