@@ -391,25 +391,24 @@ DATABASE_URL=sqlite:///./agentic_workflows.db
 
 ### OAuth Configuration
 
-**Google OAuth:**
-1. Go to [Google Cloud Console](https://console.cloud.google.com)
-2. Create OAuth 2.0 credentials
-3. Add redirect URI: `https://your-app.onrender.com/api/auth/google/callback`
-4. Set environment variables:
+**⚠️ OAuth is Optional** - Email/password authentication works out of the box!
+
+To enable Google/GitHub login, see the [OAuth Setup Guide](docs/OAUTH_SETUP.md) for detailed instructions.
+
+**Quick Setup:**
+
+1. **Google OAuth**: [Create credentials](https://console.cloud.google.com) → Add redirect URI → Set env vars
+2. **GitHub OAuth**: [Create OAuth App](https://github.com/settings/developers) → Add callback URL → Set env vars
+
+**Environment Variables:**
 ```bash
-GOOGLE_CLIENT_ID=your-client-id
-GOOGLE_CLIENT_SECRET=your-client-secret
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+GITHUB_CLIENT_ID=your-github-client-id
+GITHUB_CLIENT_SECRET=your-github-client-secret
 ```
 
-**GitHub OAuth:**
-1. Go to [GitHub Settings](https://github.com/settings/developers)
-2. Create OAuth App
-3. Set callback URL: `https://your-app.onrender.com/api/auth/github/callback`
-4. Set environment variables:
-```bash
-GITHUB_CLIENT_ID=your-client-id
-GITHUB_CLIENT_SECRET=your-client-secret
-```
+**Note**: Without OAuth credentials, users will see a friendly message to use email/password login instead.
 
 ### Rate Limiting
 
