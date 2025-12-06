@@ -28,30 +28,76 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
     const [hasValue, setHasValue] = useState(!!value)
     const inputId = id || `input-${Math.random().toString(36).substring(2, 11)}`
 
-    // Update hasValue when value prop changes or on autofill
+    // Update hasValue when value prop changes
     useEffect(() => {
       setHasValue(!!value && String(value).length > 0)
     }, [value])
 
-    // Detect autofill by checking if input has value after mount
+    // Robust autofill detection
     useEffect(() => {
-      const checkAutofill = () => {
-        const input = document.getElementById(inputId) as HTMLInputElement
-        if (input && input.value) {
+      const input = document.getElementById(inputId) as HTMLInputElement
+      if (!input) return
+
+      const checkValue = () => {
+        if (input.value && input.value.length > 0) {
           setHasValue(true)
         }
       }
-      
-      // Check immediately and after a short delay for autofill
-      checkAutofill()
-      const timer = setTimeout(checkAutofill, 100)
-      
-      return () => clearTimeout(timer)
+
+      // Check immediately
+      checkValue()
+
+      // Check after delays for autofill (browsers autofill at different times)
+      const timers = [
+        setTimeout(checkValue, 50),
+        setTimeout(checkValue, 100),
+        setTimeout(checkValue, 200),
+        setTimeout(checkValue, 500),
+      ]
+
+      // Listen for input events (catches autofill in most browsers)
+      const handleInput = () => {
+        checkValue()
+      }
+
+      // Listen for animationstart (catches Chrome autofill)
+      const handleAnimationStart = (e: AnimationEvent) => {
+        if (e.animationName === 'onAutoFillStart') {
+          setHasValue(true)
+        }
+      }
+
+      input.addEventListener('input', handleInput)
+      input.addEventListener('animationstart', handleAnimationStart as EventListener)
+
+      return () => {
+        timers.forEach(timer => clearTimeout(timer))
+        input.removeEventListener('input', handleInput)
+        input.removeEventListener('animationstart', handleAnimationStart as EventListener)
+      }
     }, [inputId])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setHasValue(e.target.value.length > 0)
       props.onChange?.(e)
+    }
+
+    const handleFocus = () => {
+      setIsFocused(true)
+      // Double-check value on focus
+      const input = document.getElementById(inputId) as HTMLInputElement
+      if (input && input.value) {
+        setHasValue(true)
+      }
+    }
+
+    const handleBlur = () => {
+      setIsFocused(false)
+      // Check value on blur
+      const input = document.getElementById(inputId) as HTMLInputElement
+      if (input) {
+        setHasValue(input.value.length > 0)
+      }
     }
 
     return (
@@ -115,8 +161,8 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
             <input
               ref={ref}
               id={inputId}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
               onChange={handleChange}
               className={`
                 relative w-full px-4 py-4 rounded-xl border-2

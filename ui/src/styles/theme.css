@@ -949,3 +949,38 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+/* === AUTOFILL DETECTION === */
+
+/* Create animation for autofill detection */
+@keyframes onAutoFillStart {
+  from { opacity: 0.99; }
+  to { opacity: 1; }
+}
+
+@keyframes onAutoFillCancel {
+  from { opacity: 1; }
+  to { opacity: 0.99; }
+}
+
+/* Apply animation to autofilled inputs */
+input:-webkit-autofill {
+  animation-name: onAutoFillStart;
+  animation-duration: 0.001s;
+}
+
+input:not(:-webkit-autofill) {
+  animation-name: onAutoFillCancel;
+  animation-duration: 0.001s;
+}
+
+/* Style autofilled inputs to match design */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--text-primary) !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--surface) inset !important;
+  box-shadow: 0 0 0 1000px var(--surface) inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
