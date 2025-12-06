@@ -26,12 +26,28 @@ const AnimatedInput = forwardRef<HTMLInputElement, AnimatedInputProps>(
   ) => {
     const [isFocused, setIsFocused] = useState(false)
     const [hasValue, setHasValue] = useState(!!value)
-    const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`
+    const inputId = id || `input-${Math.random().toString(36).substring(2, 11)}`
 
-    // Update hasValue when value prop changes
+    // Update hasValue when value prop changes or on autofill
     useEffect(() => {
       setHasValue(!!value && String(value).length > 0)
     }, [value])
+
+    // Detect autofill by checking if input has value after mount
+    useEffect(() => {
+      const checkAutofill = () => {
+        const input = document.getElementById(inputId) as HTMLInputElement
+        if (input && input.value) {
+          setHasValue(true)
+        }
+      }
+      
+      // Check immediately and after a short delay for autofill
+      checkAutofill()
+      const timer = setTimeout(checkAutofill, 100)
+      
+      return () => clearTimeout(timer)
+    }, [inputId])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setHasValue(e.target.value.length > 0)

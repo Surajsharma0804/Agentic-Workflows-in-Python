@@ -30,9 +30,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const initAuth = async () => {
-      // Check for stored auth token
-      const token = localStorage.getItem('auth_token')
-      const storedUser = localStorage.getItem('user')
+      // Check for stored auth token in both storages
+      const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token')
+      const storedUser = localStorage.getItem('user') || sessionStorage.getItem('user')
       
       if (token && storedUser) {
         try {
@@ -45,12 +45,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           
           if (response.ok) {
             const userData = await response.json()
-            localStorage.setItem('user', JSON.stringify(userData))
+            // Update the user data in the same storage where token is stored
+            if (localStorage.getItem('auth_token')) {
+              localStorage.setItem('user', JSON.stringify(userData))
+            } else {
+              sessionStorage.setItem('user', JSON.stringify(userData))
+            }
             setUser(userData)
           } else {
-            // Token is invalid, clear storage
+            // Token is invalid, clear both storages
             localStorage.removeItem('auth_token')
             localStorage.removeItem('user')
+            sessionStorage.removeItem('auth_token')
+            sessionStorage.removeItem('user')
             setUser(null)
           }
         } catch (error) {
@@ -58,6 +65,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           console.error('Auth validation error:', error)
           localStorage.removeItem('auth_token')
           localStorage.removeItem('user')
+          sessionStorage.removeItem('auth_token')
+          sessionStorage.removeItem('user')
           setUser(null)
         }
       }
@@ -90,6 +99,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const data = await response.json()
       const { access_token, user } = data
 
+      // Clear both storages first to avoid conflicts
+      localStorage.removeItem('auth_token')
+      localStorage.removeItem('user')
+      sessionStorage.removeItem('auth_token')
+      sessionStorage.removeItem('user')
+
+      // Store in appropriate storage
       const storage = rememberMe ? localStorage : sessionStorage
       storage.setItem('auth_token', access_token)
       storage.setItem('user', JSON.stringify(user))
