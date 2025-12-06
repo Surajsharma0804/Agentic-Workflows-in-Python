@@ -95,7 +95,7 @@ export default function Dashboard() {
       >
         <h1 className="text-4xl md:text-5xl font-bold mb-3 animate-slide-down">
           Welcome to{' '}
-          <span className="bg-gradient-to-r from-primary-400 via-accent-400 to-primary-400 bg-clip-text text-transparent animate-glow">
+          <span className="inline-block bg-gradient-to-r from-primary-400 via-accent-400 to-primary-400 bg-clip-text text-transparent">
             Agentic Workflows
           </span>
         </h1>

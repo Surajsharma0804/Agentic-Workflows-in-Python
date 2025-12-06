@@ -36,9 +36,6 @@
     
     <!-- Icons -->
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     
     <!-- Performance: DNS Prefetch & Preconnect -->
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
@@ -77,21 +74,10 @@
     }
     </script>
     
-    <!-- Preload critical fonts -->
-    <link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin />
-    
     <style>
-      /* Critical CSS for font loading */
-      @font-face {
-        font-family: 'Inter';
-        font-style: normal;
-        font-weight: 100 900;
-        font-display: swap;
-        src: url('/fonts/inter-var.woff2') format('woff2');
-      }
-      
+      /* Use system fonts for better performance */
       body {
-        font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
       }
       
       /* Loading state */
